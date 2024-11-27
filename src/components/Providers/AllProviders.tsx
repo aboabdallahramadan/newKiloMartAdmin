@@ -8,7 +8,7 @@ import { BiCheckCircle, BiPlayCircle, BiStopCircle } from "react-icons/bi";
 import Link from "next/link";
 
 const AllProviders = () => {
-  const [providersData, setProvidersData] = useState<Provider[]>([]);
+  const [providersData, setProvidersData] = useState<Omit<Provider, 'totalOrders' | 'totalProducts' | 'availableBalance' | 'totalBalance'>[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);

@@ -10,4 +10,8 @@ export type Provider = {
   ownerNationalId: string;
   email: string;
   isActive: boolean;
+  totalOrders: number;
+  totalProducts: number;
+  availableBalance: number;
+  totalBalance: number;
 };

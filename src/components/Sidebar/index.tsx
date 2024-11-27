@@ -7,6 +7,7 @@ import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { FaStore } from "react-icons/fa";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -43,6 +44,17 @@ const menuGroups = [
         route: "#",
         children: [
           { label: "eCommerce", route: "/" },
+        ],
+      },
+      {
+        icon: (
+          <FaStore className="text-2xl" />
+        ),
+        label: "Providers",
+        route: "#",
+        children: [
+          { label: "All Providers", route: "/providers/all" },
+          { label: "Request Approval", route: "/providers/request-approval" },
         ],
       },
       {

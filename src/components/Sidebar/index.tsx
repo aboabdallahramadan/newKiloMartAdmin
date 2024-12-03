@@ -7,7 +7,11 @@ import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { FaStore } from "react-icons/fa";
+import { FaMotorcycle, FaStore } from "react-icons/fa";
+import { CiDeliveryTruck } from "react-icons/ci";
+import { PiMotorcycle } from "react-icons/pi";
+import { MdDeliveryDining, MdOutlineDeliveryDining } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -54,7 +58,18 @@ const menuGroups = [
         route: "#",
         children: [
           { label: "All Providers", route: "/providers/all" },
-          { label: "Request Approval", route: "/providers/request-approval" },
+          { label: "New Provider Requests", route: "/providers/request-approval" },
+        ],
+      },
+      {
+        icon: (
+          <MdOutlineDeliveryDining className="text-2xl" />
+        ),
+        label: "Deliveries",
+        route: "#",
+        children: [
+          { label: "All Deliveries", route: "/deliveries/all" },
+          { label: "New Delivery Requests", route: "/deliveries/request-approval" },
         ],
       },
       {

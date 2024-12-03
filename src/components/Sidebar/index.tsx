@@ -7,11 +7,9 @@ import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { FaMotorcycle, FaStore } from "react-icons/fa";
-import { CiDeliveryTruck } from "react-icons/ci";
-import { PiMotorcycle } from "react-icons/pi";
-import { MdDeliveryDining, MdOutlineDeliveryDining } from "react-icons/md";
-import { TbTruckDelivery } from "react-icons/tb";
+import { FaStore } from "react-icons/fa";
+import { MdOutlineDeliveryDining } from "react-icons/md";
+import { AiFillProduct } from "react-icons/ai";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -70,6 +68,18 @@ const menuGroups = [
         children: [
           { label: "All Deliveries", route: "/deliveries/all" },
           { label: "New Delivery Requests", route: "/deliveries/request-approval" },
+        ],
+      },
+      {
+        icon: (
+          <AiFillProduct />
+        ),
+        label: "Products",
+        route: "#",
+        children: [
+          { label: "Categories", route: "/products/categories" },
+          { label: "All Products", route: "/products/all" },
+          { label: "New Product Requests", route: "/products/new-product" },
         ],
       },
       {

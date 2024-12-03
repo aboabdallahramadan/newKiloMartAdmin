@@ -11,5 +11,8 @@ export interface Order {
     orderDeliveryName: string;
     orderProviderId: number;
     orderProviderName: string;
+    orderDeliveryFee: number;
+    orderServiceFee: number;
+    orderPaymentMethod: "Cash" | "Online";
     orderItems: OrderItem[];
 }

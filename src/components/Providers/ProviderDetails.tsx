@@ -11,7 +11,7 @@ const provider: Provider = {
   nationalApprovalId: '1',
   ownerName: 'John Doe',
   ownerNationalId: '1234567890',
-  email: 'john.doe@example.com',
+  email: '+966855555559',
   isActive: true,
   totalOrders: 10,
   totalProducts: 10,
@@ -31,7 +31,7 @@ const ProviderDetails = () => {
           <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>National Approval ID:</strong> {provider.nationalApprovalId}</p>
           <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>Owner Name:</strong> {provider.ownerName}</p>
           <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>Owner National ID:</strong> {provider.ownerNationalId}</p>
-          <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>Email:</strong> {provider.email}</p>
+          <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>Phone:</strong> {provider.email}</p>
           <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>Active:</strong> {provider.isActive ? 'Yes' : 'No'}</p>
           <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>Total Orders:</strong> {provider.totalOrders}</p>
           <p className="text-lg font-medium text-gray-600 dark:text-gray-300"><strong className='font-bold'>Total Products:</strong> {provider.totalProducts}</p>

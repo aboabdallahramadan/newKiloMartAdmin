@@ -4,7 +4,7 @@ import { Order } from '@/types/order';
 import ElementLoader from '../common/ElementLoader';
 import ClickOutside from '../ClickOutside';
 
-const ProviderOrders = () => {
+const DeliveryOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,7 +42,7 @@ const ProviderOrders = () => {
       orderCustomerName: 'John Doe',
       orderDeliveryId: 1,
       orderDeliveryName: 'John Doe',
-      orderProviderId: 2,
+      orderProviderId: 1,
       orderProviderName: "BigMall",
       orderItems: [
         {
@@ -84,7 +84,7 @@ const ProviderOrders = () => {
       orderCustomerName: 'John Doe',
       orderDeliveryId: 1,
       orderDeliveryName: 'John Doe',
-      orderProviderId: 2,
+      orderProviderId: 1,
       orderProviderName: "BigMall",
       orderItems: [
         {
@@ -126,7 +126,7 @@ const ProviderOrders = () => {
       orderCustomerName: 'John Doe',
       orderDeliveryId: 1,
       orderDeliveryName: 'John Doe',
-      orderProviderId: 2,
+      orderProviderId: 1,
       orderProviderName: "BigMall",
       orderItems: [
         {
@@ -168,7 +168,7 @@ const ProviderOrders = () => {
       orderCustomerName: 'John Doe',
       orderDeliveryId: 1,
       orderDeliveryName: 'John Doe',
-      orderProviderId: 2,
+      orderProviderId: 1,
       orderProviderName: "BigMall",
       orderItems: [
         {
@@ -229,7 +229,7 @@ const ProviderOrders = () => {
   return (
     <div>
       <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
-        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Provider's Orders</h2>
+        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Delivery's Orders</h2>
         {loading ? (
           <ElementLoader />
         ) : (
@@ -341,8 +341,8 @@ const ProviderOrders = () => {
                   <p><strong>Order Total:</strong> {selectedOrder.orderTotal} RS</p>
                   <p><strong>Customer ID:</strong> {selectedOrder.orderCustomerId}</p>
                   <p><strong>Customer Name:</strong> {selectedOrder.orderCustomerName}</p>
-                  <p><strong>Delivery ID:</strong> {selectedOrder.orderDeliveryId}</p>
-                  <p><strong>Delivery Name:</strong> {selectedOrder.orderDeliveryName}</p>
+                  <p><strong>Provider ID:</strong> {selectedOrder.orderProviderId}</p>
+                  <p><strong>Provider Name:</strong> {selectedOrder.orderProviderName}</p>
                 </div>
                 <div className="overflow-y-auto max-h-80 grid grid-cols-1 gap-4 border-t border-gray-200 pt-4">
                   {selectedOrder.orderItems.map((item) => (
@@ -368,4 +368,4 @@ const ProviderOrders = () => {
   );
 };
 
-export default ProviderOrders;
+export default DeliveryOrders;

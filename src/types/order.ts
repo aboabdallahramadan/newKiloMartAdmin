@@ -9,5 +9,7 @@ export interface Order {
     orderCustomerName: string;
     orderDeliveryId: number;
     orderDeliveryName: string;
+    orderProviderId: number;
+    orderProviderName: string;
     orderItems: OrderItem[];
 }

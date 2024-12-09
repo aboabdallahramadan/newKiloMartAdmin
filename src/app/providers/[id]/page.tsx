@@ -5,6 +5,7 @@ import ProviderOrders from '@/components/Providers/ProviderOrders';
 import ProviderProducts from '@/components/Providers/ProviderProducts';
 import ProviderMap from '@/components/Providers/ProviderMap';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import Withdrawals from '@/components/Providers/Withdrawals';
 
 export const metadata: Metadata = {
   title: "Provider Details",
@@ -19,7 +20,9 @@ const page = () => {
         <ProviderDetails />
         <ProviderOrders />
         <ProviderProducts />
+        <Withdrawals />
         <ProviderMap />
+
       </div>
     </DefaultLayout>
   );

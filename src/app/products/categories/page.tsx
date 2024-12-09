@@ -2,6 +2,9 @@ import React from 'react'
 import { Metadata } from 'next';
 import DefaultLayout from '@/components/Layouts/DefaultLaout';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import ActiveCategories from '@/components/Products/Catogeries/ActiveCategories';
+import InactiveCategories from '@/components/Products/Catogeries/InactiveCategories';
+import AddNewCategory from '@/components/Products/Catogeries/AddNewCategory';
 
 export const metadata: Metadata = {
     title: "Categories",
@@ -11,7 +14,11 @@ const page = () => {
   return (
     <DefaultLayout >
         <Breadcrumb pageName='Categories' />
-
+        <div className='flex flex-col gap-4'>
+          <ActiveCategories />
+          <InactiveCategories />
+          <AddNewCategory />
+        </div>
     </DefaultLayout>
   )
 }

@@ -1,5 +1,15 @@
 export interface Location {
-    name?: string;
-    latitude: number;
-    longitude: number;
+    id: number;
+    userId: number;
+    userName: string;
+    type: "Apartment" | "House" | "Office";
+    buildingNumber: string;
+    apartmentNumber: string;
+    floorNumber: string;
+    streetName: string;
+    phoneNumber: string;
+    mapDetails: {
+        latitude: number;
+        longitude: number;
+    }
 }

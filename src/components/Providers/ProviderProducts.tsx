@@ -11,7 +11,7 @@ const ProviderProducts = () => {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState(2);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(6);
+  const [pageSize] = useState(3);
   const [totalCount, setTotalCount] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState<ProductOffer | null>(null);
   const {id} = useParams();
@@ -135,11 +135,11 @@ const ProviderProducts = () => {
             ))}
           </div>
           <div className="flex justify-between mt-4">
-            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">
+            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
               Previous
             </button>
             <span>Page {currentPage} of {totalPages}</span>
-            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">
+            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
               Next
             </button>
           </div>

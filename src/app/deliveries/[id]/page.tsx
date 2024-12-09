@@ -4,7 +4,7 @@ import DefaultLayout from '@/components/Layouts/DefaultLaout';
 import DeliveryOrders from '@/components/Deliveries/DeliveryOrders';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import DeliveryDetails from '@/components/Deliveries/DeliveryDetails';
-import Withdrawals from '@/components/Deliveries/Withdrawals';
+import Withdrawals from '@/components/Withdrawals/Withdrawals';
 
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ const page = () => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <DeliveryDetails />
         <DeliveryOrders />
-        <Withdrawals />
+        <Withdrawals user='Delivery' />
       </div>
     </DefaultLayout>
   )

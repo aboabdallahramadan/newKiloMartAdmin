@@ -5,9 +5,22 @@ import 'leaflet/dist/leaflet.css';
 import ElementLoader from '../common/ElementLoader';
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import { Location } from '@/types/location';
 
 const ProviderMap = () => {
-  const [location, setLocation] = useState({ lat: 24.743752042257807, lng: 46.65313878798754 });
+  const [location, setLocation] = useState<Omit<Location, 'userId' | 'userName' >>({
+    id: 0,
+    type: "Apartment",
+    buildingNumber: "123",
+    apartmentNumber: "456",
+    floorNumber: "7",
+    streetName: "Al-Riyadh",
+    phoneNumber: "+966512345678",
+    mapDetails: {
+        latitude: 24.743752042257807,
+        longitude: 46.65313878798754,
+    }
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,26 +45,31 @@ const ProviderMap = () => {
   }, []);
 
   return (
-    <div>
       <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
         <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Provider Location</h2>
         {loading ? (
           <ElementLoader />
         ) : (
-          <MapContainer center={location} zoom={13} style={{ height: "400px", width: "100%" }} className='z-0'>
+          <MapContainer center={[location.mapDetails.latitude, location.mapDetails.longitude]} zoom={13} style={{ height: "400px", width: "100%" }} className='z-0'>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            <Marker position={location}>
+            <Marker position={[location.mapDetails.latitude, location.mapDetails.longitude]}>
               <Popup>
-                Provider's Location
+                <div>
+                  <p>Type: {location.type}</p>
+                  <p>Building Number: {location.buildingNumber}</p>
+                  <p>Apartment Number: {location.apartmentNumber}</p>
+                  <p>Floor Number: {location.floorNumber}</p>
+                  <p>Street Name: {location.streetName}</p>
+                  <p>Phone Number: {location.phoneNumber}</p>
+                </div>
               </Popup>
             </Marker>
           </MapContainer>
         )}
       </div>
-    </div>
     
   );
 };

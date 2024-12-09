@@ -1,10 +1,14 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { WithdrawRequest } from '@/types/withdrawRequest';
 import { BiBlock, BiCheckCircle } from 'react-icons/bi';
 import Link from 'next/link';
 
-const WithdrawRequests = () => {
+interface WithdrawRequestsProps {
+    user: "Provider" | "Delivery"
+}
+
+const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
     const [withdrawRequests, setWithdrawRequests] = useState<Omit<WithdrawRequest, "status" | "date">[]>([
         {
             id: 1,
@@ -31,12 +35,33 @@ const WithdrawRequests = () => {
             userId: 4
         }
     ]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const pageSize = 10;
+
+    const fetchWithdrawRequests = async (page: number) => {
+        const response = await fetch(`http://kilomart-001-site1.ptempurl.com/api/admin/withdraw-requests/paginated?page=${page}&pageSize=${pageSize}&isActive=true`);
+        const data = await response.json();
+        if (data.status) {
+            setWithdrawRequests(data.data.data);
+            setTotalCount(data.data.totalCount);
+        }
+    };
+
+    useEffect(() => {
+        // fetchWithdrawRequests(currentPage);
+    }, [currentPage]);
+
     const onAccept = (id: number) => {
         console.log(id);
     };
+
     const onReject = (id: number) => {
         console.log(id);
     };
+
+    const totalPages = Math.ceil(totalCount / pageSize);
+
     return (
         <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
             <div className="px-4 py-6 md:px-6 xl:px-9">
@@ -65,7 +90,11 @@ const WithdrawRequests = () => {
                     key={withdrawRequest.id}
                 >
                     <div className="col-span-1 flex items-center">
-                        <p className="text-body-sm font-medium text-dark dark:text-dark-6"><Link className='text-primary hover:text-primary/50' href={`/deliveries/${withdrawRequest.userId}`}>{withdrawRequest.name}</Link></p>
+                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">
+                            <Link className='text-primary hover:text-primary/50' href={`/deliveries/${withdrawRequest.userId}`}>
+                                {withdrawRequest.name}
+                            </Link>
+                        </p>
                     </div>
                     <div className="col-span-2 items-center hidden lg:flex">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.phone}</p>
@@ -76,7 +105,7 @@ const WithdrawRequests = () => {
                     <div className="col-span-2 flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.bankAccountNumber}</p>
                     </div>
-                    <div className="col-span-1 flex items-center justify-end space-x-1.5  sm:space-x-3.5">
+                    <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3.5">
                         <button className="hover:text-primary" title="Accept" onClick={() => onAccept(withdrawRequest.id)}>
                             <BiCheckCircle />
                         </button>
@@ -86,6 +115,34 @@ const WithdrawRequests = () => {
                     </div>
                 </div>
             ))}
+            <div className="flex justify-between px-4 py-4">
+                <button 
+                    disabled={currentPage === 1} 
+                    onClick={() => setCurrentPage(currentPage - 1)} 
+                    className="bg-gray-300 hover:bg-gray-400 rounded px-4 py-2"
+                >
+                    Previous
+                </button>
+                <div className="flex justify-center space-x-2">
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                        key={index + 1}
+                        onClick={() => setCurrentPage(index + 1)}
+                        className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+                <button 
+                    disabled={currentPage === totalPages} 
+                    onClick={() => setCurrentPage(currentPage + 1)} 
+                    className="bg-gray-300 hover:bg-gray-400 rounded px-4 py-2"
+                >
+                    Next
+                </button>
+            </div>
+            
         </div>
     );
 };

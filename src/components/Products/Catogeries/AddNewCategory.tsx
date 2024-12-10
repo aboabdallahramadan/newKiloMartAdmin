@@ -24,42 +24,42 @@ const AddNewCategory = () => {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
+        // e.preventDefault();
+        // setLoading(true);
 
-        const categoryData = {
-            arabic: { name: arabicName },
-            english: { name: englishName },
-        };
+        // const categoryData = {
+        //     arabic: { name: arabicName },
+        //     english: { name: englishName },
+        // };
 
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MAIN}/api/admin/product-categories/add`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(categoryData),
-            });
+        // try {
+        //     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MAIN}/api/admin/product-categories/add`, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(categoryData),
+        //     });
 
-            const data = await response.json();
+        //     const data = await response.json();
 
-            if (data.status) {
-                toast.success('Category added successfully!', {
-                    autoClose: 3000,
-                });
-                handleCloseModal();
-            } else {
-                toast.error(data.message || 'Failed to add category.', {
-                    autoClose: 3000,
-                });
-            }
-        } catch (err) {
-            toast.error('An error occurred while adding the category.', {
-                autoClose: 3000,
-            });
-        } finally {
-            setLoading(false);
-        }
+        //     if (data.status) {
+        //         toast.success('Category added successfully!', {
+        //             autoClose: 3000,
+        //         });
+        //         handleCloseModal();
+        //     } else {
+        //         toast.error(data.message || 'Failed to add category.', {
+        //             autoClose: 3000,
+        //         });
+        //     }
+        // } catch (err) {
+        //     toast.error('An error occurred while adding the category.', {
+        //         autoClose: 3000,
+        //     });
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
     return (

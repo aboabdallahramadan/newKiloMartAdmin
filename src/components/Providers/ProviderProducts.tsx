@@ -138,7 +138,7 @@ const ProviderProducts = () => {
             <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
               Previous
             </button>
-            <span>Page {currentPage} of {totalPages}</span>
+            <span className="flex items-center">Page {currentPage} of {totalPages}</span>
             <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
               Next
             </button>

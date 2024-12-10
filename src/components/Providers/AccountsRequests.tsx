@@ -160,7 +160,7 @@ const AccountsRequests = () => {
                 >
                   Previous
                 </button>
-                <span>
+                <span className="flex items-center">
                   Page {currentPage} of {totalPages}
                 </span>
                 <button

@@ -5,8 +5,10 @@ import ButtonDefault from '@/components/Buttons/ButtonDefault';
 import InputGroup from '@/components/FormElements/InputGroup';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const AddNewCategory = () => {
+    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [arabicName, setArabicName] = useState('');
     const [englishName, setEnglishName] = useState('');
@@ -26,18 +28,21 @@ const AddNewCategory = () => {
         e.preventDefault();
         setLoading(true);
 
-        // Create a FormData object
-        const formData = new FormData();
-        formData.append('arabic[name]', arabicName);
-        formData.append('english[name]', englishName);
+        // Create a JSON object
+        const categoryData = {
+            arabic: { name: arabicName },
+            english: { name: englishName },
+        };
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MAIN}/api/admin/product-categories/add`, {
                 method: 'POST',
-                mode: 'no-cors',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json', // Set Content-Type to application/json
+                },
+                body: JSON.stringify(categoryData), // Convert the object to a JSON string
             });
-
+            console.log(response);
             const data = await response.json();
 
             if (data.status) {
@@ -45,6 +50,7 @@ const AddNewCategory = () => {
                     autoClose: 3000,
                 });
                 handleCloseModal();
+                router.refresh();
             } else {
                 toast.error(data.message || 'Failed to add category.', {
                     autoClose: 3000,

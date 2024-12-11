@@ -81,7 +81,8 @@ const menuGroups = [
         children: [
           { label: "Categories", route: "/products/categories" },
           { label: "All Products", route: "/products/all" },
-          { label: "New Product Requests", route: "/products/new-product" },
+          { label: "New Product Requests", route: "/products/new-product-requests" },
+          { label: "Add New Product", route: "/products/new-product" },
         ],
       },
       {

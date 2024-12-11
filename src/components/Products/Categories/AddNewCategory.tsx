@@ -4,8 +4,7 @@ import ClickOutside from '@/components/ClickOutside';
 import ButtonDefault from '@/components/Buttons/ButtonDefault';
 import InputGroup from '@/components/FormElements/InputGroup';
 import { FaPlus } from 'react-icons/fa';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 const AddNewCategory = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,42 +23,40 @@ const AddNewCategory = () => {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        // e.preventDefault();
-        // setLoading(true);
+        e.preventDefault();
+        setLoading(true);
 
-        // const categoryData = {
-        //     arabic: { name: arabicName },
-        //     english: { name: englishName },
-        // };
+        // Create a FormData object
+        const formData = new FormData();
+        formData.append('arabic[name]', arabicName);
+        formData.append('english[name]', englishName);
 
-        // try {
-        //     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MAIN}/api/admin/product-categories/add`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(categoryData),
-        //     });
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MAIN}/api/admin/product-categories/add`, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData,
+            });
 
-        //     const data = await response.json();
+            const data = await response.json();
 
-        //     if (data.status) {
-        //         toast.success('Category added successfully!', {
-        //             autoClose: 3000,
-        //         });
-        //         handleCloseModal();
-        //     } else {
-        //         toast.error(data.message || 'Failed to add category.', {
-        //             autoClose: 3000,
-        //         });
-        //     }
-        // } catch (err) {
-        //     toast.error('An error occurred while adding the category.', {
-        //         autoClose: 3000,
-        //     });
-        // } finally {
-        //     setLoading(false);
-        // }
+            if (data.status) {
+                toast.success('Category added successfully!', {
+                    autoClose: 3000,
+                });
+                handleCloseModal();
+            } else {
+                toast.error(data.message || 'Failed to add category.', {
+                    autoClose: 3000,
+                });
+            }
+        } catch (err) {
+            toast.error('An error occurred while adding the category.', {
+                autoClose: 3000,
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -122,7 +119,6 @@ const AddNewCategory = () => {
                     </ClickOutside>
                 </div>
             )}
-            <ToastContainer />
         </>
     );
 };

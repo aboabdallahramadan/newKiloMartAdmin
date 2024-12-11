@@ -6,9 +6,10 @@ import Link from 'next/link';
 import {FaEye, FaTrash, FaBan, FaEdit} from "react-icons/fa"
 import ClickOutside from '@/components/ClickOutside';
 import { Category } from '@/types/category';
+import ElementLoader from '../common/ElementLoader';
 
 
-const AllProducts = () => {
+const InactiveProducts = () => {
   const [language, setLanguage] = useState(2);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [category, setCategory] = useState(0);
@@ -26,78 +27,45 @@ const AllProducts = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [products,setProducts] = useState<Product[]>([
-    {
-      productImageUrl: "/images/product/product-01.png",
-      productName: "Apple Watch Series 7",
-      productCategoryName: "Electronics",
-      productCategoryId: 4,
-      productDescription: "an orginal Apple Watch Series 7 with 4 gifts and a good discount and fast delivery",
-      productId: 4,
-      productIsActive: true,
-      productMeasurementUnit: "Piece"
-    },
-    {
-      productImageUrl: "/images/product/product-02.png",
-      productName: "Macbook Pro M1",
-      productCategoryName: "Electronics",
-      productCategoryId: 4,
-      productDescription: "an orginal Apple Watch Series 7 with 4 gifts and a good discount and fast delivery",
-      productId: 5,
-      productIsActive: true,
-      productMeasurementUnit: "Piece"
-    },
-    {
-      productImageUrl: "/images/product/product-03.png",
-      productName: "Dell Inspiron 15",
-      productCategoryName: "Electronics",
-      productCategoryId: 4,
-      productDescription: "an orginal Apple Watch Series 7 with 4 gifts and a good discount and fast delivery",
-      productId: 6,
-      productIsActive: true,
-      productMeasurementUnit: "Piece"
-    },
-    {
-      productImageUrl: "/images/product/product-04.png",
-      productName: "HP Probook 450",
-      productCategoryName: "Electronics",
-      productCategoryId: 4,
-      productDescription: "an orginal Apple Watch Series 7 with 4 gifts and a good discount and fast delivery",
-      productId: 7,
-      productIsActive: true,
-      productMeasurementUnit: "Piece"
-    },
-  ])
+  const [products,setProducts] = useState<Omit<Product , "categoryId" | "categoryName">[]>([])
   const pageSize = 10;
 
   const fetchProducts = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/all-users/product/paginated?category=${category}&language=${language}&page=${currentPage}&pageSize=${pageSize}&isActive=true`);
-    const data = await response.json();
-    if (data.status) {
-        setProducts(data.data.data);
-        setTotalCount(data.data.totalCount);
-    } else {
-        console.error("Failed to fetch products:", data.message);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/admin/paginated?language=${language}&page=${currentPage}&pageSize=${pageSize}&isActive=false`);
+      const data = await response.json();
+      if (data.status) {
+          setProducts(data.data.data);
+          setTotalCount(data.data.totalCount);
+      } else {
+          console.error("Failed to fetch products:", data.message);
+      }
+    } catch (error) {
+      console.error("An error occurred while fetching products:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
 
   useEffect(() => {
-      // fetchProducts();
+      fetchProducts();
   }, [currentPage, language, category]);
 
 
   const fetchCategories = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/all-users/categories?language=${language}&isActive=true`);
-    const data = await response.json();
-    if (data.status) {
-        setProducts(data.data.data);
-        setTotalCount(data.data.totalCount);
-    } else {
-        console.error("Failed to fetch products:", data.message);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/all-users/categories?language=${language}&isActive=true`);
+      const data = await response.json();
+      if (data.status) {
+          setProducts(data.data.data);
+          setTotalCount(data.data.totalCount);
+      } else {
+          console.error("Failed to fetch products:", data.message);
+      }
+    } catch (error) {
+      console.error("An error occurred while fetching categories:", error);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -135,7 +103,7 @@ const AllProducts = () => {
     <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
       <div className="px-4 py-6 md:px-6 xl:px-9 flex items-center justify-between">
         <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-          Top Products
+          Inactive Products
         </h4>
         <div className='flex items-center gap-2'>
           <ClickOutside onClick={() => setIsLanguageOpen(false)}>
@@ -231,88 +199,101 @@ const AllProducts = () => {
           </ClickOutside>
         </div>
       </div>
-
-      <div className="grid grid-cols-3 gap-2 md:gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-2 flex items-center">
-          <p className="font-medium">Product Name</p>
-        </div>
-        <div className="col-span-3 hidden items-center md:flex">
-          <p className="font-medium">Description</p>
-        </div>
-        <div className="col-span-1 hidden items-center sm:flex">
-          <p className="font-medium">Category</p>
-        </div>
-        <div className="col-span-1 hidden items-center md:flex">
-          <p className="font-medium">Measurement</p>
-        </div>
-        <div className="col-span-1 flex items-center justify-center">
-          <p className="font-medium">Actions</p>
-        </div>
-      </div>
-
-      {products.map((product, key) => (
-        <div
-          className="grid grid-cols-3 gap-2 sm:gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:grid-cols-8 md:px-6 2xl:px-7.5"
-          key={key}
-        >
-          <div className="col-span-2 flex items-center">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="h-12.5 w-15 rounded-md">
-                <Image
-                  src={product.productImageUrl}
-                  width={60}
-                  height={50}
-                  alt="Product"
-                />
+      {
+        loading ? (
+          <>
+            <ElementLoader />
+          </>
+        ) : ( products.length > 0 ? (
+          <>
+            <div className="grid grid-cols-3 gap-2 md:gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:grid-cols-8 md:px-6 2xl:px-7.5">
+              <div className="col-span-2 flex items-center">
+                <p className="font-medium">Product Name</p>
               </div>
-              <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                {product.productName}
-              </p>
+              <div className="col-span-3 hidden items-center md:flex">
+                <p className="font-medium">Description</p>
+              </div>
+              <div className="col-span-1 hidden items-center sm:flex">
+                <p className="font-medium">Category</p>
+              </div>
+              <div className="col-span-1 hidden items-center md:flex">
+                <p className="font-medium">Measurement</p>
+              </div>
+              <div className="col-span-1 flex items-center justify-center">
+                <p className="font-medium">Actions</p>
+              </div>
             </div>
-          </div>
-          <div className="col-span-3 hidden items-center md:flex">
-            <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-              {product.productDescription}
-              
-            </p>
-          </div>
-          <div className="col-span-1 hidden items-center sm:flex">
-            <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-              {product.productCategoryName}
-            </p>
-          </div>
-          <div className="col-span-1 hidden items-center md:flex">
-            <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-              {product.productMeasurementUnit}
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3.5">
-              <Link href={`/products/${product.productId}`} className="hover:text-primary hover:text-primary-hover" title='view products'>
-                  <FaEye />
-              </Link>
-              <Link href={`/products/edit/${product.productId}`} className="ml-2 hover:text-primary" title='edit'>
-                  <FaEdit />
-              </Link>
-              <button className="ml-2 hover:text-red-500" title='inactive'>
-                  <FaBan />
+
+            {products.map((product, key) => (
+              <div
+                className="grid grid-cols-3 gap-2 sm:gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:grid-cols-8 md:px-6 2xl:px-7.5"
+                key={key}
+              >
+                <div className="col-span-2 flex items-center">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="h-12.5 w-15 rounded-md">
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${product.imageUrl}`}
+                        width={60}
+                        height={50}
+                        alt="Product"
+                      />
+                    </div>
+                    <p className="text-body-sm font-medium text-dark dark:text-dark-6">
+                      {product.name}
+                    </p>
+                  </div>
+                </div>
+                <div className="col-span-3 hidden items-center md:flex">
+                  <p className="text-body-sm font-medium text-dark dark:text-dark-6">
+                    {product.description}
+                    
+                  </p>
+                </div>
+                <div className="col-span-1 hidden items-center sm:flex">
+                  <p className="text-body-sm font-medium text-dark dark:text-dark-6">
+                    Vegetables
+                  </p>
+                </div>
+                <div className="col-span-1 hidden items-center md:flex">
+                  <p className="text-body-sm font-medium text-dark dark:text-dark-6">
+                    {product.measurementUnit}
+                  </p>
+                </div>
+                <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3.5">
+                    <Link href={`/products/${product.id}`} className="hover:text-primary hover:text-primary-hover" title='view products'>
+                        <FaEye />
+                    </Link>
+                    <Link href={`/products/edit/${product.id}`} className="ml-2 hover:text-primary" title='edit'>
+                        <FaEdit />
+                    </Link>
+                    <button className="ml-2 hover:text-red-500" title='inactive'>
+                        <FaBan />
+                    </button>
+                    <button className="ml-2 hover:text-red-500" title='delete'>
+                        <FaTrash />
+                    </button>
+                </div>
+              </div>
+            ))}
+            <div className="flex justify-between mt-4 px-4 py-4.5">
+              <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
+                Previous
               </button>
-              <button className="ml-2 hover:text-red-500" title='delete'>
-                  <FaTrash />
+              <span className="flex items-center">Page {currentPage} of {totalPages}</span>
+              <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
+                Next
               </button>
-          </div>
-        </div>
-      ))}
-      <div className="flex justify-between mt-4 px-4 py-4.5">
-        <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
-          Previous
-        </button>
-        <span className="flex items-center">Page {currentPage} of {totalPages}</span>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
-          Next
-        </button>
-      </div>
+            </div>
+          </>
+        ) : (
+          <p className='px-4 py-4.5'> no products found</p>
+        )
+      )
+      }
+      
     </div>
   )
 }
 
-export default AllProducts
+export default InactiveProducts

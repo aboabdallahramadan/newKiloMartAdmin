@@ -8,7 +8,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import { Location } from '@/types/location';
 import Link from 'next/link';
 
-const AllMap = () => {
+const AllCustomersMap = () => {
   const [locations, setLocations] = useState<Location[]>([
     {
       id: 1,
@@ -129,7 +129,7 @@ const AllMap = () => {
             <Marker key={location.id} position={{ lat: location.mapDetails.latitude, lng: location.mapDetails.longitude }}>
                 <Popup>
                     <div>
-                    <p>User Name: <Link className='text-primary hover:text-primary/50' href={`/providers/${location.userId}`}>{location.userName}</Link></p>
+                    <p>User Name: <Link className='text-primary hover:text-primary/50' href={`/customers/${location.userId}`}>{location.userName}</Link></p>
                     <p>Name: {location.name}</p>
                     <p>Type: {location.type}</p>
                     <p>Building Number: {location.buildingNumber}</p>
@@ -148,4 +148,4 @@ const AllMap = () => {
   );
 };
 
-export default AllMap;
+export default AllCustomersMap;

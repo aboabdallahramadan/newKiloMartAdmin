@@ -3,7 +3,12 @@ import ProductDetails from '@/components/Products/ProductDetails';
 import ProductOffersTable from '@/components/Products/ProductOffersTable';
 import DefaultLayout from '@/components/Layouts/DefaultLaout';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import { Metadata } from 'next';
 
+export const metadata: Metadata = {
+    title: "Product's Details",
+    description: "Product's Details",
+  };
 const page = () => {
     return (
         <DefaultLayout>

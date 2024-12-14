@@ -11,6 +11,7 @@ const ProviderMap = () => {
   const [location, setLocation] = useState<Omit<Location, 'userId' | 'userName' >>({
     id: 0,
     type: "Apartment",
+    name: "home",
     buildingNumber: "123",
     apartmentNumber: "456",
     floorNumber: "7",
@@ -59,6 +60,7 @@ const ProviderMap = () => {
               <Popup>
                 <div>
                   <p>Type: {location.type}</p>
+                  <p>Name: {location.name}</p>
                   <p>Building Number: {location.buildingNumber}</p>
                   <p>Apartment Number: {location.apartmentNumber}</p>
                   <p>Floor Number: {location.floorNumber}</p>

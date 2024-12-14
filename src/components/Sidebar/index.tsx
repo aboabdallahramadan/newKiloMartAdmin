@@ -10,6 +10,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import { FaStore } from "react-icons/fa";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
+import { BsPerson } from "react-icons/bs";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -71,6 +72,13 @@ const menuGroups = [
           { label: "New Delivery Requests", route: "/deliveries/request-approval" },
           { label: "Withdraw Requests", route: "/deliveries/withdraw-requests" }
         ],
+      },
+      {
+        icon: (
+          <BsPerson className="text-2xl" />
+        ),
+        label: "Customers",
+        route: "/customers",
       },
       {
         icon: (

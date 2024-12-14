@@ -8,12 +8,10 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import { Location } from '@/types/location';
 import Link from 'next/link';
 
-const AllMap = () => {
-  const [locations, setLocations] = useState<Location[]>([
+const CustomerLocations = () => {
+  const [locations, setLocations] = useState<Omit<Location , "userId" | "userName">[]>([
     {
       id: 1,
-      userId: 1,
-      userName: "John Doe",
       name: "home",
       type: "Apartment",
       buildingNumber: "123",
@@ -28,8 +26,6 @@ const AllMap = () => {
     },
     {
         id: 2,
-        userId: 2,
-        userName: "John Doe",
         name: "home",
         type: "Apartment",
         buildingNumber: "123",
@@ -44,8 +40,6 @@ const AllMap = () => {
       },
       {
         id: 3,
-        userId: 3,
-        userName: "John Doe",
         name: "home",
         type: "Apartment",
         buildingNumber: "123",
@@ -60,8 +54,6 @@ const AllMap = () => {
       },
       {
         id: 4,
-        userId: 4,
-        userName: "John Doe",
         name: "home",
         type: "Apartment",
         buildingNumber: "123",
@@ -76,8 +68,6 @@ const AllMap = () => {
       },
       {
         id: 5,
-        userId: 5,
-        userName: "John Doe",
         name: "home",
         type: "Apartment",
         buildingNumber: "123",
@@ -129,7 +119,6 @@ const AllMap = () => {
             <Marker key={location.id} position={{ lat: location.mapDetails.latitude, lng: location.mapDetails.longitude }}>
                 <Popup>
                     <div>
-                    <p>User Name: <Link className='text-primary hover:text-primary/50' href={`/providers/${location.userId}`}>{location.userName}</Link></p>
                     <p>Name: {location.name}</p>
                     <p>Type: {location.type}</p>
                     <p>Building Number: {location.buildingNumber}</p>
@@ -148,4 +137,4 @@ const AllMap = () => {
   );
 };
 
-export default AllMap;
+export default CustomerLocations;

@@ -11,7 +11,7 @@ const ProviderProducts = () => {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState(2);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(3);
+  const [pageSize] = useState(2);
   const [totalCount, setTotalCount] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState<ProductOffer | null>(null);
   const {id} = useParams();
@@ -74,72 +74,72 @@ const ProviderProducts = () => {
   };
 
   return (
-    <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
-      <div className='flex justify-between items-center w-full'>
-        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Provider's Products</h2>
+<div className="rounded-xl bg-gray-50 dark:bg-gray-dark p-6 shadow-md">
+      <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
+        <h2 className="text-2xl font-bold text-dark dark:text-white">Provider's Products</h2>
+        
         <ClickOutside onClick={() => setIsOpen(false)}>
-          <div className="relative z-20 inline-flex cursor-pointer appearance-none rounded-[5px] border border-stroke bg-white text-sm font-medium outline-none dark:border-dark-3 dark:bg-dark-2">
-            <div
-              className={`py-[5px] pl-[9px] pr-[35px] text-sm font-medium text-dark dark:text-white ${isOpen ? "open" : ""}`}
+          <div className="relative">
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary transition-colors duration-300"
               onClick={() => setIsOpen(!isOpen)}
             >
-              Language
-              <span
-                className={`absolute right-2.5 top-1/2 z-10 -translate-y-1/2 ${isOpen && "rotate-180"}`}
+              <span className="text-dark dark:text-white">Language</span>
+              <svg
+                className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                fill="currentColor"
+                viewBox="0 0 20 20"
               >
-                <svg
-                  className="fill-current"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M3.32293 6.38394C3.5251 6.14807 3.88021 6.12075 4.11608 6.32293L9.00001 10.5092L13.8839 6.32293C14.1198 6.12075 14.4749 6.14807 14.6771 6.38394C14.8793 6.61981 14.8519 6.97492 14.6161 7.17709L9.36608 11.6771C9.15543 11.8576 8.84459 11.8576 8.63394 11.6771L3.38394 7.17709C3.14807 6.97492 3.12075 6.61981 3.32293 6.38394Z"
-                    fill=""
-                  />
-                </svg>
-              </span>
-            </div>
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+
             {isOpen && (
-              <div className="absolute right-0 top-full z-40 mt-2 w-full rounded-[7px] border border-stroke bg-white py-1.5 shadow-2 dark:border-dark-3 dark:bg-dark-2 dark:shadow-card">
-                <ul>
-                    <li
-                      onClick={() => handleOptionSelect(2)}
-                      className={`flex w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-left font-medium hover:text-dark dark:hover:text-white ${language === 2 ? "selected" : ""}`}
-                    >
-                      English
-                    </li>
-                    <li
-                      onClick={() => handleOptionSelect(1)}
-                      className={`flex w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-left font-medium hover:text-dark dark:hover:text-white ${language === 1 ? "selected" : ""}`}
-                    >
-                      Arabic
-                    </li>
-                </ul>
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1">
+                <button
+                  onClick={() => handleOptionSelect(2)}
+                  className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => handleOptionSelect(1)}
+                  className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Arabic
+                </button>
               </div>
             )}
           </div>
         </ClickOutside>
       </div>
+
       {loading ? (
         <ElementLoader />
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
             {products.map((product) => (
               <ProductCard key={product.productId} product={product} onShowDetails={handleShowDetails} />
             ))}
           </div>
-          <div className="flex justify-between mt-4">
-            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
+
+          <div className="flex items-center justify-between">
+            <button 
+              onClick={handlePreviousPage} 
+              disabled={currentPage === 1} 
+              className="px-6 py-2 bg-primary text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors duration-300"
+            >
               Previous
             </button>
-            <span className="flex items-center">Page {currentPage} of {totalPages}</span>
-            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-primary text-white disabled:bg-gray-300 rounded disabled:opacity-50">
+            <span className="text-dark dark:text-white font-medium">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button 
+              onClick={handleNextPage} 
+              disabled={currentPage === totalPages} 
+              className="px-6 py-2 bg-primary text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors duration-300"
+            >
               Next
             </button>
           </div>
@@ -148,27 +148,65 @@ const ProviderProducts = () => {
       
 
       {selectedProduct && (
-        <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
-            <ClickOutside onClick={() => handleCloseModal()}>
-            <div className="bg-white dark:bg-gray-dark p-6 rounded shadow-lg max-w-md w-full">
-              <h3 className="text-xl font-bold mb-4">{selectedProduct.productName}</h3>
-              <img src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${selectedProduct.productImageUrl}`} alt={selectedProduct.productName} className="w-full h-48 object-cover rounded mb-4" />
-              <div className="space-y-2">
-                <p><strong>Description:</strong> {selectedProduct.productDescription}</p>
-                <p><strong>Price:</strong> {selectedProduct.productOfferPrice} RS</p>
-                <p><strong>Quantity:</strong> {selectedProduct.productOfferQuantity}</p>
-                <p><strong>Category:</strong> {selectedProduct.productCategoryName}</p>
-                <p><strong>Measurement Unit:</strong> {selectedProduct.productMeasurementUnit}</p>
-                <p><strong>Offer From Date:</strong> {new Date(selectedProduct.productOfferFromDate).toLocaleDateString()}</p>
-                <p><strong>Offer Off Percentage:</strong> {selectedProduct.productOfferOffPercentage}%</p>
-              </div>
-              <button onClick={handleCloseModal} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
-                Close
-              </button>
-            </div>
-          </ClickOutside>
+  <div className="fixed inset-0 z-[999] bg-black/60 flex justify-center items-center p-4">
+    <ClickOutside onClick={handleCloseModal}>
+      <div className="bg-white dark:bg-gray-dark rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden">
+        {/* Modal Header */}
+        <div className="p-6 border-b border-gray-200 dark:border-dark-3">
+          <h3 className="text-2xl font-bold text-dark dark:text-white">{selectedProduct.productName}</h3>
         </div>
-      )}
+
+        {/* Modal Content */}
+        <div className="p-6">
+          <div className="flex flex-col md:flex-row gap-6">
+            <img 
+              src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${selectedProduct.productImageUrl}`} 
+              alt={selectedProduct.productName} 
+              className="w-full md:w-1/2 h-64 object-cover rounded-lg"
+            />
+            
+            <div className="w-full md:w-1/2 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Price</p>
+                  <p className="text-lg font-semibold text-green-600 dark:text-green-400">{selectedProduct.productOfferPrice} RS</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Quantity</p>
+                  <p className="text-lg font-semibold text-dark dark:text-white">{selectedProduct.productOfferQuantity}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Category</p>
+                  <p className="text-lg font-semibold text-dark dark:text-white">{selectedProduct.productCategoryName}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Discount</p>
+                  <p className="text-lg font-semibold text-primary">{selectedProduct.productOfferOffPercentage}%</p>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Description</p>
+                <p className="text-dark dark:text-white">{selectedProduct.productDescription}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="p-6 border-t border-gray-200 dark:border-dark-3 flex justify-end">
+          <button 
+            onClick={handleCloseModal} 
+            className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </ClickOutside>
+  </div>
+)}
+
     </div>
   );
 };

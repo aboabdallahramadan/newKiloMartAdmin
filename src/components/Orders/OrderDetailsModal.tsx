@@ -8,44 +8,127 @@ interface OrderDetailsProps {
     handleCloseModal: Function
 }
 
-const OrderDetailsModal : React.FC<OrderDetailsProps> = ({Order, handleCloseModal}) => {
-
+const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal}) => {
     return (
-    <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center max-h-screen">
-            <ClickOutside onClick={() => handleCloseModal()}>
-              <div className="bg-white dark:bg-gray-dark p-6 rounded-lg shadow-xl max-w-lg w-full">
-                <h3 className="text-2xl font-semibold mb-6 text-center">Order Details</h3>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <p><strong>Order ID:</strong> {Order.orderId}</p>
-                  <p><strong>Order Date:</strong> {new Date(Order.orderDate).toLocaleDateString()}</p>
-                  <p><strong>Order Status:</strong> {Order.orderStatus}</p>
-                  <p><strong>Order Total:</strong> {Order.orderTotal} RS</p>
-                  <p><strong>Customer Name:</strong> <Link className='text-primary hover:text-primary/50' href={`/customers/${Order.orderCustomerId}`}> {Order.orderCustomerName}</Link></p>
-                  <p><strong>Provider Name:</strong> <Link className='text-primary hover:text-primary/50' href={`/providers/${Order.orderProviderId}`}> {Order.orderProviderName}</Link></p>
-                  <p><strong>Delivery Name:</strong> <Link className='text-primary hover:text-primary/50' href={`/deliveries/${Order.orderDeliveryId}`}> {Order.orderDeliveryName}</Link></p>
-                  <p><strong>Delivery Fee:</strong> {Order.orderDeliveryFee} RS</p>
-                  <p><strong>Service Fee:</strong> {Order.orderServiceFee} RS</p>
-                  <p><strong>Payment Method:</strong> {Order.orderPaymentMethod}</p>
+      <div className="fixed inset-0 z-[999] bg-black/60 flex justify-center items-center p-4">
+        <ClickOutside onClick={() => handleCloseModal()}>
+          <div className="bg-white dark:bg-gray-dark rounded-xl shadow-2xl max-w-3xl w-full max-h-screen overflow-y-auto">
+            {/* Header */}
+            <div className="p-6 border-b border-gray-200 dark:border-dark-3">
+              <div className="flex justify-between items-center">
+                <h3 className="text-2xl font-bold text-dark dark:text-white">Order Details</h3>
+                <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                  Order.orderStatus === 'Completed' 
+                    ? 'bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-400'
+                    : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800/20 dark:text-yellow-400'
+                }`}>
+                  {Order.orderStatus}
+                </span>
+              </div>
+            </div>
+
+            {/* Order Information */}
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="space-y-4">
+                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Customer Information</h4>
+                    <Link href={`/customers/${Order.orderCustomerId}`} className="text-primary hover:text-primary/80">
+                      {Order.orderCustomerName}
+                    </Link>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Provider Information</h4>
+                    <Link href={`/providers/${Order.orderProviderId}`} className="text-primary hover:text-primary/80">
+                      {Order.orderProviderName}
+                    </Link>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Delivery Information</h4>
+                    <Link href={`/deliveries/${Order.orderDeliveryId}`} className="text-primary hover:text-primary/80">
+                      {Order.orderDeliveryName}
+                    </Link>
+                  </div>
                 </div>
-                <div className="overflow-y-auto max-h-80 grid grid-cols-1 gap-4 border-t border-gray-200 pt-4">
+
+                <div className="space-y-4">
+                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Order Details</h4>
+                    <div className="space-y-2">
+                      <p className="flex justify-between">
+                        <span className="text-dark dark:text-white">Order ID:</span>
+                        <span className="font-medium">{Order.orderId}</span>
+                      </p>
+                      <p className="flex justify-between">
+                        <span className="text-dark dark:text-white">Order Date:</span>
+                        <span className="font-medium">{new Date(Order.orderDate).toLocaleDateString()}</span>
+                      </p>
+                      <p className="flex justify-between">
+                        <span className="text-dark dark:text-white">Payment Method:</span>
+                        <span className="font-medium">{Order.orderPaymentMethod}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Fees</h4>
+                    <div className="space-y-2">
+                      <p className="flex justify-between">
+                        <span className="text-dark dark:text-white">Delivery Fee:</span>
+                        <span className="font-medium">{Order.orderDeliveryFee} RS</span>
+                      </p>
+                      <p className="flex justify-between">
+                        <span className="text-dark dark:text-white">Service Fee:</span>
+                        <span className="font-medium">{Order.orderServiceFee} RS</span>
+                      </p>
+                      <p className="flex justify-between text-lg font-bold">
+                        <span className="text-dark dark:text-white">Total:</span>
+                        <span className="text-primary">{Order.orderTotal} RS</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order Items */}
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-dark dark:text-white mb-4">Order Items</h4>
+                <div className="space-y-4">
                   {Order.orderItems.map((item) => (
-                    <div key={item.productId} className="flex items-center space-x-4 border-b border-gray-300 pb-2">
-                      <img src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${item.imageUrl}`} alt={item.productName} className="w-20 h-20 object-cover rounded" />
-                      <div>
-                        <p><strong>Product Name:</strong> <Link className='text-primary hover:text-primary/50' href={`/products/${item.productId}`}>{item.productName}</Link></p>
-                        <p><strong>Quantity:</strong> {item.quantity}</p>
-                        <p><strong>Price:</strong> {item.price} RS</p>
+                    <div key={item.productId} className="flex items-center gap-4 bg-white dark:bg-gray-700 p-4 rounded-lg">
+                      <img 
+                        src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${item.imageUrl}`} 
+                        alt={item.productName} 
+                        className="w-20 h-20 object-cover rounded-lg"
+                      />
+                      <div className="flex-1">
+                        <Link href={`/products/${item.productId}`} className="text-primary hover:text-primary/80 font-medium">
+                          {item.productName}
+                        </Link>
+                        <div className="flex justify-between mt-2">
+                          <span className="text-dark dark:text-white">Quantity: {item.quantity}</span>
+                          <span className="font-medium text-dark dark:text-white">{item.price} RS</span>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-                <button onClick={() => handleCloseModal()} className="mt-6 w-full py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition duration-300">
-                  Close
-                </button>
               </div>
-            </ClickOutside>
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-200 dark:border-dark-3">
+              <button 
+                onClick={() => handleCloseModal()} 
+                className="w-full py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors duration-300"
+              >
+                Close
+              </button>
+            </div>
           </div>
-  )
+        </ClickOutside>
+      </div>
+    )
 }
 
 export default OrderDetailsModal

@@ -11,6 +11,8 @@ export type ProductOffer = {
     productOfferOffPercentage: number;
     productOfferPrice: number;
     productOfferQuantity: number;
+    productOfferProviderName?: string;
+    productOfferProviderId?: number;
     productProductCategory: number;
     productCategoryName: string;
 }

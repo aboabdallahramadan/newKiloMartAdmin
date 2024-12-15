@@ -100,6 +100,18 @@ const menuGroups = [
       },
       {
         icon: (
+          <AiFillProduct />
+        ),
+        label: "Offers",
+        route: "#",
+        children: [
+          { label: "Product Offers", route: "/offers/product" },
+          { label: "Codes", route: "/offers/codes" },
+          { label: "Free Delivery", route: "/offers/delivery" },
+        ],
+      },
+      {
+        icon: (
           <svg
             className="fill-current"
             width="24"

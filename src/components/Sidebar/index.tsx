@@ -11,6 +11,7 @@ import { FaStore } from "react-icons/fa";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
+import { BiCart } from "react-icons/bi";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -92,6 +93,13 @@ const menuGroups = [
           { label: "New Product Requests", route: "/products/new-product-requests" },
           { label: "Add New Product", route: "/products/new-product" },
         ],
+      },
+      {
+        icon: (
+          <BiCart className="text-2xl" />
+        ),
+        label: "Orders",
+        route: "/orders",
       },
       {
         icon: (

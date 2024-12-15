@@ -1,7 +1,7 @@
 "use client";
 import jsVectorMap from "jsvectormap";
 import React, { useEffect } from "react";
-import "../../js/us-aea-en";
+import "../../js/saudi-arabia.js";
 
 const MapOne: React.FC = () => {
   useEffect(() => {
@@ -14,7 +14,7 @@ const MapOne: React.FC = () => {
 
     const vectorMapOne = new jsVectorMap({
       selector: "#mapOne",
-      map: "us_aea_en",
+      map: "saudi-arabia",
       zoomButtons: true,
 
       regionStyle: {

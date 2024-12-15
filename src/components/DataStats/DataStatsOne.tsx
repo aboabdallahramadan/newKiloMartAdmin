@@ -1,31 +1,15 @@
 import React from "react";
 import { dataStats } from "@/types/dataStats";
+import { BsFillCartFill } from "react-icons/bs";
 
 const dataStatsList = [
   {
     icon: (
-      <svg
-        width="26"
-        height="26"
-        viewBox="0 0 26 26"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M10.5626 13.0002C10.5626 11.654 11.6539 10.5627 13.0001 10.5627C14.3463 10.5627 15.4376 11.654 15.4376 13.0002C15.4376 14.3464 14.3463 15.4377 13.0001 15.4377C11.6539 15.4377 10.5626 14.3464 10.5626 13.0002Z"
-          fill="white"
-        />
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M2.16675 13.0002C2.16675 14.7762 2.62713 15.3743 3.54788 16.5705C5.38638 18.959 8.4697 21.6668 13.0001 21.6668C17.5305 21.6668 20.6138 18.959 22.4523 16.5705C23.373 15.3743 23.8334 14.7762 23.8334 13.0002C23.8334 11.2242 23.373 10.6261 22.4523 9.42985C20.6138 7.04135 17.5305 4.3335 13.0001 4.3335C8.4697 4.3335 5.38638 7.04135 3.54788 9.42985C2.62713 10.6261 2.16675 11.2242 2.16675 13.0002ZM13.0001 8.93766C10.7564 8.93766 8.93758 10.7565 8.93758 13.0002C8.93758 15.2438 10.7564 17.0627 13.0001 17.0627C15.2437 17.0627 17.0626 15.2438 17.0626 13.0002C17.0626 10.7565 15.2437 8.93766 13.0001 8.93766Z"
-          fill="white"
-        />
-      </svg>
+      <BsFillCartFill className="text-white text-2xl" />
     ),
     color: "#3FD97F",
-    title: "Total Views",
-    value: "3.456K",
+    title: "Total Orders",
+    value: "3557",
     growthRate: 0.43,
   },
   {
@@ -47,7 +31,7 @@ const dataStatsList = [
     ),
     color: "#FF9C55",
     title: "Total Profit",
-    value: "$42.2K",
+    value: "42598 RS",
     growthRate: 4.35,
   },
   {
@@ -75,7 +59,7 @@ const dataStatsList = [
     ),
     color: "#8155FF",
     title: "Total Product",
-    value: "2.450",
+    value: "250",
     growthRate: 2.59,
   },
   {
@@ -112,8 +96,8 @@ const dataStatsList = [
       </svg>
     ),
     color: "#18BFFF",
-    title: "Total Users",
-    value: "3.465",
+    title: "Total Customers",
+    value: "365",
     growthRate: -0.95,
   },
 ];
@@ -142,7 +126,7 @@ const DataStatsOne: React.FC<dataStats> = () => {
                 <span className="text-body-sm font-medium">{item.title}</span>
               </div>
 
-              <span
+              {/* <span
                 className={`flex items-center gap-1.5 text-body-sm font-medium ${
                   item.growthRate > 0 ? "text-green" : "text-red"
                 }`}
@@ -177,7 +161,7 @@ const DataStatsOne: React.FC<dataStats> = () => {
                     />
                   </svg>
                 )}
-              </span>
+              </span> */}
             </div>
           </div>
         ))}

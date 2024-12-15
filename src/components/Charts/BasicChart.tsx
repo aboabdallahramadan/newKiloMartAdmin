@@ -1,6 +1,6 @@
 "use client";
 
-import ChartThree from "@/components/Charts/ChartThree";
+import ChartThree from "@/components/Charts/OrdersChart";
 import React from "react";
 import ChartFive from "@/components/Charts/ChartFive";
 

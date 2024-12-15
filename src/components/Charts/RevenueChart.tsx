@@ -3,7 +3,7 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
 
-const ChartOne: React.FC = () => {
+const RevenueChart: React.FC = () => {
   const series = [
     {
       name: "Received Amount",
@@ -137,9 +137,9 @@ const ChartOne: React.FC = () => {
         </div>
         <div className="flex items-center gap-2.5">
           <p className="font-medium uppercase text-dark dark:text-dark-6">
-            Short by:
+            Year
           </p>
-          <DefaultSelectOption options={["Monthly", "Yearly"]} />
+          <DefaultSelectOption options={["2024", "2023" , "2022"]} />
         </div>
       </div>
       <div>
@@ -155,15 +155,15 @@ const ChartOne: React.FC = () => {
 
       <div className="flex flex-col gap-2 text-center xsm:flex-row xsm:gap-0">
         <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
-          <p className="font-medium">Received Amount</p>
+          <p className="font-medium">Cash Payments</p>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            $45,070.00
+            45,070.00 RS
           </h4>
         </div>
         <div className="xsm:w-1/2">
-          <p className="font-medium">Due Amount</p>
+          <p className="font-medium">Card Payments</p>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            $32,400.00
+            32,400.00 RS
           </h4>
         </div>
       </div>
@@ -171,4 +171,4 @@ const ChartOne: React.FC = () => {
   );
 };
 
-export default ChartOne;
+export default RevenueChart;

@@ -1,5 +1,8 @@
 import React from 'react'
 import { Metadata } from 'next';
+import DefaultLayout from '@/components/Layouts/DefaultLaout';
+import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import FreeDelivery from '@/components/offers/FreeDelivery';
 
 export const metadata: Metadata = {
     title: "Free Delivery Offers",
@@ -8,7 +11,10 @@ export const metadata: Metadata = {
   
 const page = () => {
   return (
-    <div>page</div>
+    <DefaultLayout>
+      <Breadcrumb pageName='Free Delivery Offers' />
+      <FreeDelivery />
+    </DefaultLayout>
   )
 }
 

@@ -76,7 +76,7 @@ const ProviderProducts = () => {
   return (
 <div className="rounded-xl bg-gray-50 dark:bg-gray-dark p-6 shadow-md">
       <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
-        <h2 className="text-2xl font-bold text-dark dark:text-white">Provider's Products</h2>
+        <h2 className="text-2xl font-bold text-dark dark:text-white">Provider&lsquo;s Products</h2>
         
         <ClickOutside onClick={() => setIsOpen(false)}>
           <div className="relative">

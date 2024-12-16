@@ -97,7 +97,7 @@ const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal
                   {Order.orderItems.map((item) => (
                     <div key={item.productId} className="flex items-center gap-4 bg-white dark:bg-gray-700 p-4 rounded-lg">
                       <img 
-                        src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${item.imageUrl}`} 
+                        src={`/images/product/product-01.png`} 
                         alt={item.productName} 
                         className="w-20 h-20 object-cover rounded-lg"
                       />

@@ -10,7 +10,7 @@ const ProviderProducts = () => {
   const [products, setProducts] = useState<ProductOffer[]>([
     {
       productId: 1,
-      productImageUrl: "/images/product/product-01.jpg",
+      productImageUrl: "/images/product/product-01.png",
       productIsActive: true,
       productDescription: "Fresh organic apples from local farms",
       productMeasurementUnit: "kg",
@@ -28,7 +28,7 @@ const ProviderProducts = () => {
     },
     {
       productId: 2,
-      productImageUrl: "/images/product/product-02.jpg",
+      productImageUrl: "/images/product/product-02.png",
       productIsActive: true,
       productDescription: "Premium whole grain bread",
       productMeasurementUnit: "piece",

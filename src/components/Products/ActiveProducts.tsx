@@ -24,7 +24,7 @@ const ActiveProducts = () => {
       name: "Fresh Apples",
       description: "Premium quality fresh red apples",
       measurementUnit: "KG",
-      imageUrl: "/images/product/product-01.jpg",
+      imageUrl: "/images/product/product-01.png",
       isActive: true
     },
     {
@@ -32,7 +32,7 @@ const ActiveProducts = () => {
       name: "Organic Bananas",
       description: "Naturally ripened organic bananas",
       measurementUnit: "KG",
-      imageUrl: "/images/product/product-01.jpg",
+      imageUrl: "/images/product/product-01.png",
       isActive: true
     },
     {
@@ -40,7 +40,7 @@ const ActiveProducts = () => {
       name: "Whole Wheat Bread",
       description: "Freshly baked whole wheat bread",
       measurementUnit: "PCS",
-      imageUrl: "/images/product/product-01.jpg",
+      imageUrl: "/images/product/product-01.png",
       isActive: true
     },
     {
@@ -48,7 +48,7 @@ const ActiveProducts = () => {
       name: "Fresh Milk",
       description: "Farm fresh whole milk",
       measurementUnit: "L",
-      imageUrl: "/images/product/product-01.jpg",
+      imageUrl: "/images/product/product-01.png",
       isActive: true
     }
   ])

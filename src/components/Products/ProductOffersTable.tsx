@@ -50,7 +50,7 @@ const ProductOffersTable = () => {
     return (
       <div className="p-4 md:p-6 w-full mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-dark dark:text-white">Product's Offers</h2>
+          <h2 className="text-2xl font-bold text-dark dark:text-white">Product&apos;s Offers</h2>
           <span className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
             {offers.length} Active Offers
           </span>

@@ -8,7 +8,38 @@ import { toast } from "react-toastify";
 import EditCode from "./EditCode";
 
 const DiscountCodes = () => {
-  const [codesData, setCodesData] = useState<Code[]>([]);
+  const [codesData, setCodesData] = useState<Code[]>([
+    {
+      id: 1,
+      code: "SUMMER2024",
+      discountType: "1",
+      value: 50,
+      description: "Summer season discount",
+      startDate: "2024-06-01T00:00:00",
+      endDate: "2024-08-31T00:00:00",
+      isActive: true
+    },
+    {
+      id: 2,
+      code: "WELCOME25",
+      discountType: "2", 
+      value: 25,
+      description: "New customer welcome discount",
+      startDate: "2024-01-01T00:00:00",
+      endDate: "2024-12-31T00:00:00",
+      isActive: true
+    },
+    {
+      id: 3,
+      code: "FLASH10",
+      discountType: "2",
+      value: 10,
+      description: "Flash sale discount",
+      startDate: "2024-03-15T00:00:00", 
+      endDate: "2024-03-17T00:00:00",
+      isActive: false
+    }
+  ]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
@@ -41,7 +72,7 @@ const DiscountCodes = () => {
       }
     };
   
-    fetchCodes();
+    // fetchCodes();
   }, [currentPage, pageSize]);
 
   const totalPages = Math.ceil(totalCount / pageSize);

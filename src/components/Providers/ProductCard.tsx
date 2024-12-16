@@ -11,7 +11,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowDetails }) => 
     <div className="bg-white dark:bg-gray-dark rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="relative">
         <img 
-          src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${product.productImageUrl}`} 
+          src={`${product.productImageUrl}`} 
           alt={product.productName} 
           className="w-full h-48 object-cover rounded-t-xl"
         />

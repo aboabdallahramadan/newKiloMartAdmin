@@ -15,7 +15,7 @@ const ActiveProducts = () => {
   const [category, setCategory] = useState(0);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [categories,setCategories] = useState<Omit<Category, "isActive" | "productsCount">[]>([])
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [products,setProducts] = useState<Omit<Product , "categoryId" | "categoryName">[]>([

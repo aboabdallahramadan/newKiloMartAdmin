@@ -24,7 +24,7 @@ const InactiveProducts = () => {
       id: 1
     }
   ])
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [products,setProducts] = useState<Omit<Product , "categoryId" | "categoryName">[]>([

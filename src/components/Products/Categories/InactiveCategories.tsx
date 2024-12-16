@@ -19,7 +19,7 @@ const CategoriesTable = () => {
         { id: 9, name: "Automotive" },
         { id: 10, name: "Health" }
     ]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const pageSize = 10;

@@ -7,7 +7,18 @@ import { FaBan, FaTrash, FaEye, FaCheck, FaEdit } from 'react-icons/fa';
 import ClickOutside from '@/components/ClickOutside';
 
 const CategoriesTable = () => {
-    const [categories, setCategories] = useState<Omit<Category, 'productsCount' | "status">[]>([]);
+    const [categories, setCategories] = useState<Omit<Category, 'productsCount' | "isActive">[]>([
+        { id: 1, name: "Electronics"},
+        { id: 2, name: "Groceries" },
+        { id: 3, name: "Fashion" },
+        { id: 4, name: "Home & Garden" },
+        { id: 5, name: "Sports" },
+        { id: 6, name: "Books"},
+        { id: 7, name: "Beauty" },
+        { id: 8, name: "Toys" },
+        { id: 9, name: "Automotive" },
+        { id: 10, name: "Health" }
+    ]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);

@@ -7,7 +7,44 @@ import { useParams } from 'next/dist/client/components/navigation';
 import ClickOutside from '../ClickOutside';
 
 const ProviderProducts = () => {
-  const [products, setProducts] = useState<ProductOffer[]>([]);
+  const [products, setProducts] = useState<ProductOffer[]>([
+    {
+      productId: 1,
+      productImageUrl: "/images/product/product-01.jpg",
+      productIsActive: true,
+      productDescription: "Fresh organic apples from local farms",
+      productMeasurementUnit: "kg",
+      productName: "Organic Apples",
+      productOfferId: 101,
+      productOfferFromDate: "2024-01-15",
+      productOfferIsActive: true,
+      productOfferOffPercentage: 15,
+      productOfferPrice: 25.99,
+      productOfferQuantity: 100,
+      productOfferProviderName: "Fresh Foods Market",
+      productOfferProviderId: 501,
+      productProductCategory: 1,
+      productCategoryName: "Fruits"
+    },
+    {
+      productId: 2,
+      productImageUrl: "/images/product/product-02.jpg",
+      productIsActive: true,
+      productDescription: "Premium whole grain bread",
+      productMeasurementUnit: "piece",
+      productName: "Whole Grain Bread",
+      productOfferId: 102,
+      productOfferFromDate: "2024-01-16",
+      productOfferIsActive: true,
+      productOfferOffPercentage: 10,
+      productOfferPrice: 12.50,
+      productOfferQuantity: 50,
+      productOfferProviderName: "Bakery Delights",
+      productOfferProviderId: 502,
+      productProductCategory: 2,
+      productCategoryName: "Bakery"
+    }
+  ]);
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState(2);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +80,7 @@ const ProviderProducts = () => {
       }
     };
 
-    fetchProducts();
+    // fetchProducts();
   }, [currentPage, pageSize, language]);
 
   const handleOptionSelect = (option: number) => {

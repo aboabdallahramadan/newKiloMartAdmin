@@ -5,22 +5,22 @@ import Header from "@/components/Header";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getSession } from 'next-auth/react';
-export async function getServerSideProps(context: any) {
-  const session = await getSession(context);
+// export async function getServerSideProps(context: any) {
+//   const session = await getSession(context);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: '/auth/signin',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {
-    props: { session },
-  };
-}
+//   return {
+//     props: { session },
+//   };
+// }
 
 export default function DefaultLayout({
   children,

@@ -18,7 +18,40 @@ const ActiveProducts = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [products,setProducts] = useState<Omit<Product , "categoryId" | "categoryName">[]>([])
+  const [products,setProducts] = useState<Omit<Product , "categoryId" | "categoryName">[]>([
+    {
+      id: 1,
+      name: "Fresh Apples",
+      description: "Premium quality fresh red apples",
+      measurementUnit: "KG",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    },
+    {
+      id: 2,
+      name: "Organic Bananas",
+      description: "Naturally ripened organic bananas",
+      measurementUnit: "KG",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    },
+    {
+      id: 3,
+      name: "Whole Wheat Bread",
+      description: "Freshly baked whole wheat bread",
+      measurementUnit: "PCS",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    },
+    {
+      id: 4,
+      name: "Fresh Milk",
+      description: "Farm fresh whole milk",
+      measurementUnit: "L",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    }
+  ])
   const pageSize = 10;
 
   const fetchProducts = async () => {
@@ -40,7 +73,7 @@ const ActiveProducts = () => {
 
 
   useEffect(() => {
-      fetchProducts();
+      // fetchProducts();
   }, [currentPage, language, category]);
 
 
@@ -221,7 +254,7 @@ const ActiveProducts = () => {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                     <div className="h-12.5 w-15 rounded-md">
                       <img
-                        src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${product.imageUrl}`}
+                        src={`${product.imageUrl}`}
                         width={60}
                         height={50}
                         alt="Product"

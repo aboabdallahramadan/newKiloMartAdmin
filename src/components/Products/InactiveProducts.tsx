@@ -27,7 +27,40 @@ const InactiveProducts = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [products,setProducts] = useState<Omit<Product , "categoryId" | "categoryName">[]>([])
+  const [products,setProducts] = useState<Omit<Product , "categoryId" | "categoryName">[]>([
+    {
+      id: 1,
+      name: "Fresh Apples",
+      description: "Premium quality fresh red apples",
+      measurementUnit: "KG",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    },
+    {
+      id: 2,
+      name: "Organic Bananas",
+      description: "Naturally ripened organic bananas",
+      measurementUnit: "KG",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    },
+    {
+      id: 3,
+      name: "Whole Wheat Bread",
+      description: "Freshly baked whole wheat bread",
+      measurementUnit: "PCS",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    },
+    {
+      id: 4,
+      name: "Fresh Milk",
+      description: "Farm fresh whole milk",
+      measurementUnit: "L",
+      imageUrl: "/images/product/product-01.jpg",
+      isActive: true
+    }
+  ])
   const pageSize = 10;
 
   const fetchProducts = async () => {
@@ -49,7 +82,7 @@ const InactiveProducts = () => {
 
 
   useEffect(() => {
-      fetchProducts();
+      // fetchProducts();
   }, [currentPage, language, category]);
 
 

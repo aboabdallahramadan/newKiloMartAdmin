@@ -6,7 +6,18 @@ import ClickOutside from '@/components/ClickOutside'
 
 const CategorySelect = ({category, setCategory}: {category: number, setCategory: (category: number) => void}) => {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-    const [categories,setCategories] = useState<Omit<Category, "isActive" | "productsCount">[]>([])
+    const [categories,setCategories] = useState<Omit<Category, "isActive" | "productsCount">[]>([
+        { id: 1, name: "Electronics"},
+        { id: 2, name: "Groceries" },
+        { id: 3, name: "Fashion" },
+        { id: 4, name: "Home & Garden" },
+        { id: 5, name: "Sports" },
+        { id: 6, name: "Books"},
+        { id: 7, name: "Beauty" },
+        { id: 8, name: "Toys" },
+        { id: 9, name: "Automotive" },
+        { id: 10, name: "Health" }
+    ])
     const fetchCategories = async () => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/all-users/product-categories/paginated?language=2&page=1&pageSize=99999&isActive=true`);
@@ -22,7 +33,7 @@ const CategorySelect = ({category, setCategory}: {category: number, setCategory:
     };
 
     useEffect(() => {
-        fetchCategories();
+        // fetchCategories();
     }, []);
     const handleCategorySelect = (option: number) => {
         setCategory(option);

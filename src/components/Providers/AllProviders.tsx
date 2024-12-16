@@ -8,7 +8,47 @@ import Link from "next/link";
 import AddNewProvider from "./AddNewProvider";
 
 const AllProviders = () => {
-  const [providersData, setProvidersData] = useState<Omit<Provider, 'totalOrders' | 'totalProducts' | 'availableBalance' | 'totalBalance'>[]>([]);
+  const [providersData, setProvidersData] = useState<Omit<Provider, 'totalOrders' | 'totalProducts' | 'availableBalance' | 'totalBalance'>[]>([
+    {
+      providerId: 1,
+      userId: 101,
+      displayName: "Fresh Foods Market",
+      firstName: "John",
+      secondName: "Doe",
+      companyName: "Fresh Foods Ltd",
+      nationalApprovalId: "FDA123456",
+      ownerName: "John Doe",
+      ownerNationalId: "ID123456789",
+      email: "john@freshfoods.com",
+      isActive: true
+    },
+    {
+      providerId: 2,
+      userId: 102,
+      displayName: "Organic Grocers",
+      firstName: "Jane",
+      secondName: "Smith",
+      companyName: "Organic Grocers Inc",
+      nationalApprovalId: "FDA789012",
+      ownerName: "Jane Smith",
+      ownerNationalId: "ID987654321",
+      email: "jane@organicgrocers.com",
+      isActive: false
+    },
+    {
+      providerId: 3,
+      userId: 103,
+      displayName: "Quality Goods Store",
+      firstName: "Mike",
+      secondName: "Johnson",
+      companyName: "Quality Goods Ltd",
+      nationalApprovalId: "FDA345678",
+      ownerName: "Mike Johnson",
+      ownerNationalId: "ID456789123",
+      email: "mike@qualitygoods.com",
+      isActive: true
+    }
+  ]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
@@ -41,7 +81,7 @@ const AllProviders = () => {
       }
     };
   
-    fetchProviders();
+    // fetchProviders();
   }, [currentPage, pageSize]);
 
   const totalPages = Math.ceil(totalCount / pageSize);

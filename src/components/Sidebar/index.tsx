@@ -14,6 +14,7 @@ import { BsPerson, BsQuestionCircle } from "react-icons/bs";
 import { BiCart } from "react-icons/bi";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import { IoInformationOutline } from "react-icons/io5";
+import { CiSettings } from "react-icons/ci";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -281,6 +282,13 @@ const menuGroups = [
         ),
         label: "Contact Information",
         route: "/contact-information",
+      },
+      {
+        icon: (
+          <CiSettings />
+        ),
+        label: "Project Settings",
+        route: "/pages/project-settings",
       },
       // {
       //   icon: (

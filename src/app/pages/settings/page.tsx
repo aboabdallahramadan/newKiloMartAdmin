@@ -5,8 +5,8 @@ import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import SettingBoxes from "@/components/SettingBoxes";
 
 export const metadata: Metadata = {
-  title: "KiloMart Admin Panel",
-  description: "KiloMart Admin Panel",
+  title: "User Settings",
+  description: "User Settings",
 };
 
 const Settings = () => {

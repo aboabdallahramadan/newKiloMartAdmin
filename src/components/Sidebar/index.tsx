@@ -8,7 +8,7 @@ import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { FaStore } from "react-icons/fa";
-import { MdOutlineDeliveryDining } from "react-icons/md";
+import { MdAdsClick, MdOutlineDeliveryDining } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
 import { BsPerson, BsQuestionCircle } from "react-icons/bs";
 import { BiCart } from "react-icons/bi";
@@ -289,6 +289,13 @@ const menuGroups = [
         ),
         label: "Project Settings",
         route: "/pages/project-settings",
+      },
+      {
+        icon: (
+          <MdAdsClick />
+        ),
+        label: "Ads",
+        route: "/ads",
       },
       // {
       //   icon: (

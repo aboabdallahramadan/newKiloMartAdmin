@@ -1,62 +1,64 @@
 "use client";
 import React, { useState } from 'react';
-import { Faq } from '@/types/faq';
 import InputGroup from '@/components/FormElements/InputGroup';
 import CloseMark from '@/components/CloseMarks/CloseMark';
 import {  TbEditCircleOff } from 'react-icons/tb';
+import { Information } from '@/types/information';
 
-const Providers: React.FC = () => {
-  const [faqs, setFaqs] = useState<Faq[]>([
-    { id: 1, question: 'How do I track my order?', answer: 'You can track your order in the Orders section using your order ID.' },
-    { id: 2, question: 'What payment methods do you accept?', answer: 'We accept credit cards, debit cards, and mobile money.' }
+const AllInformation: React.FC = () => {
+  const [info, setInfo] = useState<Information[]>([
+    { id: 1, key: 'WhatsApp', value: '+9669999999' },
+    { id: 2, key: 'Facebook', value: 'https://facebook.com/kilomart' },
+    { id: 3, key: 'Twitter', value: 'https://x.com/kilomart' },
+    { id: 4, key: 'Instagram', value: 'https://instagram.com/kilomart' }
   ]);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState({ question: '', answer: '' });
+  const [editForm, setEditForm] = useState({ key: '', value: '' });
 
-  const handleEdit = (faq: Faq) => {
-    setEditingId(faq.id);
-    setEditForm({ question: faq.question, answer: faq.answer });
+  const handleEdit = (information: Information) => {
+    setEditingId(information.id);
+    setEditForm({ key: information.key, value: information.value });
   };
 
   const handleDelete = (id: number) => {
-    setFaqs(faqs.filter(faq => faq.id !== id));
+    setInfo(info.filter(information => information.id !== id));
   };
 
   const handleSaveEdit = (id: number) => {
-    setFaqs(faqs.map(faq => 
-      faq.id === id 
-        ? { ...faq, question: editForm.question, answer: editForm.answer }
-        : faq
+    setInfo(info.map(information => 
+      information.id === id 
+        ? { ...information, key: editForm.key, value: editForm.value }
+        : information
     ));
     setEditingId(null);
   };
 
   return (
     <div className="rounded-sm bg-white dark:bg-dark p-4 shadow-default">
-      <h2 className="text-2xl font-bold text-dark dark:text-white mb-6">Frequently Asked Questions For Providers</h2>
+      <h2 className="text-2xl font-bold text-dark dark:text-white mb-6">Contact Information</h2>
       
       <div className="space-y-4">
-        {faqs.map((faq) => (
-          <div key={faq.id} className="border rounded-lg p-4">
-            {editingId === faq.id ? (
+        {info.map((information) => (
+          <div key={information.id} className="border rounded-lg p-4">
+            {editingId === information.id ? (
               <div className="space-y-4">
                 <InputGroup
-                  label="Question"
+                  label="Key"
                   type="text"
-                  value={editForm.question}
-                  onChange={(e) => setEditForm({ ...editForm, question: e.target.value })}
-                  placeholder="Enter question"
+                  value={editForm.key}
+                  onChange={(e) => setEditForm({ ...editForm, key: e.target.value })}
+                  placeholder="Enter key"
                 />
                 <InputGroup
-                  label="Answer"
+                  label="Value"
                   type="text"
-                  value={editForm.answer}
-                  onChange={(e) => setEditForm({ ...editForm, answer: e.target.value })}
-                  placeholder="Enter answer"
+                  value={editForm.value}
+                  onChange={(e) => setEditForm({ ...editForm, value: e.target.value })}
+                  placeholder="Enter value"
                 />
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleSaveEdit(faq.id)}
+                    onClick={() => handleSaveEdit(information.id)}
                     className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/80"
                   >
                     Save
@@ -72,23 +74,23 @@ const Providers: React.FC = () => {
             ) : (
               <div>
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-semibold text-dark dark:text-white">{faq.question}</h3>
+                  <h3 className="text-lg font-semibold text-dark dark:text-white">{information.key}</h3>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => handleEdit(faq)}
+                      onClick={() => handleEdit(information)}
                       className="text-primary hover:text-primary/80"
                     >
                       <TbEditCircleOff className="text-xl"/>
                     </button>
                     <button
-                      onClick={() => handleDelete(faq.id)}
+                      onClick={() => handleDelete(information.id)}
                       className="text-danger hover:text-danger/80"
                     >
                       <CloseMark/>
                     </button>
                   </div>
                 </div>
-                <p className="text-body dark:text-bodydark">{faq.answer}</p>
+                <p className="text-body dark:text-bodydark">{information.value}</p>
               </div>
             )}
           </div>
@@ -98,4 +100,4 @@ const Providers: React.FC = () => {
   );
 };
 
-export default Providers;
+export default AllInformation;

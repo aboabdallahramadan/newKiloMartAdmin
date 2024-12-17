@@ -10,9 +10,10 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import { FaStore } from "react-icons/fa";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
-import { BsPerson, BsQuestion, BsQuestionCircle } from "react-icons/bs";
+import { BsPerson, BsQuestionCircle } from "react-icons/bs";
 import { BiCart } from "react-icons/bi";
 import { RiDiscountPercentLine } from "react-icons/ri";
+import { IoInformationOutline } from "react-icons/io5";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -273,6 +274,13 @@ const menuGroups = [
           { label: "For Providers", route: "/faqs/providers" },
           { label: "For Deliveries", route: "/faqs/deliveries" },
         ],
+      },
+      {
+        icon: (
+          <IoInformationOutline />
+        ),
+        label: "Contact Information",
+        route: "/contact-information",
       },
       // {
       //   icon: (

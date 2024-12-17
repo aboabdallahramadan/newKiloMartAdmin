@@ -63,7 +63,7 @@ const Customers: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setEditingId(null)}
-                    className="bg-danger text-white px-4 py-2 rounded-lg hover:bg-danger/80"
+                    className="bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-danger/80"
                   >
                     Cancel
                   </button>

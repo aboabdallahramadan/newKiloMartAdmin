@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { signIn } from 'next-auth/react';
-import { toast } from "react-toastify";
 
 
 
@@ -10,29 +8,8 @@ export default function SigninWithPassword() {
     remember: false,
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const email = (e.target as any).email.value;
-    const password = (e.target as any).password.value;
-
-    // Use the next-auth `signIn` function
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
-    console.log(result)
-
-    if (result?.error) {
-      toast.error("Sign-in Failed")
-    } else {
-      toast.success('Sign-in successful!');
-      
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <div className="mb-4">
         <label
           htmlFor="email"

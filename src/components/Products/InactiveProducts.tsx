@@ -142,7 +142,7 @@ const InactiveProducts = () => {
           <ClickOutside onClick={() => setIsLanguageOpen(false)}>
             <div className="relative z-20 inline-flex cursor-pointer appearance-none rounded-[5px] border border-stroke bg-white text-sm font-medium outline-none dark:border-dark-3 dark:bg-dark-2">
                 <div
-                className={`py-[5px] pl-[9px] pr-[35px] text-sm font-medium text-dark dark:text-white ${isLanguageOpen ? "open" : ""}`}
+                className={`py-[5px] pl-[9px] pr-[35px] text-xs sm:text-sm font-medium text-dark dark:text-white ${isLanguageOpen ? "open" : ""}`}
                 onClick={() => setIsLanguageOpen(!isLanguageOpen)}
                 >
                 Language
@@ -189,7 +189,7 @@ const InactiveProducts = () => {
           <ClickOutside onClick={() => setIsCategoryOpen(false)}>
             <div className="relative z-20 inline-flex cursor-pointer appearance-none rounded-[5px] border border-stroke bg-white text-sm font-medium outline-none dark:border-dark-3 dark:bg-dark-2">
                 <div
-                className={`py-[5px] pl-[9px] pr-[35px] text-sm font-medium text-dark dark:text-white ${isCategoryOpen ? "open" : ""}`}
+                className={`py-[5px] pl-[9px] pr-[35px] text-xs sm:text-sm font-medium text-dark dark:text-white ${isCategoryOpen ? "open" : ""}`}
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
                 >
                 category
@@ -266,7 +266,7 @@ const InactiveProducts = () => {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                     <div className="h-12.5 w-15 rounded-md">
                       <img
-                        src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${product.imageUrl}`}
+                        src={`${product.imageUrl}`}
                         width={60}
                         height={50}
                         alt="Product"

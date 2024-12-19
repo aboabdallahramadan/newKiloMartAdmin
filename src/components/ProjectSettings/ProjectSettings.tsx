@@ -159,7 +159,7 @@ const ProjectSettings = () => {
 
           
 
-          <div className="col-span-2">
+          <div className="col-span-1 md:col-span-2">
             <label className="flex items-center mb-2.5 text-black dark:text-white">
               <input
                 type="checkbox"

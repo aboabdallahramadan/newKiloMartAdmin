@@ -133,7 +133,7 @@ const ActiveProducts = () => {
           <ClickOutside onClick={() => setIsLanguageOpen(false)}>
             <div className="relative z-20 inline-flex cursor-pointer appearance-none rounded-[5px] border border-stroke bg-white text-sm font-medium outline-none dark:border-dark-3 dark:bg-dark-2">
                 <div
-                className={`py-[5px] pl-[9px] pr-[35px] text-sm font-medium text-dark dark:text-white ${isLanguageOpen ? "open" : ""}`}
+                className={`py-[5px] pl-[9px] pr-[35px] text-xs sm:text-sm font-medium text-dark dark:text-white ${isLanguageOpen ? "open" : ""}`}
                 onClick={() => setIsLanguageOpen(!isLanguageOpen)}
                 >
                 Language
@@ -180,7 +180,7 @@ const ActiveProducts = () => {
           <ClickOutside onClick={() => setIsCategoryOpen(false)}>
             <div className="relative z-20 inline-flex cursor-pointer appearance-none rounded-[5px] border border-stroke bg-white text-sm font-medium outline-none dark:border-dark-3 dark:bg-dark-2">
                 <div
-                className={`py-[5px] pl-[9px] pr-[35px] text-sm font-medium text-dark dark:text-white ${isCategoryOpen ? "open" : ""}`}
+                className={`py-[5px] pl-[9px] pr-[35px] text-xs sm:text-sm font-medium text-dark dark:text-white ${isCategoryOpen ? "open" : ""}`}
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
                 >
                 category

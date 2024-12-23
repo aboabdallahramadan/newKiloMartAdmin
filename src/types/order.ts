@@ -1,18 +1,24 @@
 import { OrderItem } from "./orderItem";
+import {Location} from "@/types/location"
 
 export interface Order {
     orderId: number;
     orderDate: string;
-    orderStatus: string;
-    orderTotal: number;
+    orderStatus: "Order Placed" | "Preparing" | "Shipped" | "Canceled" | "Completed";
+    orderActivityType: "InitByCustomer" | "CanceledByCustomerBeforeProviderAcceptIt" | "CanceledByCustomerBeforeDeliveryAcceptAfterProviderAccept" | "CanceledByCustomerAfterDeliveryAcceptIt" | "AcceptedByProvider" | "CanceledByProviderBeforeDeliveryAcceptIt" | "AcceptedByDelivery" | "CanceledByDelivery" | "ShippedByDelivery" | "DeliveredByDelivery" | "CompletedByDelivery";
     orderCustomerId: number;
     orderCustomerName: string;
-    orderDeliveryId: number;
-    orderDeliveryName: string;
-    orderProviderId: number;
-    orderProviderName: string;
+    orderCustomerLocation: Location['mapDetails'];
+    orderDeliveryId?: number;
+    orderDeliveryName?: string;
+    orderDeliveryLocation?: Location['mapDetails'];
+    orderProviderId?: number;
+    orderProviderName?: string;
+    orderProviderLocation?: Location['mapDetails'];
+    orderSubtotal: number;
     orderDeliveryFee: number;
     orderServiceFee: number;
-    orderPaymentMethod: "Cash" | "Online";
+    orderTotal: number;
+    orderPaymentMethod: "Cash" | "Elcetronic";
     orderItems: OrderItem[];
 }

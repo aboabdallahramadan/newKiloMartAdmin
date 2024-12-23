@@ -67,6 +67,10 @@ const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal
                         <span className="text-dark dark:text-white">Payment Method:</span>
                         <span className="font-medium">{Order.orderPaymentMethod}</span>
                       </p>
+                      <p className="flex justify-between flex-col">
+                        <span className="text-dark dark:text-white">Order Status: </span>
+                        <span className="font-medium">{Order.orderActivityType}</span>
+                      </p>
                     </div>
                   </div>
 

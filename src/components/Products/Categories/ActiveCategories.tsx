@@ -5,7 +5,6 @@ import ElementLoader from '@/components/common/ElementLoader';
 import { Category } from '@/types/category';
 import { FaBan, FaTrash, FaEye, FaEdit } from 'react-icons/fa';
 import ClickOutside from '@/components/ClickOutside';
-import { getSession } from 'next-auth/react';
 
 const CategoriesTable = () => {
     const [categories, setCategories] = useState<Omit<Category, 'productsCount' | "isActive">[]>([
@@ -28,13 +27,7 @@ const CategoriesTable = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const fetchCategories = async (page: number, lang: number) => {
-        const session = await getSession();
-        const token = session?.user
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/all-users/product-categories/paginated?language=${lang}&page=${page}&pageSize=${pageSize}&isActive=true`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-              },
-        });
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/all-users/product-categories/paginated?language=${lang}&page=${page}&pageSize=${pageSize}&isActive=true`);
         const data = await response.json();
         if (data.status) {
             setCategories(data.data.data);

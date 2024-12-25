@@ -3,6 +3,7 @@ import React from 'react'
 import { Metadata } from "next"
 import AllDeliveries from '@/components/Deliveries/AllDeliveries';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import DeliveriesDataStats from '@/components/Deliveries/DeliveriesDataStats';
 
 export const metadata: Metadata = {
     title: "All Deliveries",
@@ -13,7 +14,10 @@ const page = () => {
   return (
     <DefaultLayout>
         <Breadcrumb pageName='All Deliveries'/>
-        <AllDeliveries />
+        <div className="flex flex-col gap-4">
+          <DeliveriesDataStats />
+          <AllDeliveries />
+        </div>
     </DefaultLayout>
   )
 }

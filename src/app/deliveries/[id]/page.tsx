@@ -8,8 +8,8 @@ import Withdrawals from '@/components/Withdrawals/Withdrawals';
 
 
 export const metadata: Metadata = {
-  title: "Provider Details",
-  description: "Provider Details",
+  title: "Delivery Details",
+  description: "Delivery Details",
 };
 
 const page = () => {

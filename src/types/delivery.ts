@@ -4,10 +4,12 @@ export type Delivery = {
     displayName: string;
     firstName: string;
     secondName: string;
-    companyName: string;
-    nationalApprovalId: string;
-    ownerName: string;
-    ownerNationalId: string;
+    nationalId: string;
+    nationalName: string;
+    drivingLicenseExpiredDate: string;
+    drivingLicenseNumber: string;
+    licenseExpiredDate: string;
+    licenseNumber: string;
     email: string;
     isActive: boolean;
     totalOrders: number;

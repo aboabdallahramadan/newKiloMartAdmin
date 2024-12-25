@@ -106,7 +106,7 @@ const CustomerLocations = () => {
 
   return (
       <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
-        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Providers Location</h2>
+        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Customer Location</h2>
         {loading ? (
           <ElementLoader />
         ) : (

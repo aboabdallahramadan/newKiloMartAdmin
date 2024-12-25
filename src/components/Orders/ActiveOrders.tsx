@@ -2,10 +2,9 @@
 import { useEffect, useState } from 'react';
 import { Order } from '@/types/order';
 import ElementLoader from '../common/ElementLoader';
-import ClickOutside from '../ClickOutside';
 import OrderDetailsModal from '../Orders/OrderDetailsModal';
 
-const ProviderOrders = () => {
+const ActiveOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -94,59 +93,6 @@ const ProviderOrders = () => {
       ],
     },
     {
-      orderId: 2,
-      orderDate: new Date().toLocaleString(),
-      orderStatus: 'Canceled',
-      orderCustomerId: 1,
-      orderCustomerName: 'John Doe',
-      orderCustomerLocation: {
-        latitude: 24.181212251491353,
-        longitude: 43.91654599169042
-      },
-      orderProviderId: 2,
-      orderProviderName: "BigMall",
-      orderProviderLocation : {
-        latitude: 23.181212251491353,
-        longitude: 43.91654599169042
-      },
-      orderSubtotal: 75,
-      orderDeliveryFee: 10,
-      orderServiceFee: 15,
-      orderTotal: 100,
-      orderActivityType: "CanceledByCustomerBeforeDeliveryAcceptAfterProviderAccept",
-      orderPaymentMethod: "Elcetronic",
-      orderItems: [
-        {
-          productId: 1,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-        {
-          productId: 2,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-        {
-          productId: 3,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-        {
-          productId: 4,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-      ],
-    },
-    {
       orderId: 3,
       orderDate: new Date().toLocaleString(),
       orderStatus: 'Preparing',
@@ -200,60 +146,59 @@ const ProviderOrders = () => {
       ],
     },
     {
-      orderId: 4,
-      orderDate: new Date().toLocaleString(),
-      orderStatus: 'Completed',
-      orderCustomerId: 1,
-      orderCustomerName: 'John Doe',
-      orderCustomerLocation: {
-        latitude: 24.181212251491353,
-        longitude: 43.91654599169042
+        orderId: 3,
+        orderDate: new Date().toLocaleString(),
+        orderStatus: 'Shipped',
+        orderCustomerId: 1,
+        orderCustomerName: 'John Doe',
+        orderCustomerLocation: {
+          latitude: 24.181212251491353,
+          longitude: 43.91654599169042
+        },
+        orderProviderId: 2,
+        orderProviderName: "BigMall",
+        orderProviderLocation: {
+          latitude: 23.181212251491353,
+          longitude: 43.91654599169042
+        },
+        orderSubtotal: 75,
+        orderDeliveryFee: 10,
+        orderTotal: 100,
+        orderServiceFee: 15,
+        orderActivityType: "ShippedByDelivery",
+        orderPaymentMethod: "Elcetronic",
+        orderItems: [
+          {
+            productId: 1,
+            productName: 'Product 1',
+            quantity: 1,
+            price: 100,
+            imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
+          },
+          {
+            productId: 2,
+            productName: 'Product 1',
+            quantity: 1,
+            price: 100,
+            imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
+          },
+          {
+            productId: 3,
+            productName: 'Product 1',
+            quantity: 1,
+            price: 100,
+            imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
+          },
+          {
+            productId: 4,
+            productName: 'Product 1',
+            quantity: 1,
+            price: 100,
+            imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
+          },
+        ],
       },
-      orderDeliveryId: 1,
-      orderDeliveryName: 'John Doe',
-      orderProviderId: 2,
-      orderProviderName: "BigMall",
-      orderProviderLocation: {
-        latitude: 23.181212251491353,
-        longitude: 43.91654599169042
-      },
-      orderSubtotal: 75,
-      orderDeliveryFee: 10,
-      orderTotal: 100,
-      orderServiceFee: 15,
-      orderActivityType: "CompletedByDelivery",
-      orderPaymentMethod: "Cash",
-      orderItems: [
-        {
-          productId: 1,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-        {
-          productId: 2,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-        {
-          productId: 3,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-        {
-          productId: 4,
-          productName: 'Product 1',
-          quantity: 1,
-          price: 100,
-          imageUrl: 'images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg',
-        },
-      ],
-    }]);
+]);
     setTotalCount(4);
   }, [currentPage, pageSize]);
 
@@ -282,7 +227,7 @@ const ProviderOrders = () => {
   return (
     <div>
       <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
-        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Provider&apos;s Orders</h2>
+        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Active Orders</h2>
         {loading ? (
           <ElementLoader />
         ) : (
@@ -297,6 +242,9 @@ const ProviderOrders = () => {
                 </th>
                 <th className="px-1 py-4 font-medium text-dark dark:text-white">
                   Status
+                </th>
+                <th className="px-1 py-4 font-medium text-dark dark:text-white hidden sm:table-cell">
+                  Products
                 </th>
                 <th className="px-1 py-4 text-right font-medium text-dark dark:text-white xl:pr-2">
                   Actions
@@ -336,6 +284,13 @@ const ProviderOrders = () => {
                       }`}
                     >
                       {order.orderStatus}
+                    </p>
+                  </td>
+                  <td
+                    className={`border-[#eee] px-1 py-4 dark:border-dark-3 ${index === orders.length - 1 ? "border-b-0" : "border-b"} hidden sm:table-cell`}
+                  >
+                    <p className="text-dark dark:text-white">
+                      {order.orderItems.length}
                     </p>
                   </td>
                   <td
@@ -390,4 +345,4 @@ const ProviderOrders = () => {
   );
 };
 
-export default ProviderOrders;
+export default ActiveOrders;

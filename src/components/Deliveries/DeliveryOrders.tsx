@@ -36,18 +36,32 @@ const DeliveryOrders = () => {
     // fetchOrders();
     setOrders([{
       orderId: 1,
-      orderDate: new Date().toLocaleDateString(),
-      orderStatus: 'Completed',
-      orderTotal: 100,
+      orderDate: new Date().toLocaleString(),
+      orderStatus: 'Shipped',
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
+      orderCustomerLocation: {
+        latitude: 24.181212251491353,
+        longitude: 43.91654599169042
+      },
       orderDeliveryId: 1,
       orderDeliveryName: 'John Doe',
-      orderProviderId: 1,
+      orderDeliveryLocation: {
+        latitude: 23.181212251491353,
+        longitude: 44.91654599169042
+      },
+      orderProviderId: 2,
       orderProviderName: "BigMall",
+      orderProviderLocation:  {
+        latitude: 24.181212251491353,
+        longitude: 44.91654599169042
+      },
+      orderSubtotal: 75,
       orderDeliveryFee: 10,
+      orderTotal: 100,
       orderServiceFee: 15,
-      orderPaymentMethod: "Cash",
+      orderActivityType: "ShippedByDelivery",
+      orderPaymentMethod: "Elcetronic",
       orderItems: [
         {
           productId: 1,
@@ -81,18 +95,26 @@ const DeliveryOrders = () => {
     },
     {
       orderId: 2,
-      orderDate: new Date().toLocaleDateString(),
+      orderDate: new Date().toLocaleString(),
       orderStatus: 'Canceled',
-      orderTotal: 100,
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
-      orderDeliveryId: 1,
-      orderDeliveryName: 'John Doe',
-      orderProviderId: 1,
+      orderCustomerLocation: {
+        latitude: 24.181212251491353,
+        longitude: 43.91654599169042
+      },
+      orderProviderId: 2,
       orderProviderName: "BigMall",
+      orderProviderLocation : {
+        latitude: 23.181212251491353,
+        longitude: 43.91654599169042
+      },
+      orderSubtotal: 75,
       orderDeliveryFee: 10,
       orderServiceFee: 15,
-      orderPaymentMethod: "Cash",
+      orderTotal: 100,
+      orderActivityType: "CanceledByCustomerBeforeDeliveryAcceptAfterProviderAccept",
+      orderPaymentMethod: "Elcetronic",
       orderItems: [
         {
           productId: 1,
@@ -126,18 +148,26 @@ const DeliveryOrders = () => {
     },
     {
       orderId: 3,
-      orderDate: new Date().toLocaleDateString(),
-      orderStatus: 'InProgress',
-      orderTotal: 100,
+      orderDate: new Date().toLocaleString(),
+      orderStatus: 'Preparing',
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
-      orderDeliveryId: 1,
-      orderDeliveryName: 'John Doe',
-      orderProviderId: 1,
+      orderCustomerLocation: {
+        latitude: 24.181212251491353,
+        longitude: 43.91654599169042
+      },
+      orderProviderId: 2,
       orderProviderName: "BigMall",
+      orderProviderLocation: {
+        latitude: 23.181212251491353,
+        longitude: 43.91654599169042
+      },
+      orderSubtotal: 75,
       orderDeliveryFee: 10,
+      orderTotal: 100,
       orderServiceFee: 15,
-      orderPaymentMethod: "Cash",
+      orderActivityType: "AcceptedByProvider",
+      orderPaymentMethod: "Elcetronic",
       orderItems: [
         {
           productId: 1,
@@ -171,17 +201,27 @@ const DeliveryOrders = () => {
     },
     {
       orderId: 4,
-      orderDate: new Date().toLocaleDateString(),
+      orderDate: new Date().toLocaleString(),
       orderStatus: 'Completed',
-      orderTotal: 100,
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
+      orderCustomerLocation: {
+        latitude: 24.181212251491353,
+        longitude: 43.91654599169042
+      },
       orderDeliveryId: 1,
       orderDeliveryName: 'John Doe',
-      orderProviderId: 1,
+      orderProviderId: 2,
       orderProviderName: "BigMall",
+      orderProviderLocation: {
+        latitude: 23.181212251491353,
+        longitude: 43.91654599169042
+      },
+      orderSubtotal: 75,
       orderDeliveryFee: 10,
+      orderTotal: 100,
       orderServiceFee: 15,
+      orderActivityType: "CompletedByDelivery",
       orderPaymentMethod: "Cash",
       orderItems: [
         {

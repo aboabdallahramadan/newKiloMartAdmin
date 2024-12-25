@@ -35,7 +35,7 @@ const AllOrders = () => {
     // fetchOrders();
     setOrders([{
       orderId: 1,
-      orderDate: new Date().toLocaleDateString(),
+      orderDate: new Date().toLocaleString(),
       orderStatus: 'Shipped',
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
@@ -94,7 +94,7 @@ const AllOrders = () => {
     },
     {
       orderId: 2,
-      orderDate: new Date().toLocaleDateString(),
+      orderDate: new Date().toLocaleString(),
       orderStatus: 'Canceled',
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
@@ -104,10 +104,14 @@ const AllOrders = () => {
       },
       orderProviderId: 2,
       orderProviderName: "BigMall",
+      orderProviderLocation : {
+        latitude: 23.181212251491353,
+        longitude: 43.91654599169042
+      },
       orderSubtotal: 75,
       orderDeliveryFee: 10,
-      orderTotal: 100,
       orderServiceFee: 15,
+      orderTotal: 100,
       orderActivityType: "CanceledByCustomerBeforeDeliveryAcceptAfterProviderAccept",
       orderPaymentMethod: "Elcetronic",
       orderItems: [
@@ -143,24 +147,26 @@ const AllOrders = () => {
     },
     {
       orderId: 3,
-      orderDate: new Date().toLocaleDateString(),
+      orderDate: new Date().toLocaleString(),
       orderStatus: 'Preparing',
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
-      orderDeliveryId: 1,
-      orderDeliveryName: 'John Doe',
+      orderCustomerLocation: {
+        latitude: 24.181212251491353,
+        longitude: 43.91654599169042
+      },
       orderProviderId: 2,
       orderProviderName: "BigMall",
+      orderProviderLocation: {
+        latitude: 23.181212251491353,
+        longitude: 43.91654599169042
+      },
       orderSubtotal: 75,
       orderDeliveryFee: 10,
       orderTotal: 100,
       orderServiceFee: 15,
       orderActivityType: "AcceptedByProvider",
       orderPaymentMethod: "Elcetronic",
-      orderCustomerLocation: {
-        latitude: 24.181212251491353,
-        longitude: 43.91654599169042
-      },
       orderItems: [
         {
           productId: 1,
@@ -194,24 +200,28 @@ const AllOrders = () => {
     },
     {
       orderId: 4,
-      orderDate: new Date().toLocaleDateString(),
+      orderDate: new Date().toLocaleString(),
       orderStatus: 'Completed',
       orderCustomerId: 1,
       orderCustomerName: 'John Doe',
+      orderCustomerLocation: {
+        latitude: 24.181212251491353,
+        longitude: 43.91654599169042
+      },
       orderDeliveryId: 1,
       orderDeliveryName: 'John Doe',
       orderProviderId: 2,
       orderProviderName: "BigMall",
+      orderProviderLocation: {
+        latitude: 23.181212251491353,
+        longitude: 43.91654599169042
+      },
       orderSubtotal: 75,
       orderDeliveryFee: 10,
       orderTotal: 100,
       orderServiceFee: 15,
       orderActivityType: "CompletedByDelivery",
       orderPaymentMethod: "Cash",
-      orderCustomerLocation: {
-        latitude: 24.181212251491353,
-        longitude: 43.91654599169042
-      },
       orderItems: [
         {
           productId: 1,

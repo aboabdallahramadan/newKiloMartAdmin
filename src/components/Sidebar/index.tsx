@@ -99,7 +99,11 @@ const menuGroups = [
           <BiCart className="text-2xl" />
         ),
         label: "Orders",
-        route: "/orders",
+        route: "#",
+        children: [
+          {label: "Active Orders", route: "/orders/active-orders"},
+          {label: "All Orders", route: "/orders"},
+        ]
       },
       {
         icon: (

@@ -2,6 +2,7 @@ import React from 'react'
 import { Order } from '@/types/order'
 import ClickOutside from '../ClickOutside'
 import Link from 'next/link';
+import OrderMap from '@/components/Orders/OrderMap';
 
 interface OrderDetailsProps {
     Order: Order;
@@ -10,7 +11,7 @@ interface OrderDetailsProps {
 
 const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal}) => {
     return (
-      <div className="fixed inset-0 z-[999] bg-black/60 flex justify-center items-center p-4">
+      <div className="fixed inset-0 z-[9999] bg-black/60 flex justify-center items-center p-4">
         <ClickOutside onClick={() => handleCloseModal()}>
           <div className="bg-white dark:bg-gray-dark rounded-xl shadow-2xl max-w-3xl w-full max-h-screen overflow-y-auto">
             {/* Header */}
@@ -37,39 +38,49 @@ const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal
                       {Order.orderCustomerName}
                     </Link>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Provider Information</h4>
-                    <Link href={`/providers/${Order.orderProviderId}`} className="text-primary hover:text-primary/80">
-                      {Order.orderProviderName}
-                    </Link>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Delivery Information</h4>
-                    <Link href={`/deliveries/${Order.orderDeliveryId}`} className="text-primary hover:text-primary/80">
-                      {Order.orderDeliveryName}
-                    </Link>
-                  </div>
+                  
+                  {(Order.orderActivityType == "AcceptedByDelivery" || Order.orderActivityType == "CanceledByCustomerAfterDeliveryAcceptIt" || Order.orderActivityType == "CanceledByDelivery" || Order.orderActivityType == "CompletedByDelivery" || Order.orderActivityType == "DeliveredByDelivery" || Order.orderActivityType == "ShippedByDelivery" || Order.orderActivityType == "AcceptedByProvider" || Order.orderActivityType == "CanceledByCustomerBeforeDeliveryAcceptAfterProviderAccept" || Order.orderActivityType == "CanceledByProviderBeforeDeliveryAcceptIt") && (
+                    <>
+                    <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                      <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Provider Information</h4>
+                      <Link href={`/providers/${Order.orderProviderId}`} className="text-primary hover:text-primary/80">
+                        {Order.orderProviderName}
+                      </Link>
+                    </div>
+                      {(Order.orderActivityType == "AcceptedByDelivery" || Order.orderActivityType == "CanceledByCustomerAfterDeliveryAcceptIt" || Order.orderActivityType == "CanceledByDelivery" || Order.orderActivityType == "CompletedByDelivery" || Order.orderActivityType == "DeliveredByDelivery" || Order.orderActivityType == "ShippedByDelivery") && (
+                        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Delivery Information</h4>
+                          <Link href={`/deliveries/${Order.orderDeliveryId}`} className="text-primary hover:text-primary/80">
+                            {Order.orderDeliveryName}
+                          </Link>
+                        </div>
+                      )}
+                      
+                    </>
+                    
+                  )}
+                  
                 </div>
 
                 <div className="space-y-4">
                   <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                     <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Order Details</h4>
                     <div className="space-y-2">
-                      <p className="flex justify-between">
+                      <p className="flex justify-between gap-1">
                         <span className="text-dark dark:text-white">Order ID:</span>
                         <span className="font-medium">{Order.orderId}</span>
                       </p>
-                      <p className="flex justify-between">
+                      <p className="flex justify-between flex-col gap-1">
                         <span className="text-dark dark:text-white">Order Date:</span>
-                        <span className="font-medium">{new Date(Order.orderDate).toLocaleDateString()}</span>
+                        <span className="font-medium">{Order.orderDate}</span>
                       </p>
-                      <p className="flex justify-between">
+                      <p className="flex justify-between gap-1">
                         <span className="text-dark dark:text-white">Payment Method:</span>
                         <span className="font-medium">{Order.orderPaymentMethod}</span>
                       </p>
                       <p className="flex justify-between flex-col">
-                        <span className="text-dark dark:text-white">Order Status: </span>
-                        <span className="font-medium">{Order.orderActivityType}</span>
+                        <span className="text-dark dark:text-white">Order Status:</span>
+                          <span className="font-medium">{Order.orderActivityType.replace(/([A-Z])/g, ' $1').trim()}</span>
                       </p>
                     </div>
                   </div>
@@ -77,6 +88,10 @@ const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal
                   <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                     <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Fees</h4>
                     <div className="space-y-2">
+                      <p className="flex justify-between">
+                        <span className="text-dark dark:text-white">Subtotal:</span>
+                        <span className="font-medium">{Order.orderSubtotal} RS</span>
+                      </p>
                       <p className="flex justify-between">
                         <span className="text-dark dark:text-white">Delivery Fee:</span>
                         <span className="font-medium">{Order.orderDeliveryFee} RS</span>
@@ -117,6 +132,10 @@ const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal
                     </div>
                   ))}
                 </div>
+              </div>
+
+              <div className='p-4'>
+                <OrderMap order={Order} />
               </div>
             </div>
 

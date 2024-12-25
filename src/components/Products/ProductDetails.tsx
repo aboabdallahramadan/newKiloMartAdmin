@@ -6,7 +6,7 @@ const product : Details = {
     id: 1,
     name: "Potato",
     description: "High-quality long grain basmati rice, perfect for biryani and pulao. Sourced from the finest rice fields with natural aging process.",
-    imageUrl: "images/559d17ec-d21b-4168-a0bf-f3caffa2869b.jpg",
+    imageUrl: "/images/product/potato.jpg",
     measurementUnit: "KG",
     categoryName: "Grains & Rice",
     totalOrders: 1250,
@@ -23,7 +23,7 @@ const ProductDetails = ({ }) => {
                 {/* Image Section */}
                 <div>
                     <img 
-                        src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${product.imageUrl}`} 
+                        src={`${product.imageUrl}`} 
                         alt={product.name} 
                         className="w-full h-[400px] object-cover rounded-lg shadow-sm"
                     />

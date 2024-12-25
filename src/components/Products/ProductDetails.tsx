@@ -19,9 +19,9 @@ const product : Details = {
 const ProductDetails = ({ }) => {
     return (
         <div className="bg-white dark:bg-gray-dark p-8 rounded-lg shadow-md max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex flex-col gap-8">
                 {/* Image Section */}
-                <div className="md:w-1/2">
+                <div>
                     <img 
                         src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${product.imageUrl}`} 
                         alt={product.name} 
@@ -30,7 +30,7 @@ const ProductDetails = ({ }) => {
                 </div>
 
                 {/* Details Section */}
-                <div className="md:w-1/2 space-y-4">
+                <div className="space-y-4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-2xl font-bold text-dark dark:text-white">{product.name}</h2>
                         <span className={`px-3 py-1 rounded-full text-sm ${product.isActive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>

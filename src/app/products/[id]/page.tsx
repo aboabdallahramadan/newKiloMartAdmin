@@ -4,6 +4,7 @@ import ProductOffersTable from '@/components/Products/ProductOffersTable';
 import DefaultLayout from '@/components/Layouts/DefaultLaout';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import { Metadata } from 'next';
+import ProductOrders from '@/components/Products/ProductOrders';
 
 export const metadata: Metadata = {
     title: "Product's Details",
@@ -14,7 +15,10 @@ const page = () => {
         <DefaultLayout>
         <Breadcrumb pageName='Product Details' />
             <div className="p-6 flex flex-col gap-8">
-                <ProductDetails />
+                <div className='grid grid-cols-2 gap-4'>
+                    <ProductDetails />
+                    <ProductOrders />
+                </div>
                 <ProductOffersTable />
             </div>
         </DefaultLayout>

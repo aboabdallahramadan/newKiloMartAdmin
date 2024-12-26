@@ -64,8 +64,14 @@ const UserDetailsModal = ({user , handleCloseModal}: UserDetailsModalProps) => {
                               <p className="text-sm text-gray-500 dark:text-gray-400">Phone</p>
                               <p className="text-base font-medium text-dark dark:text-white flex items-center justify-start gap-1">
                                 {user.email} 
-                                {user.isEmailVerified && (
+                                {user.isEmailVerified ? (
                                   <span className="text-green-500">
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                      <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+                                    </svg>
+                                  </span>
+                                ) : (
+                                  <span className="text-red-500">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                       <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                                     </svg>
@@ -161,8 +167,14 @@ const UserDetailsModal = ({user , handleCloseModal}: UserDetailsModalProps) => {
                         <InfoRow label="Second Name" value={user.secondName} />
                         <div className='flex items-end gap-1 justify-start'>
                           <InfoRow label="Email" value={user.email} />
-                          {user.isEmailVerified && (
+                          {user.isEmailVerified ? (
                             <span className="text-green-500">
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+                              </svg>
+                            </span>
+                          ) : (
+                            <span className="text-red-500">
                               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                               </svg>

@@ -196,7 +196,7 @@ const AccountsRequests = ({user}: AccountsRequestsProps) => {
                     </div>
                   </div>
                   <div className="col-span-2 flex items-center">
-                    <p className="text-body-sm font-medium text-dark dark:text-dark-6">
+                    <p className="text-body-sm font-medium text-dark dark:text-dark-6 break-all pr-4">
                       {request.user.email}
                     </p>
                   </div>
@@ -205,7 +205,7 @@ const AccountsRequests = ({user}: AccountsRequestsProps) => {
                       {request.date}
                     </p>
                   </div>
-                  <div className="col-span-1 flex items-center justify-end space-x-3.5">
+                  <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3">
                   <button 
                         className="hover:text-primary" 
                         title="View Details"

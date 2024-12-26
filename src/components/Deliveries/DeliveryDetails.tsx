@@ -18,6 +18,11 @@ const delivery: Delivery = {
   totalOrders: 10,
   availableBalance: 1000,
   totalBalance: 100000,
+  isEmailVerified: true,
+  NationalIqamaIDFile: '/files/sample.pdf',
+  VehiclePhotoFile: '/files/sample.pdf',
+  DrivingLicenseFile: '/files/sample.pdf',
+  VehicleLicenseFile: '/files/sample.pdf'
 };
 
 const DeliveryDetails = () => {
@@ -49,7 +54,16 @@ const DeliveryDetails = () => {
             <InfoRow label="Display Name" value={delivery.displayName} />
             <InfoRow label="First Name" value={delivery.firstName} />
             <InfoRow label="Second Name" value={delivery.secondName} />
-            <InfoRow label="Email" value={delivery.email} />
+            <div className='flex items-end gap-1 justify-start'>
+              <InfoRow label="Email" value={delivery.email} />
+              {delivery.isEmailVerified && (
+                <span className="text-green-500">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+                  </svg>
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -70,11 +84,87 @@ const DeliveryDetails = () => {
         <div className="space-y-4 md:col-span-2">
           <h3 className="text-xl font-semibold text-dark dark:text-white mb-4">Statistics</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <StatCard label="Total Orders" value={`${delivery.totalOrders}`} />
+            <StatCard label="Total Orders" value={`${delivery.totalOrders}`}  className=" text-primary"/>
             <StatCard label="Available Balance" value={`${delivery.availableBalance} RS`} className="text-green-600" />
             <StatCard label="Total Balance" value={`${delivery.totalBalance} RS`} className="text-green-600" />
           </div>
         </div>
+
+        {/* Documents Section */}
+        <div className="mt-8 md:col-span-2">
+          <h3 className="text-lg font-semibold text-dark dark:text-white mb-4">Documents</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Vehicle Photo</p>
+              <div className="flex items-center gap-2">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <a 
+                  href={delivery.VehiclePhotoFile} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 font-medium"
+                  download
+                >
+                  Download Document
+                </a>
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Driving License</p>
+              <div className="flex items-center gap-2">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <a 
+                  href={delivery.DrivingLicenseFile} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 font-medium"
+                  download
+                >
+                  Download Document
+                </a>
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Vehicle License</p>
+              <div className="flex items-center gap-2">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <a 
+                  href={delivery.VehicleLicenseFile} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 font-medium"
+                  download
+                >
+                  Download Document
+                </a>
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">National Iqama ID</p>
+              <div className="flex items-center gap-2">
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <a 
+                  href={delivery.NationalIqamaIDFile} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 font-medium"
+                  download
+                >
+                  Download Document
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
@@ -82,8 +172,8 @@ const DeliveryDetails = () => {
 
 const InfoRow = ({ label, value }: { label: string; value: string }) => (
   <div className="flex flex-col space-y-1">
-    <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>
-    <span className="text-base font-medium text-gray-800 dark:text-gray-200">{value}</span>
+    <span className="text-sm text-gray-500 dark:text-gray-400 break-all">{label}</span>
+    <span className="text-base font-medium text-gray-800 dark:text-gray-200 break-all">{value}</span>
   </div>
 );
 

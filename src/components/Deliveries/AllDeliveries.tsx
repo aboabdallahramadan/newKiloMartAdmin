@@ -8,7 +8,7 @@ import Link from "next/link";
 import AddNewDelivery from "./AddNewDelivery";
 
 const AllDeliveries = () => {
-  const [deliveriesData, setDeliveriesData] = useState<Delivery[]>([]);
+  const [deliveriesData, setDeliveriesData] = useState<Omit<Delivery, "NationalIqamaIDFile" | "VehicleLicenseFile" | "DrivingLicenseFile" | "VehiclePhotoFile" | "isEmailVerified">[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);

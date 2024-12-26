@@ -11,8 +11,13 @@ export type Delivery = {
     licenseExpiredDate: string;
     licenseNumber: string;
     email: string;
+    isEmailVerified: boolean;
     isActive: boolean;
     totalOrders: number;
     availableBalance: number;
     totalBalance: number;
+    VehiclePhotoFile: string;
+    DrivingLicenseFile: string;
+    VehicleLicenseFile: string;
+    NationalIqamaIDFile: string;
   };

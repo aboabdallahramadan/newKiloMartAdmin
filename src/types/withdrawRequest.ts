@@ -7,4 +7,5 @@ export type WithdrawRequest = {
     date: string;
     bankAccountNumber: string;
     userId: number;
+    amount: number;
 };

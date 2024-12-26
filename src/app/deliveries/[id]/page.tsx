@@ -18,8 +18,10 @@ const page = () => {
       <Breadcrumb pageName='Delivery Page'/>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <DeliveryDetails />
-        <DeliveryOrders />
-        <Withdrawals user='Delivery' />
+        <div className='flex flex-col gap-4'>
+          <DeliveryOrders />
+          <Withdrawals user='Delivery' />
+        </div>
       </div>
     </DefaultLayout>
   )

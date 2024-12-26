@@ -124,7 +124,7 @@ const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal
                         <Link href={`/products/${item.productId}`} className="text-primary hover:text-primary/80 font-medium">
                           {item.productName}
                         </Link>
-                        <div className="flex justify-between mt-2">
+                        <div className="flex flex-col justify-between mt-2">
                           <span className="text-dark dark:text-white">Quantity: {item.quantity}</span>
                           <span className="font-medium text-dark dark:text-white">{item.price} RS</span>
                         </div>

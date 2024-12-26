@@ -12,19 +12,22 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
             id: 1,
             bankAccountNumber: "123456789",
             status: "Approved",
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
+            amount: 100,
         },
         {
             id: 2,
             bankAccountNumber: "987654321",
             status: "Rejected",
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
+            amount: 100,
         },
         {
             id: 3,
             bankAccountNumber: "555555555",
             status: "Pending",
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
+            amount: 100,
         }
     ]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -52,12 +55,15 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                 <div className="px-4 py-6 md:px-6 xl:px-9">
                     <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Withdrawals</h4>
                 </div>
-                <div className="grid grid-cols-2 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-3 md:px-6 2xl:px-7.5">
+                <div className="grid grid-cols-3 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5">
                     <div className="col-span-1 hidden sm:flex items-center">
                         <p className="font-medium">Bank Account Number</p>
                     </div>
                     <div className="col-span-1 flex items-center">
                         <p className="font-medium">Date</p>
+                    </div>
+                    <div className="col-span-1 flex items-center">
+                        <p className="font-medium">Amount</p>
                     </div>
                     <div className="col-span-1 flex items-center justify-start">
                         <p className="font-medium">Status</p>
@@ -65,7 +71,7 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                 </div>
                 {withdrawals.map((withdrawal) => (
                     <div
-                        className="grid grid-cols-2 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-3 md:px-6 2xl:px-7.5"
+                        className="grid grid-cols-3 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5"
                         key={withdrawal.id}
                     >
                         <div className="col-span-1 hidden sm:flex items-center">
@@ -73,6 +79,9 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                         </div>
                         <div className="col-span-1 flex items-center">
                             <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawal.date).toLocaleDateString()}</p>
+                        </div>
+                        <div className="col-span-1 flex items-center">
+                            <p className="text-body-sm font-medium text-[#219653]">{withdrawal.amount} RS</p>
                         </div>
                         <div className="col-span-1 flex items-center">
                             <p

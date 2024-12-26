@@ -1,11 +1,11 @@
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '@/components/Layouts/DefaultLaout'
-import AccountsRequests from '@/components/Providers/AccountsRequests';
+import AccountsRequests from '@/components/Users/AccountsRequests';
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "KiloMart Admin Panel",
-  description: "KiloMart Admin Panel",
+  title: "New Providers Requests",
+  description: "New Providers Requests",
 };
 
 
@@ -13,7 +13,7 @@ const page = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='New Provider Requests' />
-      <AccountsRequests />
+      <AccountsRequests user='Provider'/>
     </DefaultLayout>
   )
 }

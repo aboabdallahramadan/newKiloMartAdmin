@@ -9,9 +9,12 @@ export type Provider = {
   ownerName: string;
   ownerNationalId: string;
   email: string;
+  isEmailVerified: boolean;
   isActive: boolean;
   totalOrders: number;
   totalProducts: number;
   availableBalance: number;
   totalBalance: number;
+  ownershipDocumentFile: string;
+  ownerNationalApprovalFile: string;
 };

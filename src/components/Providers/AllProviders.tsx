@@ -8,7 +8,7 @@ import Link from "next/link";
 import AddNewProvider from "./AddNewProvider";
 
 const AllProviders = () => {
-  const [providersData, setProvidersData] = useState<Omit<Provider, 'totalOrders' | 'totalProducts' | 'availableBalance' | 'totalBalance'>[]>([
+  const [providersData, setProvidersData] = useState<Omit<Provider, 'totalOrders' | 'totalProducts' | 'availableBalance' | 'totalBalance' | 'ownershipDocumentFile' | 'ownerNationalApprovalFile' | 'isEmailVerified'>[]>([
     {
       providerId: 1,
       userId: 101,

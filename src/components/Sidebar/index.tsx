@@ -59,7 +59,8 @@ const menuGroups = [
         children: [
           { label: "All Providers", route: "/providers/all" },
           { label: "New Provider Requests", route: "/providers/request-approval" },
-          { label: "Withdraw Requests", route: "/providers/withdraw-requests" }
+          { label: "Withdraw Requests", route: "/providers/withdraw-requests" },
+          { label: "Withdrawals History", route: "/providers/withdrawals-history"}
         ],
       },
       {
@@ -71,7 +72,8 @@ const menuGroups = [
         children: [
           { label: "All Deliveries", route: "/deliveries/all" },
           { label: "New Delivery Requests", route: "/deliveries/request-approval" },
-          { label: "Withdraw Requests", route: "/deliveries/withdraw-requests" }
+          { label: "Withdraw Requests", route: "/deliveries/withdraw-requests" },
+          { label: "Withdrawals History", route: "/deliveries/withdrawals-history"}
         ],
       },
       {

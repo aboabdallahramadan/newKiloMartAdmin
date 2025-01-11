@@ -5,6 +5,7 @@ import DataStatsOne from "@/components/DataStats/DataStatsOne";
 import RevenueChart from "@/components/Charts/RevenueChart";
 import MapOne from "../Maps/MapOne";
 import MainMap from "../Maps/MainMap";
+import SecondeOrdersChart from "../Charts/SecondOrdersChart";
 
 const ECommerce: React.FC = () => {
   return (
@@ -15,8 +16,12 @@ const ECommerce: React.FC = () => {
         <RevenueChart />
         <OrdersChart />
         <div className="col-span-12">
+          <SecondeOrdersChart />
+        </div>
+        <div className="col-span-12">
           <MainMap />
         </div>
+        
         {/* <MapOne /> */}
       </div>
     </>

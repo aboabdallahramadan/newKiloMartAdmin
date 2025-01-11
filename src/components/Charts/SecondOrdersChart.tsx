@@ -4,7 +4,7 @@ import React,{useState, useEffect} from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
 
-const RevenueChart: React.FC = () => {
+const SecondeOrdersChart: React.FC = () => {
   const currentYear = new Date().getFullYear();
     const years = Array.from(
       { length: currentYear - 2024 + 1 },
@@ -16,11 +16,11 @@ const RevenueChart: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState("1");
   const [chartSeries, setChartSeries] = useState([
     {
-      name: "Cash Payments",
+      name: "Completed Orders",
       data: [0, 20, 35, 45, 35, 0, 0, 0, 0, 0, 0, 0],
     },
     {
-      name: "Card Payments", 
+      name: "Canceled Orders", 
       data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
     },
   ]);
@@ -163,11 +163,11 @@ const RevenueChart: React.FC = () => {
       ];
       newSeries = [
         {
-          name: "Cash Payments",
+          name: "Completed Orders",
           data: [0, 20, 35, 45, 35, 55, 65, 50, 65, 75, 60, 0],
         },
         {
-          name: "Card Payments",
+          name: "Canceled Orders",
           data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
         },
       ];
@@ -177,11 +177,11 @@ const RevenueChart: React.FC = () => {
       newXaxis = Array.from({length: numDays}, (_, i) => (i + 1).toString());
       newSeries = [
         {
-          name: "Cash Payments",
+          name: "Completed Orders",
           data: Array.from({length: numDays}, () => Math.floor(Math.random() * 75))
         },
         {
-          name: "Card Payments",
+          name: "Canceled Orders",
           data: Array.from({length: numDays}, () => Math.floor(Math.random() * 94))
         }
       ];
@@ -239,19 +239,19 @@ const RevenueChart: React.FC = () => {
         <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
           <p className="font-medium">
             <div className="w-3 h-3 rounded-full bg-[#5750F1] inline-block mr-2"></div> 
-            Cash Payments
+            Completed Orders
             </p>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            45,070.00 RS
+            150
           </h4>
         </div>
         <div className="xsm:w-1/2">
           <p className="font-medium">
           <div className="w-3 h-3 rounded-full bg-[#0ABEF9] inline-block mr-2"></div> 
-          Card Payments
+          Canceled Orders
           </p>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            32,400.00 RS
+            99
           </h4>
         </div>
       </div>
@@ -259,4 +259,4 @@ const RevenueChart: React.FC = () => {
   );
 };
 
-export default RevenueChart;
+export default SecondeOrdersChart;

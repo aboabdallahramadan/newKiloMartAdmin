@@ -6,6 +6,7 @@ import ProviderProducts from '@/components/Providers/ProviderProducts';
 import ProviderMap from '@/components/Providers/ProviderMap';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import Withdrawals from '@/components/Withdrawals/Withdrawals';
+import Profiles from '@/components/Providers/Profiles';
 
 export const metadata: Metadata = {
   title: "Provider Details",
@@ -23,6 +24,9 @@ const page = () => {
         <Withdrawals user='Provider' />
         <div className='col-span-1 md:col-span-2'>
           <ProviderMap />
+        </div>
+        <div className='col-span-1 md:col-span-2'>
+          <Profiles />
         </div>
 
       </div>

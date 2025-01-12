@@ -15,13 +15,14 @@ export type ProviderProfile = {
     buildingNumber: string,
     floorNumber: string,
     apartmentNumber: string,
+    city?: string,
     streetNumber: string,
     phoneNumber: string,
     isAccepted: boolean,
     isRejected: boolean,
     submitDate: Date,
-    reviewDate: Date,
+    reviewDate: Date | null,
     providerId: number,
     isActive: boolean,
-    reviewDescription: string
+    reviewDescription: string | null
   }

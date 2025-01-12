@@ -5,6 +5,7 @@ import DeliveryOrders from '@/components/Deliveries/DeliveryOrders';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import DeliveryDetails from '@/components/Deliveries/DeliveryDetails';
 import Withdrawals from '@/components/Withdrawals/Withdrawals';
+import Profiles from '@/components/Deliveries/Profiles';
 
 
 export const metadata: Metadata = {
@@ -21,6 +22,9 @@ const page = () => {
         <div className='flex flex-col gap-4'>
           <DeliveryOrders />
           <Withdrawals user='Delivery' />
+        </div>
+        <div className='md:col-span-2'>
+          <Profiles />
         </div>
       </div>
     </DefaultLayout>

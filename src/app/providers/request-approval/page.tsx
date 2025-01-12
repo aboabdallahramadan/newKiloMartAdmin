@@ -1,6 +1,6 @@
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '@/components/Layouts/DefaultLaout'
-import AccountsRequests from '@/components/Users/AccountsRequests';
+import NewProviderRequests from '@/components/Providers/NewProvidersRequests';
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ const page = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='New Provider Requests' />
-      <AccountsRequests user='Provider'/>
+      <NewProviderRequests />
     </DefaultLayout>
   )
 }

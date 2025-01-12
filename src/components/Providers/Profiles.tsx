@@ -11,88 +11,91 @@ const Profiles = () => {
   
   // Mock data - replace with actual data fetching
   const providerProfiles: ProviderProfile[] = [
-    {
-      id: 1,
-      firstName: "John",
-      secondName: "Doe",
-      nationalApprovalId: "NAP123456",
-      companyName: "Fresh Foods Market",
-      ownerName: "John Doe",
-      ownerNationalId: "NID789012",
-      ownershipDocumentFileUrl: "https://example.com/doc1.pdf",
-      ownerNationalApprovalFileUrl: "https://example.com/doc2.pdf",
-      locationName: "Downtown Store",
-      longitude: 31.2357,
-      latitude: 30.0444,
-      buildingType: "Commercial",
-      buildingNumber: "123",
-      floorNumber: "1",
-      apartmentNumber: "101",
-      streetNumber: "45",
-      phoneNumber: "+201234567890",
-      isAccepted: true,
-      isRejected: false,
-      submitDate: new Date("2024-01-15"),
-      reviewDate: new Date("2024-01-20"),
-      providerId: 1001,
-      isActive: true,
-      reviewDescription: "All documents verified successfully"
-    },
-    {
-      id: 2,
-      firstName: "Sarah",
-      secondName: "Smith",
-      nationalApprovalId: "NAP789012",
-      companyName: "City Grocers",
-      ownerName: "Sarah Smith",
-      ownerNationalId: "NID345678",
-      ownershipDocumentFileUrl: "https://example.com/doc3.pdf",
-      ownerNationalApprovalFileUrl: "https://example.com/doc4.pdf",
-      locationName: "Suburban Branch",
-      longitude: 31.2456,
-      latitude: 30.0533,
-      buildingType: "Retail",
-      buildingNumber: "456",
-      floorNumber: "2",
-      apartmentNumber: "202",
-      streetNumber: "78",
-      phoneNumber: "+201122334455",
-      isAccepted: false,
-      isRejected: false,
-      submitDate: new Date("2024-02-01"),
-      reviewDate: new Date("2024-02-05"),
-      providerId: 1002,
-      isActive: true,
-      reviewDescription: "Pending review"
-    },
-    {
-      id: 3,
-      firstName: "Mohamed",
-      secondName: "Ahmed",
-      nationalApprovalId: "NAP345678",
-      companyName: "Express Mart",
-      ownerName: "Mohamed Ahmed",
-      ownerNationalId: "NID901234",
-      ownershipDocumentFileUrl: "https://example.com/doc5.pdf",
-      ownerNationalApprovalFileUrl: "https://example.com/doc6.pdf",
-      locationName: "City Center",
-      longitude: 31.2789,
-      latitude: 30.0622,
-      buildingType: "Mall",
-      buildingNumber: "789",
-      floorNumber: "3",
-      apartmentNumber: "303",
-      streetNumber: "90",
-      phoneNumber: "+201099887766",
-      isAccepted: true,
-      isRejected: false,
-      submitDate: new Date("2024-01-25"),
-      reviewDate: new Date("2024-01-30"),
-      providerId: 1003,
-      isActive: true,
-      reviewDescription: "Approved with premium status"
-    }
-  ]
+     {
+       id: 1,
+       firstName: "John",
+       secondName: "Doe",
+       nationalApprovalId: "NAP123456",
+       companyName: "Fresh Foods Market",
+       ownerName: "John Doe",
+       ownerNationalId: "NID789012",
+       ownershipDocumentFileUrl: "https://example.com/doc1.pdf",
+       ownerNationalApprovalFileUrl: "https://example.com/doc2.pdf",
+       locationName: "Downtown Store",
+       longitude: 31.2357,
+       latitude: 30.0444,
+       buildingType: "Commercial",
+       buildingNumber: "123",
+       floorNumber: "1",
+       apartmentNumber: "101",
+       streetNumber: "45",
+       city: "Cairo",
+       phoneNumber: "+201234567890",
+       isAccepted: true,
+       isRejected: false,
+       submitDate: new Date("2024-01-15"),
+       reviewDate: new Date("2024-01-20"),
+       providerId: 1001,
+       isActive: true,
+       reviewDescription: "All documents verified successfully"
+     },
+     {
+       id: 2,
+       firstName: "Sarah",
+       secondName: "Smith",
+       nationalApprovalId: "NAP789012",
+       companyName: "City Grocers",
+       ownerName: "Sarah Smith",
+       ownerNationalId: "NID345678",
+       ownershipDocumentFileUrl: "https://example.com/doc3.pdf",
+       ownerNationalApprovalFileUrl: "https://example.com/doc4.pdf",
+       locationName: "Suburban Branch",
+       longitude: 31.2456,
+       latitude: 30.0533,
+       buildingType: "Retail",
+       buildingNumber: "456",
+       floorNumber: "2",
+       apartmentNumber: "202",
+       streetNumber: "78",
+       city: "Cairo",
+       phoneNumber: "+201122334455",
+       isAccepted: false,
+       isRejected: false,
+       submitDate: new Date("2024-02-01"),
+       reviewDate: new Date("2024-02-05"),
+       providerId: 1002,
+       isActive: true,
+       reviewDescription: "Pending review"
+     },
+     {
+       id: 3,
+       firstName: "Mohamed",
+       secondName: "Ahmed",
+       nationalApprovalId: "NAP345678",
+       companyName: "Express Mart",
+       ownerName: "Mohamed Ahmed",
+       ownerNationalId: "NID901234",
+       ownershipDocumentFileUrl: "https://example.com/doc5.pdf",
+       ownerNationalApprovalFileUrl: "https://example.com/doc6.pdf",
+       locationName: "City Center",
+       longitude: 31.2789,
+       latitude: 30.0622,
+       buildingType: "Mall",
+       buildingNumber: "789",
+       floorNumber: "3",
+       apartmentNumber: "303",
+       streetNumber: "90",
+       city: "Cairo",
+       phoneNumber: "+201099887766",
+       isAccepted: true,
+       isRejected: false,
+       submitDate: new Date("2024-01-25"),
+       reviewDate: new Date("2024-01-30"),
+       providerId: 1003,
+       isActive: true,
+       reviewDescription: "Approved with premium status"
+     }
+   ]
 
   return (
     <div className="p-6 max-w-[1600px] mx-auto">
@@ -115,9 +118,9 @@ const Profiles = () => {
       </div>
 
       {selectedProfile && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white dark:bg-dark-2 rounded-xl shadow-md">
           {/* Profile Information Card */}
-          <div className="bg-white dark:bg-dark-2 p-6 rounded-xl shadow-md space-y-6 lg:col-span-2">
+          <div className=" p-6 space-y-6 lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Basic Information */}
               <div className="space-y-4">
@@ -135,10 +138,32 @@ const Profiles = () => {
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold dark:text-white border-b pb-2">Status & Contact</h3>
                 <div className="space-y-2">
+                <InfoItem label="Added in" value={selectedProfile.submitDate.toLocaleDateString()} />
                   <InfoItem label="Phone Number" value={selectedProfile.phoneNumber} />
                   <StatusBadge status={selectedProfile.isRejected ? 'rejected' : selectedProfile.isAccepted ? 'accepted' : 'pending'} />
-                  {(selectedProfile.isAccepted || selectedProfile.isRejected) && (
+                  {(selectedProfile.isAccepted || selectedProfile.isRejected) ? (
                     <InfoItem label="Review Notes" value={selectedProfile.reviewDescription} />
+                  ) : (
+                    <div className="flex gap-2 mt-4">
+                      <button 
+                        onClick={() => {
+                          // Add your accept logic here
+                          console.log('Accept profile:', selectedProfile.id)
+                        }}
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                      >
+                        Accept Profile
+                      </button>
+                      <button 
+                        onClick={() => {
+                          // Add your reject logic here
+                          console.log('Reject profile:', selectedProfile.id)
+                        }}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                      >
+                        Reject Profile
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -196,10 +221,10 @@ const Profiles = () => {
 }
 
 // Helper Components
-const InfoItem = ({ label, value }: { label: string, value: string }) => (
-  <div className="flex flex-col">
-    <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>
-    <span className="font-medium dark:text-white">{value}</span>
+const InfoItem = ({ label, value }: { label: string, value: string | undefined }) => (
+  <div className="flex gap-2 items-center justify-between">
+    <span className="text-sm text-gray-500 dark:text-gray-400">{label}:</span>
+    <span className="text-sm text-gray-500 dark:text-gray-400">{value}</span>
   </div>
 )
 

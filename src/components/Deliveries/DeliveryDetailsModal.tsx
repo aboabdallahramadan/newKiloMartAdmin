@@ -1,14 +1,22 @@
 "use client"
 import React, { useState } from 'react'
 import { DeliveryProfile } from '../../types/deliveryProfile'
+import ReviewProfileModal from '../Users/ReviewProfileModal'
 
 
 interface DeliveryDetailsModalProps {
     deliveryId: number;
     onClose: () => void;
   }
-  const DeliveryDetailsModal: React.FC<DeliveryDetailsModalProps> = ({ deliveryId, onClose }) => {
+const DeliveryDetailsModal: React.FC<DeliveryDetailsModalProps> = ({ deliveryId, onClose }) => {
   const [selectedProfile, setSelectedProfile] = useState<DeliveryProfile | null>(null)
+  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+
+  const openAcceptModal = () => setIsAcceptModalOpen(true);
+  const closeAcceptModal = () => setIsAcceptModalOpen(false);
+  const openRejectModal = () => setIsRejectModalOpen(true);
+  const closeRejectModal = () => setIsRejectModalOpen(false);
   
   // Mock data - replace with actual data fetching
   const deliveryProfiles: DeliveryProfile[] | null = [
@@ -135,19 +143,13 @@ interface DeliveryDetailsModalProps {
                             ) : (
                                 <div className="flex gap-2 mt-4">
                                 <button 
-                                    onClick={() => {
-                                    // Add your accept logic here
-                                    console.log('Accept profile:', selectedProfile.id)
-                                    }}
+                                    onClick={openAcceptModal}
                                     className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                                 >
                                     Accept Profile
                                 </button>
                                 <button 
-                                    onClick={() => {
-                                    // Add your reject logic here
-                                    console.log('Reject profile:', selectedProfile.id)
-                                    }}
+                                    onClick={openRejectModal}
                                     className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                                 >
                                     Reject Profile
@@ -186,6 +188,26 @@ interface DeliveryDetailsModalProps {
                 )}
             </div>
         </div>
+        {isAcceptModalOpen && (
+          <ReviewProfileModal 
+            onConfirm={(description) => {
+              // Handle the review description
+              console.log(description);
+              closeAcceptModal();
+            }}
+            onCancel={closeAcceptModal}
+          />
+        )}
+        {isRejectModalOpen && (
+          <ReviewProfileModal 
+            onConfirm={(description) => {
+              // Handle the review description
+              console.log(description);
+              closeRejectModal();
+            }}
+            onCancel={closeRejectModal}
+          />
+        )}
     </div>
 
   )

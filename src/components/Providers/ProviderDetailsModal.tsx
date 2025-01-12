@@ -5,6 +5,7 @@ import {MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import "leaflet-defaulticon-compatibility"
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css"
+import ReviewProfileModal from '../Users/ReviewProfileModal'
 
 
 interface ProviderDetailsModalProps {
@@ -13,8 +14,14 @@ interface ProviderDetailsModalProps {
   }
   const ProviderDetailsModal: React.FC<ProviderDetailsModalProps> = ({ providerId, onClose }) => {
   const [selectedProfile, setSelectedProfile] = useState<ProviderProfile | null>(null)
+    const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
+    const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   
-  // Mock data - replace with actual data fetching
+    const openAcceptModal = () => setIsAcceptModalOpen(true);
+    const closeAcceptModal = () => setIsAcceptModalOpen(false);
+    const openRejectModal = () => setIsRejectModalOpen(true);
+    const closeRejectModal = () => setIsRejectModalOpen(false);
+  
   const providerProfiles: ProviderProfile[] = [
     {
       id: 1,
@@ -130,7 +137,7 @@ interface ProviderDetailsModalProps {
                 <option value="">Select a Provider Profile</option>
                 {providerProfiles.map(profile => (
                     <option key={profile.id} value={profile.id}>
-                    {profile.companyName} - {profile.ownerName}
+                    {profile.firstName} {profile.secondName}
                     </option>
                 ))}
                 </select>
@@ -165,19 +172,13 @@ interface ProviderDetailsModalProps {
                         ) : (
                             <div className="flex gap-2 mt-4">
                             <button 
-                                onClick={() => {
-                                // Add your accept logic here
-                                console.log('Accept profile:', selectedProfile.id)
-                                }}
+                                onClick={openAcceptModal}
                                 className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                             >
                                 Accept Profile
                             </button>
                             <button 
-                                onClick={() => {
-                                // Add your reject logic here
-                                console.log('Reject profile:', selectedProfile.id)
-                                }}
+                                onClick={openRejectModal}
                                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                             >
                                 Reject Profile
@@ -238,6 +239,26 @@ interface ProviderDetailsModalProps {
             )}
             </div>
         </div>
+        {isAcceptModalOpen && (
+          <ReviewProfileModal 
+            onConfirm={(description) => {
+              // Handle the review description
+              console.log(description);
+              closeAcceptModal();
+            }}
+            onCancel={closeAcceptModal}
+          />
+        )}
+        {isRejectModalOpen && (
+          <ReviewProfileModal 
+            onConfirm={(description) => {
+              // Handle the review description
+              console.log(description);
+              closeRejectModal();
+            }}
+            onCancel={closeRejectModal}
+          />
+        )}
     </div>
 
   )

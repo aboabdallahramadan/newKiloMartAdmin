@@ -278,7 +278,7 @@ const ProvidersProducts = () => {
                 </div>
                 <div className="col-span-1 flex items-center justify-center">
                   <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                    <Link href={`/provider/${product.productOfferProviderId}`} className='text-blue-500 hover:text-blue-700'>
+                    <Link href={`/providers/${product.productOfferProviderId}`} className='text-blue-500 hover:text-blue-700'>
                         {product.productOfferProviderName}
                     </Link>
                   </p>

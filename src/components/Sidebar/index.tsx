@@ -91,6 +91,7 @@ const menuGroups = [
         route: "#",
         children: [
           { label: "Categories", route: "/products/categories" },
+          { label: "Providers Products", route: "/products/providers-products" },
           { label: "All Products", route: "/products/all" },
           { label: "New Product Requests", route: "/products/new-product-requests" },
           { label: "Add New Product", route: "/products/new-product" },

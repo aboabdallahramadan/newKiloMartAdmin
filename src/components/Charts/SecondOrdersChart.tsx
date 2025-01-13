@@ -237,19 +237,19 @@ const SecondeOrdersChart: React.FC = () => {
 
       <div className="flex flex-col gap-2 text-center xsm:flex-row xsm:gap-0">
         <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
-          <p className="font-medium">
+          <div className="font-medium">
             <div className="w-3 h-3 rounded-full bg-[#5750F1] inline-block mr-2"></div> 
             Completed Orders
-            </p>
+            </div>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
             150
           </h4>
         </div>
         <div className="xsm:w-1/2">
-          <p className="font-medium">
-          <div className="w-3 h-3 rounded-full bg-[#0ABEF9] inline-block mr-2"></div> 
-          Canceled Orders
-          </p>
+          <div className="font-medium">
+            <div className="w-3 h-3 rounded-full bg-[#0ABEF9] inline-block mr-2"></div> 
+            Canceled Orders
+          </div>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
             99
           </h4>

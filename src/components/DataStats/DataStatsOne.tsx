@@ -31,7 +31,7 @@ const dataStatsList = [
     ),
     color: "#FF9C55",
     title: "Total Profit",
-    value: "42598 RS",
+    value: "42598 SAR",
     growthRate: 4.35,
   },
   {

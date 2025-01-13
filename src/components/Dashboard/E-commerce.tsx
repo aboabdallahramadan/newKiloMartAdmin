@@ -22,7 +22,6 @@ const ECommerce: React.FC = () => {
           <MainMap />
         </div>
         
-        {/* <MapOne /> */}
       </div>
     </>
   );

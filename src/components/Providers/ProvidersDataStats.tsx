@@ -1,8 +1,44 @@
-import React from "react";
+"use client";
+import React, {useState, useEffect} from "react";
 import { dataStats } from "@/types/dataStats";
-import { BsFillCartFill } from "react-icons/bs";
+import { ProvidersSummary } from "@/types/providersSummary";
+import ElementLoader from "../common/ElementLoader";
 
-const dataStatsList = [
+
+
+
+const ProvidersDataStats: React.FC<dataStats> = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataStats, setDataStats] = useState<ProvidersSummary>({
+    totalActiveProviders: 0,
+    totalProvidersBalance: 0,
+    totalProductOffers: 0,
+  });
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch('/backend/api/admin-panel/providers-summary');
+        const res = await response.json();
+        if(res.status == true){
+          setDataStats(res.data);
+        }
+        else{
+          console.log(res.message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  },[])
+
+  const dataStatsList = [
     {
     icon: (
         <svg
@@ -37,8 +73,8 @@ const dataStatsList = [
         </svg>
     ),
     color: "#18BFFF",
-    title: "Total Providers",
-    value: "365",
+    title: "Total Active Providers",
+    value: dataStats.totalActiveProviders,
     growthRate: -0.95,
     },
     {
@@ -60,7 +96,7 @@ const dataStatsList = [
         ),
         color: "#FF9C55",
         title: "Total Providers Balance",
-        value: "42598 RS",
+        value: dataStats.totalProvidersBalance + " SAR",
         growthRate: 4.35,
     },
     {
@@ -88,13 +124,11 @@ const dataStatsList = [
         ),
         color: "#8155FF",
         title: "Total Providers Products",
-        value: "250",
+        value: dataStats.totalProductOffers,
         growthRate: 2.59,
     },
   
 ];
-
-const ProvidersDataStats: React.FC<dataStats> = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -103,7 +137,12 @@ const ProvidersDataStats: React.FC<dataStats> = () => {
             key={index}
             className="rounded-[10px] bg-white p-6 shadow-1 dark:bg-gray-dark"
           >
-            <div
+            {
+              isLoading ? (
+                <ElementLoader />
+              ) : (
+                <>
+                  <div
               className="flex h-14.5 w-14.5 items-center justify-center rounded-full"
               style={{ backgroundColor: item.color }}
             >
@@ -155,6 +194,10 @@ const ProvidersDataStats: React.FC<dataStats> = () => {
                 )}
               </span> */}
             </div>
+                </>
+              )
+            }
+            
           </div>
         ))}
       </div>

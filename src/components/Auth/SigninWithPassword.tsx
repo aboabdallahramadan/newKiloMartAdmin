@@ -1,15 +1,39 @@
 "use client";
 import React, { useState } from "react";
+import { signIn } from "next-auth/react"
 
 
 
 export default function SigninWithPassword() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const result = await signIn("credentials", {
+      email: email,
+      password: password,
+      redirect: true,
+      callbackUrl: "/dashboard"
+    })
+    console.log(result);
+  }
   const [data, setData] = useState({
     remember: false,
   });
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="mb-4">
         <label
           htmlFor="email"
@@ -22,6 +46,7 @@ export default function SigninWithPassword() {
             type="email"
             placeholder="Enter your email"
             name="email"
+            onChange={handleChange}
             className="w-full rounded-lg border border-stroke bg-transparent py-[15px] pl-6 pr-11 font-medium text-dark outline-none focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             required
           />
@@ -58,6 +83,7 @@ export default function SigninWithPassword() {
             type="password"
             name="password"
             placeholder="Enter your password"
+            onChange={handleChange}
             autoComplete="password"
             className="w-full rounded-lg border border-stroke bg-transparent py-[15px] pl-6 pr-11 font-medium text-dark outline-none focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             required

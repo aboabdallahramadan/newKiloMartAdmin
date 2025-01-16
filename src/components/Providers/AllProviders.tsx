@@ -1,65 +1,27 @@
 "use client";
 import { Provider } from "@/types/provider";
 import { useEffect, useState } from "react";
-import Loader from "../common/Loader";
 import { FaEye } from "react-icons/fa";
 import { BiCheckCircle, BiStopCircle } from "react-icons/bi";
 import Link from "next/link";
 import AddNewProvider from "./AddNewProvider";
+import ElementLoader from "../common/ElementLoader";
+import { toast } from "react-toastify";
 
 const AllProviders = () => {
-  const [providersData, setProvidersData] = useState<Omit<Provider, 'totalOrders' | 'totalProducts' | 'availableBalance' | 'totalBalance' | 'ownershipDocumentFile' | 'ownerNationalApprovalFile' | 'isEmailVerified'>[]>([
-    {
-      providerId: 1,
-      userId: 101,
-      displayName: "Fresh Foods Market",
-      firstName: "John",
-      secondName: "Doe",
-      companyName: "Fresh Foods Ltd",
-      nationalApprovalId: "FDA123456",
-      ownerName: "John Doe",
-      ownerNationalId: "ID123456789",
-      email: "john@freshfoods.com",
-      isActive: true
-    },
-    {
-      providerId: 2,
-      userId: 102,
-      displayName: "Organic Grocers",
-      firstName: "Jane",
-      secondName: "Smith",
-      companyName: "Organic Grocers Inc",
-      nationalApprovalId: "FDA789012",
-      ownerName: "Jane Smith",
-      ownerNationalId: "ID987654321",
-      email: "jane@organicgrocers.com",
-      isActive: false
-    },
-    {
-      providerId: 3,
-      userId: 103,
-      displayName: "Quality Goods Store",
-      firstName: "Mike",
-      secondName: "Johnson",
-      companyName: "Quality Goods Ltd",
-      nationalApprovalId: "FDA345678",
-      ownerName: "Mike Johnson",
-      ownerNationalId: "ID456789123",
-      email: "mike@qualitygoods.com",
-      isActive: true
-    }
-  ]);
+  const [providersData, setProvidersData] = useState<Omit<Provider,'ownershipDocumentFile' | 'ownerNationalApprovalFile' | 'isEmailVerified'>[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
+  const [pageSize] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     const fetchProviders = async () => {
       try {
         setLoading(true);
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/provider/admin/list?page=${currentPage}&pageSize=${pageSize}`;
-        console.log("Fetching from API URL:", apiUrl);
+        const apiUrl = `/backend/api/admin-panel/providers/paginated-by-search-term?term=${searchTerm}&page=${currentPage}&pageSize=${pageSize}`;
   
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -69,7 +31,7 @@ const AllProviders = () => {
         const data = await response.json();
   
         if (data.status) {
-          setProvidersData(data.data.data);
+          setProvidersData(data.data.providers);
           setTotalCount(data.data.totalCount);
         } else {
           console.error("Failed to fetch providers:", data.message);
@@ -81,10 +43,79 @@ const AllProviders = () => {
       }
     };
   
-    // fetchProviders();
-  }, [currentPage, pageSize]);
+    fetchProviders();
+  }, [currentPage, pageSize, searchTerm]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
+
+
+  const handleFreeze = async (email: string) => {
+    try {
+      const apiUrl = `/backend/api/user/admin/deactivate/email`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(email),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status) {
+        setProvidersData((prevProvidersData) =>
+          prevProvidersData.map((provider) =>
+            provider.email === email ? { ...provider, isActive: false } : provider
+          )
+        );
+        toast.success("Provider has been frozen successfully");
+      } else {
+        console.error("Failed to freeze provider:", data.message);
+        toast.error("Failed to freeze provider");
+      }}
+      catch (error) {
+      console.error("Error freezing provider:", error);
+      toast.error("Failed to freeze provider");
+    }
+  };
+
+
+  const handleActivate = async (email: string) => {
+    try {
+      const apiUrl = `/backend/api/user/admin/activate/email`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status) {
+        setProvidersData((prevProvidersData) =>
+          prevProvidersData.map((provider) =>
+            provider.email === email ? { ...provider, isActive: true } : provider
+          )
+        );
+        toast.success("Provider has been activated successfully");
+      } else {
+        console.error("Failed to activate provider:", data.message);
+        toast.error("Failed to activate provider");
+      }}
+      catch (error) {
+      console.error("Error activating provider:", error);
+      toast.error("Failed to activate provider");
+    }
+  };
+
+
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -100,6 +131,23 @@ const AllProviders = () => {
 
   return (
     <div>
+    <div className="flex justify-between items-center mb-4">
+      <input
+          type="text"
+          placeholder="Search by name or phone..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className="flex-1 md:w-1/3 px-4 py-2 rounded-lg border border-dark-3 bg-transparent outline-none focus:border-primary dark:border-dark-3 dark:bg-dark-2"
+        />
+
+        <button
+          className="ml-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-all"
+          onClick={() => setSearchTerm(searchInput)}
+        >
+          Search
+        </button>
+
+      </div>
       <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
         <div className="w-full flex items-center justify-between px-4 py-6 md:px-6 xl:px-9">
           <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
@@ -109,7 +157,7 @@ const AllProviders = () => {
         </div>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
-          <Loader />
+          <ElementLoader size={20} />
         </div>
       ) : (
         <>
@@ -158,7 +206,7 @@ const AllProviders = () => {
                   </div>
                   <div className="col-span-1 flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      24
+                      {provider.totalOrders}
                     </p>
                   </div>
                   <div className="col-span-1 hidden sm:flex items-center">
@@ -168,9 +216,9 @@ const AllProviders = () => {
                   </div>
                   <div className="col-span-1 flex items-center">
                     <p className="text-body-sm font-medium text-green">
-                      100RS
+                      {provider.totalBalnace} SAR
                       <br />
-                      50RS
+                      {provider.availableBalnace} SAR
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center justify-end space-x-3.5">
@@ -179,11 +227,11 @@ const AllProviders = () => {
                     </Link>
                     {
                       provider.isActive ? (
-                        <button className="hover:text-primary" title="Freeze">
+                        <button className="hover:text-primary" title="Freeze" onClick={() => handleFreeze(provider.email)}>
                           <BiStopCircle />
                         </button>
                       ) : (
-                        <button className="hover:text-primary" title="Activate">
+                        <button className="hover:text-primary" title="Activate" onClick={() => handleActivate(provider.email)}>
                           <BiCheckCircle />
                         </button>
                       )
@@ -196,7 +244,7 @@ const AllProviders = () => {
                 <button
                   onClick={handlePreviousPage}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                  className="px-4 py-2 bg-gray-300 rounded text-black disabled:opacity-50"
                 >
                   Previous
                 </button>
@@ -206,7 +254,7 @@ const AllProviders = () => {
                 <button
                   onClick={handleNextPage}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                  className="px-4 py-2 bg-gray-300 rounded text-black disabled:opacity-50"
                 >
                   Next
                 </button>

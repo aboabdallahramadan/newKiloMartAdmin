@@ -14,8 +14,8 @@ export type Provider = {
   isActive: boolean;
   totalOrders: number;
   totalProducts: number;
-  availableBalance: number;
-  totalBalance: number;
+  availableBalnace: number;
+  totalBalnace: number;
   ownershipDocumentFile: string;
   ownerNationalApprovalFile: string;
 };

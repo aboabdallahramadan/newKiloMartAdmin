@@ -46,20 +46,11 @@ const SignIn: React.FC = () => {
                 Welcome Back!
               </h1>
 
-              <p className="w-full max-w-[375px] font-medium text-dark-4 dark:text-dark-6">
+              <p className="w-full max-w-[375px] font-medium text-dark-4 dark:text-dark-6 mb-10">
                 Please sign in to your account by completing the necessary
                 fields below
               </p>
 
-              <div className="mt-31">
-                <Image
-                  src={"/images/grids/grid-02.svg"}
-                  alt="Logo"
-                  width={405}
-                  height={325}
-                  className="mx-auto dark:opacity-30"
-                />
-              </div>
             </div>
           </div>
         </div>

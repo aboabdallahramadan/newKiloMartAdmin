@@ -3,6 +3,5 @@ export type UserData = {
     email: string,
     name: string,
     role: string,
-    language: number,
     token: string
 }

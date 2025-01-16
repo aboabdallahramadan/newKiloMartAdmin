@@ -19,11 +19,10 @@ export const authOptions: NextAuthOptions = {
         console.log(result);
         if (res.ok && result.status) {
             return {
-              id: result.data.token as string,
-              email: result.data.email as string,
-              name: result.data.userName as string,
+              id: result.data.userInfo.id as string,
+              email: result.data.userInfo.email as string,
+              name: result.data.adminInfo.displayName as string,
               role: result.data.role as string,
-              language: result.data.language as number,
               token: result.data.token as string
             }
         }
@@ -35,7 +34,6 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.role = user.role as string
-        token.language = user.language as number
         token.accessToken = user.token as string
       }
       return token
@@ -43,7 +41,6 @@ export const authOptions: NextAuthOptions = {
     session: async ({ session, token }) => {
       if (session?.user) {
         session.user.role = token.role as string
-        session.user.language = token.language as number
         session.accessToken = token.accessToken as string
       }
       return session

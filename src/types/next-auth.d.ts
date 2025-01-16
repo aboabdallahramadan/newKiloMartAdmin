@@ -6,7 +6,6 @@ declare module "next-auth" {
       email: string
       name: string
       role: string
-      language: number
     }
     accessToken: string
   }
@@ -15,7 +14,6 @@ declare module "next-auth" {
     email: string
     name: string
     role: string
-    language: number
     token: string
   }
 }

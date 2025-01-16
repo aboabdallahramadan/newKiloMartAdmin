@@ -24,7 +24,7 @@ const DataStatsOne: React.FC<dataStats> = () => {
     const fetchOrders = async () => {
       
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/admin-panel/order-count', {
+        const response = await fetch('/backend/api/admin-panel/order-count', {
           headers: {
             'Authorization': `Bearer ${session?.accessToken}`,
           }

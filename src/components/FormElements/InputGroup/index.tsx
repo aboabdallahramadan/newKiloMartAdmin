@@ -4,7 +4,7 @@ interface InputGroupProps {
   customClasses?: string;
   label: string;
   type: string;
-  placeholder: string;
+  placeholder?: string;
   required?: boolean;
   value?: any;
   name?: string;

@@ -1,6 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { signIn } from "next-auth/react"
+import { toast } from "react-toastify";
+import Loader from "../common/Loader";
+import ElementLoader from "../common/ElementLoader";
 
 
 
@@ -20,13 +23,23 @@ export default function SigninWithPassword() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     const result = await signIn("credentials", {
       email: email,
       password: password,
-      redirect: true,
-      callbackUrl: "/"
+      redirect: false,
     })
-    console.log(result);
+    if (result?.error) {
+      toast.error("Invalid email or password", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+      })
+    } else {
+      window.location.href = "/"
+    }
+    
+    setLoading(false)
   }
   const [data, setData] = useState({
     remember: false,
@@ -120,7 +133,18 @@ export default function SigninWithPassword() {
           type="submit"
           className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-4 font-medium text-white transition hover:bg-opacity-90"
         >
-          Sign In
+          {
+            loading ? (
+              <>
+              <ElementLoader color="white" size={6} />
+              </>
+            ) : (
+              <>
+              Sign In
+              </>
+            )
+          }
+          
         </button>
       </div>
     </form>

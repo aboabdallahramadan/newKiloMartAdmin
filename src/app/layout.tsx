@@ -6,6 +6,8 @@ import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
 import { SessionProvider } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RootLayout({
   children,
@@ -26,6 +28,7 @@ export default function RootLayout({
       <html lang="en">
         <body suppressHydrationWarning={true}>
           {loading ? <Loader /> : children}
+          <ToastContainer/>
         </body>
       </html>
     </SessionProvider>

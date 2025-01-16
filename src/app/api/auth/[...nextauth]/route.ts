@@ -16,8 +16,8 @@ export const authOptions: NextAuthOptions = {
           headers: { "Content-Type": "application/json" }
         })
         const result = await res.json()
-        console.log(result);
         if (res.ok && result.status) {
+          if(result.data.role === 'Admin') {
             return {
               id: result.data.userInfo.id as string,
               email: result.data.userInfo.email as string,
@@ -25,6 +25,11 @@ export const authOptions: NextAuthOptions = {
               role: result.data.role as string,
               token: result.data.token as string
             }
+          }
+          else {
+            throw new Error('Only admin accounts are allowed')
+          }
+            
         }
         return null
       }

@@ -16,6 +16,7 @@ export const authOptions: NextAuthOptions = {
           headers: { "Content-Type": "application/json" }
         })
         const result = await res.json()
+        console.log(result);
         if (res.ok && result.status) {
             return {
               id: result.data.token as string,

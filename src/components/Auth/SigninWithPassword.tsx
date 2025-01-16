@@ -24,7 +24,7 @@ export default function SigninWithPassword() {
       email: email,
       password: password,
       redirect: true,
-      callbackUrl: "/dashboard"
+      callbackUrl: "/"
     })
     console.log(result);
   }

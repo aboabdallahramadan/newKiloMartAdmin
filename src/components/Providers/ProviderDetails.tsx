@@ -1,30 +1,62 @@
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { Provider } from '@/types/provider';
-
-const provider: Provider = {
-  displayName: 'Provider 1',
-  firstName: 'John',
-  secondName: 'Doe',
-  companyName: 'Provider Company',
-  providerId: 1,
-  userId: 1,
-  nationalApprovalId: '1',
-  ownerName: 'John Doe',
-  ownerNationalId: '1234567890',
-  email: '+966855555559',
-  isActive: true,
-  totalOrders: 10,
-  totalProducts: 10,
-  availableBalance: 1000,
-  receivedBalance: 1000,
-  ownerNationalApprovalFile: "/files/sample.pdf",
-  ownershipDocumentFile: "/files/sample.pdf",
-  isEmailVerified: true,
-};
-
+import ElementLoader from '../common/ElementLoader';
 
 const ProviderDetails = () => {
-  return (
+  const providerId = useParams().id;
+
+  const [provider, setProvider] = useState<Provider | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!providerId) return; // wait until query param is available
+
+    const fetchProvider = async () => {
+      try {
+        const res = await fetch(
+          `/backend/api/admin-panel/provider-by-id?providerId=${providerId}`
+        );
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch provider data');
+        }
+
+        const data = await res.json();
+        // Assuming the provider data is available under data.provider.
+        setProvider(data.data);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProvider();
+  }, [providerId]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full mx-auto">
+        <div className="bg-white dark:bg-gray-dark rounded-lg shadow-md p-4">
+          <ElementLoader />
+        </div>
+      </div>
+      );
+  }
+
+  if (error || !provider) {
+    return (
+    <div className="w-full mx-auto">
+      <div className="bg-white dark:bg-gray-dark rounded-lg shadow-md p-4">
+        Error: {error || 'Provider not found'}
+      </div>
+    </div>
+    );
+  }  return (
     <div className="w-full mx-auto">
       <div className="bg-white dark:bg-gray-dark rounded-lg shadow-md">
         {/* Header Section */}
@@ -98,19 +130,19 @@ const ProviderDetails = () => {
           <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
               <p className="text-sm text-gray-500 dark:text-gray-400">Total Orders</p>
-              <p className="text-xl font-bold text-primary">{provider.totalOrders}</p>
+              <p className="text-xl font-bold text-primary">{provider.totalOrders || 0}</p>
             </div>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
               <p className="text-sm text-gray-500 dark:text-gray-400">Total Products</p>
-              <p className="text-xl font-bold text-primary">{provider.totalProducts}</p>
+              <p className="text-xl font-bold text-primary">{provider.totalProducts || 0}</p>
             </div>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
               <p className="text-sm text-gray-500 dark:text-gray-400">Available Balance</p>
-              <p className="text-xl font-bold text-green-500">{provider.availableBalance} RS</p>
+              <p className="text-xl font-bold text-green-500">{provider.availableBalance || 0} RS</p>
             </div>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
               <p className="text-sm text-gray-500 dark:text-gray-400">Total Balance</p>
-              <p className="text-xl font-bold text-green-500">{provider.receivedBalance} RS</p>
+              <p className="text-xl font-bold text-green-500">{provider.receivedBalance || 0} RS</p>
             </div>
           </div>
 
@@ -125,7 +157,7 @@ const ProviderDetails = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                   <a 
-                    href={provider.ownerNationalApprovalFile} 
+                    href={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${provider.ownerNationalApprovalFile}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary hover:text-primary/80 font-medium"
@@ -143,7 +175,7 @@ const ProviderDetails = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                   <a 
-                    href={provider.ownershipDocumentFile} 
+                    href={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${provider.ownershipDocumentFile}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary hover:text-primary/80 font-medium"

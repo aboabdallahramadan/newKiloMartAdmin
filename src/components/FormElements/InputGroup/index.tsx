@@ -9,6 +9,7 @@ interface InputGroupProps {
   value?: any;
   name?: string;
   inputClasses?: string;
+  pattern?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -21,7 +22,8 @@ const InputGroup: React.FC<InputGroupProps> = ({
   value,
   onChange,
   name,
-  inputClasses
+  inputClasses,
+  pattern
 }) => {
   return (
     <>
@@ -37,6 +39,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
           value={value}
           onChange={onChange}
           name={name}
+          pattern = {pattern}
         />
       </div>
     </>

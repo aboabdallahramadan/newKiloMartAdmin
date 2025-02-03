@@ -1,27 +1,36 @@
 "use client";
 import { ApexOptions } from "apexcharts";
-import React,{useState, useEffect} from "react";
+import React,{useState, useEffect, use} from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
+import ElementLoader from "../common/ElementLoader";
 
-const SecondeOrdersChart: React.FC = () => {
+const SecondOrdersChart: React.FC = () => {
   const currentYear = new Date().getFullYear();
-    const years = Array.from(
-      { length: currentYear - 2024 + 1 },
-      (_, index) => (2024 + index).toString()
-    );
+  const years = Array.from(
+    { length: currentYear - 2024 + 1 },
+    (_, index) => (2024 + index).toString()
+  );
   
   const [selectedType, setSelectedType] = useState("Yearly");
   const [selectedYear, setSelectedYear] = useState("2024");
   const [selectedMonth, setSelectedMonth] = useState("1");
+
+  const [totalCompletedOrders, setTotalCompletedOrders] = useState<number>(0);
+  const [totalCanceledOrders, setTotalCanceledOrders] = useState<number>(0);
+
+
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const [chartSeries, setChartSeries] = useState([
     {
       name: "Completed Orders",
-      data: [0, 20, 35, 45, 35, 0, 0, 0, 0, 0, 0, 0],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     {
       name: "Canceled Orders", 
-      data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
   ]);
   const options: ApexOptions = {
@@ -144,59 +153,129 @@ const SecondeOrdersChart: React.FC = () => {
 
   
   useEffect(() => {
-    let newXaxis = [...Xasix];
-    let newSeries = [...chartSeries];
-    if(selectedType === "Yearly") {
-      newXaxis = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      newSeries = [
-        {
-          name: "Completed Orders",
-          data: [0, 20, 35, 45, 35, 55, 65, 50, 65, 75, 60, 0],
-        },
-        {
-          name: "Canceled Orders",
-          data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
-        },
-      ];
-    }
-    else if(selectedType === "Monthly") {
-      const numDays = getDaysInMonth(parseInt(selectedYear), parseInt(selectedMonth));
-      newXaxis = Array.from({length: numDays}, (_, i) => (i + 1).toString());
-      newSeries = [
-        {
-          name: "Completed Orders",
-          data: Array.from({length: numDays}, () => Math.floor(Math.random() * 75))
-        },
-        {
-          name: "Canceled Orders",
-          data: Array.from({length: numDays}, () => Math.floor(Math.random() * 94))
+    
+    async function fetchData() {
+      setIsLoading(true);
+      let newXaxis: string[] = [];
+      let newSeries: any[] = [];
+      if (selectedType === "Yearly") {
+        newXaxis = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        try {
+          const res = await fetch(`/backend/api/admin-panel/orders-count-yearly-stats-summary?year=${selectedYear}`);
+          const json = await res.json();
+          if (json.status) {
+            newSeries = [
+              {
+                name: "Completed Orders",
+                data: json.data.cashPayments,
+              },
+              {
+                name: "Canceled Orders",
+                data: json.data.cardPayments,
+              },
+            ];
+            setTotalCompletedOrders(json.data.cashPayments.reduce((sum:number, value:number) => sum + value, 0));
+            setTotalCanceledOrders(json.data.cardPayments.reduce((sum:number, value:number) => sum + value, 0));
+          } else {
+            // fallback to default data if response status is false
+            newSeries = [
+              {
+                name: "Completed Orders",
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              },
+              {
+                name: "Canceled Orders",
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              },
+            ];
+          }
+        } catch (error) {
+          console.error("Error fetching yearly stats:", error);
+          // fallback on error
+          newSeries = [
+            {
+              name: "Completed Orders",
+              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+            {
+              name: "Canceled Orders",
+              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+          ];
         }
-      ];
-    }
-    
-    setXasix(newXaxis);
-    setChartSeries(newSeries);
-    setChartOptions({
-      ...options,
-      xaxis: {
-        ...options.xaxis,
-        categories: newXaxis
+      } else if (selectedType === "Monthly") {
+        const numDays = getDaysInMonth(parseInt(selectedYear), parseInt(selectedMonth));
+        newXaxis = Array.from({ length: numDays }, (_, i) => (i + 1).toString());
+        try {
+          const res = await fetch(`/backend/api/admin-panel/orders-count-monthly-stats-summary?year=${selectedYear}&month=${selectedMonth}`);
+          const json = await res.json();
+          if (json.status) {
+            newSeries = [
+              {
+                name: "Completed Orders",
+                data: json.data.cashPayments,
+              },
+              {
+                name: "Canceled Orders",
+                data: json.data.cardPayments,
+              },
+            ];
+            setTotalCompletedOrders(json.data.cashPayments.reduce((sum:number, value:number) => sum + value, 0));
+            setTotalCanceledOrders(json.data.cardPayments.reduce((sum:number, value:number) => sum + value, 0));
+          } else {
+            // fallback to default data if response status is false
+            newSeries = [
+              {
+                name: "Completed Orders",
+                data: Array.from({ length: numDays }, () => 0),
+              },
+              {
+                name: "Canceled Orders",
+                data: Array.from({ length: numDays }, () => 0),
+              },
+            ];
+          }
+        } catch (error) {
+          console.error("Error fetching yearly stats:", error);
+          // fallback on error
+          newSeries = [
+            {
+              name: "Completed Orders",
+              data: Array.from({ length: numDays }, () => 0),
+            },
+            {
+              name: "Canceled Orders",
+              data: Array.from({ length: numDays }, () => 0),
+            },
+          ];
+        }
+
       }
-    });
-    
+      setXasix(newXaxis);
+      setChartSeries(newSeries);
+      setChartOptions({
+        ...options,
+        xaxis: {
+          ...options.xaxis,
+          categories: newXaxis,
+        },
+      });
+    setIsLoading(false);
+    }
+    fetchData();
   }, [selectedType, selectedYear, selectedMonth]);
   
   return (
@@ -204,7 +283,7 @@ const SecondeOrdersChart: React.FC = () => {
       <div className="mb-3.5 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-            Orders Overview
+            Payments Overview
           </h4>
         </div>
         <div className="flex items-center gap-2.5">
@@ -224,7 +303,12 @@ const SecondeOrdersChart: React.FC = () => {
             <DefaultSelectOption options={["1", "2" , "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]} onSelect={(s : string) =>  setSelectedMonth(s)} />
           </div>)}
       </div>
-      <div>
+
+      {
+        isLoading ? (
+          <ElementLoader size={12} />
+        ) : (
+          <div>
         <div className="-ml-4 -mr-5">
           <ReactApexChart
             options={chartOptions}
@@ -234,24 +318,27 @@ const SecondeOrdersChart: React.FC = () => {
           />
         </div>
       </div>
+        )
+      }
+      
 
       <div className="flex flex-col gap-2 text-center xsm:flex-row xsm:gap-0">
         <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
           <div className="font-medium">
             <div className="w-3 h-3 rounded-full bg-[#5750F1] inline-block mr-2"></div> 
             Completed Orders
-            </div>
+          </div>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            150
+            {totalCompletedOrders}
           </h4>
         </div>
         <div className="xsm:w-1/2">
           <div className="font-medium">
-            <div className="w-3 h-3 rounded-full bg-[#0ABEF9] inline-block mr-2"></div> 
-            Canceled Orders
+          <div className="w-3 h-3 rounded-full bg-[#0ABEF9] inline-block mr-2"></div> 
+          Canceled Orders
           </div>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            99
+          {totalCanceledOrders}
           </h4>
         </div>
       </div>
@@ -259,4 +346,4 @@ const SecondeOrdersChart: React.FC = () => {
   );
 };
 
-export default SecondeOrdersChart;
+export default SecondOrdersChart;

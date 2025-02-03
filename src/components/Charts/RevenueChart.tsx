@@ -1,27 +1,36 @@
 "use client";
 import { ApexOptions } from "apexcharts";
-import React,{useState, useEffect} from "react";
+import React,{useState, useEffect, use} from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
+import ElementLoader from "../common/ElementLoader";
 
 const RevenueChart: React.FC = () => {
   const currentYear = new Date().getFullYear();
-    const years = Array.from(
-      { length: currentYear - 2024 + 1 },
-      (_, index) => (2024 + index).toString()
-    );
+  const years = Array.from(
+    { length: currentYear - 2024 + 1 },
+    (_, index) => (2024 + index).toString()
+  );
   
   const [selectedType, setSelectedType] = useState("Yearly");
   const [selectedYear, setSelectedYear] = useState("2024");
   const [selectedMonth, setSelectedMonth] = useState("1");
+
+  const [totalCashPayments, setTotalCashPayments] = useState<number>(0);
+  const [totalCardPayments, setTotalCardPayments] = useState<number>(0);
+
+
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const [chartSeries, setChartSeries] = useState([
     {
       name: "Cash Payments",
-      data: [0, 20, 35, 45, 35, 0, 0, 0, 0, 0, 0, 0],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     {
       name: "Card Payments", 
-      data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
   ]);
   const options: ApexOptions = {
@@ -144,59 +153,129 @@ const RevenueChart: React.FC = () => {
 
   
   useEffect(() => {
-    let newXaxis = [...Xasix];
-    let newSeries = [...chartSeries];
-    if(selectedType === "Yearly") {
-      newXaxis = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      newSeries = [
-        {
-          name: "Cash Payments",
-          data: [0, 20, 35, 45, 35, 55, 65, 50, 65, 75, 60, 0],
-        },
-        {
-          name: "Card Payments",
-          data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
-        },
-      ];
-    }
-    else if(selectedType === "Monthly") {
-      const numDays = getDaysInMonth(parseInt(selectedYear), parseInt(selectedMonth));
-      newXaxis = Array.from({length: numDays}, (_, i) => (i + 1).toString());
-      newSeries = [
-        {
-          name: "Cash Payments",
-          data: Array.from({length: numDays}, () => Math.floor(Math.random() * 75))
-        },
-        {
-          name: "Card Payments",
-          data: Array.from({length: numDays}, () => Math.floor(Math.random() * 94))
+    
+    async function fetchData() {
+      setIsLoading(true);
+      let newXaxis: string[] = [];
+      let newSeries: any[] = [];
+      if (selectedType === "Yearly") {
+        newXaxis = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        try {
+          const res = await fetch(`/backend/api/admin-panel/payment-yearly-stats-by-year?year=${selectedYear}`);
+          const json = await res.json();
+          if (json.status) {
+            newSeries = [
+              {
+                name: "Cash Payments",
+                data: json.data.cashPayments,
+              },
+              {
+                name: "Card Payments",
+                data: json.data.cardPayments,
+              },
+            ];
+            setTotalCashPayments(json.data.cashPayments.reduce((sum:number, value:number) => sum + value, 0));
+            setTotalCardPayments(json.data.cardPayments.reduce((sum:number, value:number) => sum + value, 0));
+          } else {
+            // fallback to default data if response status is false
+            newSeries = [
+              {
+                name: "Cash Payments",
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              },
+              {
+                name: "Card Payments",
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              },
+            ];
+          }
+        } catch (error) {
+          console.error("Error fetching yearly stats:", error);
+          // fallback on error
+          newSeries = [
+            {
+              name: "Cash Payments",
+              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+            {
+              name: "Card Payments",
+              data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+          ];
         }
-      ];
-    }
-    
-    setXasix(newXaxis);
-    setChartSeries(newSeries);
-    setChartOptions({
-      ...options,
-      xaxis: {
-        ...options.xaxis,
-        categories: newXaxis
+      } else if (selectedType === "Monthly") {
+        const numDays = getDaysInMonth(parseInt(selectedYear), parseInt(selectedMonth));
+        newXaxis = Array.from({ length: numDays }, (_, i) => (i + 1).toString());
+        try {
+          const res = await fetch(`/backend/api/admin-panel/payment-yearly-stats-by-month?year=${selectedYear}&month=${selectedMonth}`);
+          const json = await res.json();
+          if (json.status) {
+            newSeries = [
+              {
+                name: "Cash Payments",
+                data: json.data.cashPayments,
+              },
+              {
+                name: "Card Payments",
+                data: json.data.cardPayments,
+              },
+            ];
+            setTotalCashPayments(json.data.cashPayments.reduce((sum:number, value:number) => sum + value, 0));
+            setTotalCardPayments(json.data.cardPayments.reduce((sum:number, value:number) => sum + value, 0));
+          } else {
+            // fallback to default data if response status is false
+            newSeries = [
+              {
+                name: "Cash Payments",
+                data: Array.from({ length: numDays }, () => 0),
+              },
+              {
+                name: "Card Payments",
+                data: Array.from({ length: numDays }, () => 0),
+              },
+            ];
+          }
+        } catch (error) {
+          console.error("Error fetching yearly stats:", error);
+          // fallback on error
+          newSeries = [
+            {
+              name: "Cash Payments",
+              data: Array.from({ length: numDays }, () => 0),
+            },
+            {
+              name: "Card Payments",
+              data: Array.from({ length: numDays }, () => 0),
+            },
+          ];
+        }
+
       }
-    });
-    
+      setXasix(newXaxis);
+      setChartSeries(newSeries);
+      setChartOptions({
+        ...options,
+        xaxis: {
+          ...options.xaxis,
+          categories: newXaxis,
+        },
+      });
+    setIsLoading(false);
+    }
+    fetchData();
   }, [selectedType, selectedYear, selectedMonth]);
   
   return (
@@ -224,7 +303,12 @@ const RevenueChart: React.FC = () => {
             <DefaultSelectOption options={["1", "2" , "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]} onSelect={(s : string) =>  setSelectedMonth(s)} />
           </div>)}
       </div>
-      <div>
+
+      {
+        isLoading ? (
+          <ElementLoader size={12} />
+        ) : (
+          <div>
         <div className="-ml-4 -mr-5">
           <ReactApexChart
             options={chartOptions}
@@ -234,6 +318,9 @@ const RevenueChart: React.FC = () => {
           />
         </div>
       </div>
+        )
+      }
+      
 
       <div className="flex flex-col gap-2 text-center xsm:flex-row xsm:gap-0">
         <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
@@ -242,7 +329,7 @@ const RevenueChart: React.FC = () => {
             Cash Payments
           </div>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            45,070.00 RS
+            {totalCashPayments} SAR
           </h4>
         </div>
         <div className="xsm:w-1/2">
@@ -251,7 +338,7 @@ const RevenueChart: React.FC = () => {
           Card Payments
           </div>
           <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            32,400.00 RS
+          {totalCardPayments} SAR
           </h4>
         </div>
       </div>

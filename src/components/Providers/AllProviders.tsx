@@ -89,7 +89,10 @@ const AllProviders = () => {
       const apiUrl = `/backend/api/user/admin/activate/email`;
       const response = await fetch(apiUrl, {
         method: "POST",
-        body: JSON.stringify({ email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(email),
       });
 
       if (!response.ok) {
@@ -216,9 +219,9 @@ const AllProviders = () => {
                   </div>
                   <div className="col-span-1 flex items-center">
                     <p className="text-body-sm font-medium text-green">
-                      {provider.totalBalnace} SAR
+                      {provider.receivedBalance} SAR
                       <br />
-                      {provider.availableBalnace} SAR
+                      {provider.availableBalance} SAR
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center justify-end space-x-3.5">

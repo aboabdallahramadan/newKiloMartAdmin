@@ -16,11 +16,12 @@ const provider: Provider = {
   totalOrders: 10,
   totalProducts: 10,
   availableBalance: 1000,
-  totalBalance: 1000,
+  receivedBalance: 1000,
   ownerNationalApprovalFile: "/files/sample.pdf",
   ownershipDocumentFile: "/files/sample.pdf",
   isEmailVerified: true,
 };
+
 
 const ProviderDetails = () => {
   return (
@@ -109,7 +110,7 @@ const ProviderDetails = () => {
             </div>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
               <p className="text-sm text-gray-500 dark:text-gray-400">Total Balance</p>
-              <p className="text-xl font-bold text-green-500">{provider.totalBalance} RS</p>
+              <p className="text-xl font-bold text-green-500">{provider.receivedBalance} RS</p>
             </div>
           </div>
 

@@ -6,11 +6,42 @@ import InputGroup from '../FormElements/InputGroup';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ElementLoader from '../common/ElementLoader';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import "leaflet/dist/leaflet.css";
+import L from 'leaflet';
+// Fix leaflet's default icon issue
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: '',
+  iconSize: [16, 20],
+  iconAnchor: [8, 16]
+});
+
+
+interface FormDataType {
+    [key: string]: string | number | File | null;
+}
+
+interface LocationPickerProps {
+  onLocationSelect: (latlng: { lat: number, lng: number }) => void;
+}
+
+const LocationPicker: React.FC<LocationPickerProps> = ({ onLocationSelect }) => {
+  const [position, setPosition] = useState<{ lat: number, lng: number } | null>(null);
+  useMapEvents({
+    click(e) {
+      setPosition(e.latlng);
+      onLocationSelect(e.latlng);
+    }
+  });
+  return position ? <Marker position={position} /> : null;
+};
+
 
 const AddNewProvider = () => {
-    interface FormDataType {
-        [key: string]: string | number | File | null;
-    }
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<FormDataType>({
@@ -52,6 +83,15 @@ const AddNewProvider = () => {
         }
     };
 
+    // New handler for location selection on the map
+    const handleLocationSelect = (latlng: { lat: number; lng: number }) => {
+        setFormData(prev => ({
+            ...prev,
+            Latitude: latlng.lat,
+            Longitude: latlng.lng
+        }));
+    };
+
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -71,7 +111,7 @@ const AddNewProvider = () => {
             setIsLoading(true);
             const response = await fetch('/backend/api/admin-panel/create-provider-directly', {
                 method: 'POST',
-                body: formDataToSend
+                body: formDataToSend,
             });
             
             if (response.ok) {
@@ -79,7 +119,7 @@ const AddNewProvider = () => {
                 handleCloseModal();
             }
             else {
-                console.log('Response errors:', response.body);
+                console.log('Response errors:', response.json());
                 toast.error('Failed to add provider. Please try again.');
             }
         } catch (error) {
@@ -114,12 +154,13 @@ const AddNewProvider = () => {
                             <form onSubmit={handleSubmit}>
                                 <div className="p-6.5 grid grid-cols-2 gap-4">
                                     <InputGroup
-                                        label="Email"
-                                        type="email"
+                                        label="Phone number must start with +966"
+                                        type="text"
                                         name="Email"
                                         value={formData.Email}
                                         onChange={handleInputChange}
                                         required
+                                        pattern="^\+966.*$"
                                     />
                                     <InputGroup
                                         label="Display Name"
@@ -170,10 +211,18 @@ const AddNewProvider = () => {
                                         required
                                     />
                                     <InputGroup
-                                        label="National Id"
+                                        label="National Approval Id"
                                         type="text"
                                         name="NationalApprovalId"
                                         value={formData.NationalApprovalId}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                    <InputGroup
+                                        label="Owner National Id"
+                                        type="text"
+                                        name="OwnerNationalId"
+                                        value={formData.OwnerNationalId}
                                         onChange={handleInputChange}
                                         required
                                     />
@@ -185,22 +234,24 @@ const AddNewProvider = () => {
                                         onChange={handleInputChange}
                                         required
                                     />
-                                    <InputGroup
-                                        label="Longitude"
-                                        type="number"
-                                        name="Longitude"
-                                        value={formData.Longitude}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                    <InputGroup
-                                        label="Latitude"
-                                        type="number"
-                                        name="Latitude"
-                                        value={formData.Latitude}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-dark dark:text-white mb-2">
+                                            Select Location on Map
+                                        </label>
+                                        <MapContainer 
+                                            center={{ lat: 24.181212251491353, lng: 43.91654599169042 }} zoom={6}
+                                            style={{ height: '300px', width: '100%' }}
+                                        >
+                                            <TileLayer
+                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                            />
+                                            <LocationPicker onLocationSelect={handleLocationSelect} />
+                                        </MapContainer>
+                                        <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                          Click on the map to select a location.
+                                        </p>
+                                    </div>
                                     <InputGroup
                                         label="Building Type"
                                         type="text"
@@ -248,6 +299,7 @@ const AddNewProvider = () => {
                                         value={formData.PhoneNumber}
                                         onChange={handleInputChange}
                                         required
+                                        pattern="^\+966.*$"
                                     />
                                     <InputGroup
                                         label="Ownership Documents"

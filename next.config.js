@@ -2,7 +2,7 @@ module.exports = {
     async rewrites() {
         return [
             {
-                source: '/backend/api/:path*', // Proxy all requests starting with `/api/`
+                source: '/backend/api/:path*', // Proxy all requests starting with `/backend/api/`
                 destination: process.env.NEXT_PUBLIC_API_URL + '/api/:path*', // Your actual API URL
             },
         ];

@@ -211,7 +211,7 @@ const AllProviders = () => {
                   </div>
                   <div className="col-span-1 hidden sm:flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      10
+                      {provider.totalProducts}
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center">

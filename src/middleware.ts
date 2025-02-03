@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
 
-  if (request.nextUrl.pathname.startsWith('/api/')) {
+  if (request.nextUrl.pathname.includes('/api/')) {
     const modifiedHeaders = new Headers(request.headers);
 
     // Add the token to the Authorization header

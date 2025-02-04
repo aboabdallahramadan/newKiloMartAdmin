@@ -1,8 +1,9 @@
-export interface OrderItem {
-    itemId: number,
-    itemOrder: number,
-    itemQuantity: number,
-    actualUnitPrice: number,
+export interface OrderOfferItem {
+    id: number,
+    order: number,
+    productOffer: number,
+    quantity: number,
+    unitPrice: number,
     productId: number,
     productImageUrl: string,
     productIsActive: boolean,
@@ -12,5 +13,4 @@ export interface OrderItem {
     productCategoryId: number,
     productCategoryIsActive:  boolean,
     productCategoryName: string,
-    
 }

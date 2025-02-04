@@ -7,44 +7,7 @@ import { useParams } from 'next/dist/client/components/navigation';
 import ClickOutside from '../ClickOutside';
 
 const ProviderProducts = () => {
-  const [products, setProducts] = useState<ProductOffer[]>([
-    {
-      productId: 1,
-      productImageUrl: "/images/product/product-01.png",
-      productIsActive: true,
-      productDescription: "Fresh organic apples from local farms",
-      productMeasurementUnit: "kg",
-      productName: "Organic Apples",
-      productOfferId: 101,
-      productOfferFromDate: "2024-01-15",
-      productOfferIsActive: true,
-      productOfferOffPercentage: 15,
-      productOfferPrice: 25.99,
-      productOfferQuantity: 100,
-      productOfferProviderName: "Fresh Foods Market",
-      productOfferProviderId: 501,
-      productProductCategory: 1,
-      productCategoryName: "Fruits"
-    },
-    {
-      productId: 2,
-      productImageUrl: "/images/product/product-02.png",
-      productIsActive: true,
-      productDescription: "Premium whole grain bread",
-      productMeasurementUnit: "piece",
-      productName: "Whole Grain Bread",
-      productOfferId: 102,
-      productOfferFromDate: "2024-01-16",
-      productOfferIsActive: true,
-      productOfferOffPercentage: 10,
-      productOfferPrice: 12.50,
-      productOfferQuantity: 50,
-      productOfferProviderName: "Bakery Delights",
-      productOfferProviderId: 502,
-      productProductCategory: 2,
-      productCategoryName: "Bakery"
-    }
-  ]);
+  const [products, setProducts] = useState<ProductOffer[]>([]);
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState(2);
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,7 +23,7 @@ const ProviderProducts = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product-offer/list?provider=${id}&language=${language}&page=${currentPage}&pageSize=${pageSize}`, {
+        const response = await fetch(`/backend/api/admin-panel/products-for-provider?language=${language}&providerId=${id}&pageNumber=${currentPage}&pageSize=${pageSize}`, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -68,7 +31,7 @@ const ProviderProducts = () => {
         const data = await response.json();
 
         if (data.status) {
-          setProducts(data.data.data);
+          setProducts(data.data.products);
           setTotalCount(data.data.totalCount);
         } else {
           console.error("Failed to fetch products:", data.message);
@@ -80,7 +43,7 @@ const ProviderProducts = () => {
       }
     };
 
-    // fetchProducts();
+    fetchProducts();
   }, [currentPage, pageSize, language]);
 
   const handleOptionSelect = (option: number) => {
@@ -111,7 +74,7 @@ const ProviderProducts = () => {
   };
 
   return (
-<div className="rounded-xl bg-gray-50 dark:bg-gray-dark p-6 shadow-md">
+    <div className="rounded-xl bg-gray-50 dark:bg-gray-dark p-6 shadow-md">
       <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
         <h2 className="text-2xl font-bold text-dark dark:text-white">Provider&lsquo;s Products</h2>
         
@@ -155,11 +118,18 @@ const ProviderProducts = () => {
         <ElementLoader />
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
-            {products.map((product) => (
-              <ProductCard key={product.productId} product={product} onShowDetails={handleShowDetails} />
-            ))}
-          </div>
+        {
+          products.length === 0 ? (
+            <p className="text-gray-600 dark:text-gray-800 text-center">no products found</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
+                  {products.map((product) => (
+                    <ProductCard key={product.productId} product={product} onShowDetails={handleShowDetails} />
+                  ))}
+                </div>
+              )
+        }
+          
 
           <div className="flex items-center justify-between">
             <button 
@@ -197,7 +167,7 @@ const ProviderProducts = () => {
         <div className="p-6">
           <div className="flex flex-col md:flex-row gap-6">
             <img 
-              src={`${selectedProduct.productImageUrl}`} 
+              src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${selectedProduct.productImageUrl}`} 
               alt={selectedProduct.productName} 
               className="w-full md:w-1/2 h-64 object-cover rounded-lg"
             />
@@ -206,11 +176,11 @@ const ProviderProducts = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
                   <p className="text-sm text-gray-500 dark:text-gray-400">Price</p>
-                  <p className="text-lg font-semibold text-green-600 dark:text-green-400">{selectedProduct.productOfferPrice} RS</p>
+                  <p className="text-lg font-semibold text-green-600 dark:text-green-400">{selectedProduct.productOfferPrice} SAR</p>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
                   <p className="text-sm text-gray-500 dark:text-gray-400">Quantity</p>
-                  <p className="text-lg font-semibold text-dark dark:text-white">{selectedProduct.productOfferQuantity}</p>
+                  <p className="text-lg font-semibold text-dark dark:text-white">{selectedProduct.productOfferQuantity} {selectedProduct.productMeasurementUnit}</p>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
                   <p className="text-sm text-gray-500 dark:text-gray-400">Category</p>

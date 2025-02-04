@@ -52,7 +52,11 @@ const ProviderOrders = () => {
           <ElementLoader />
         ) : (
           <div className="overflow-y-auto max-h-[600px]">
-            <table className="w-full table-auto">
+            {
+              orders.length === 0 ? (
+                <p className="text-gray-500 text-center">No orders found.</p>
+              ) : (
+                <table className="w-full table-auto">
               <thead>
                 <tr className="bg-[#F7F9FC] text-left dark:bg-dark-2">
                   <th className="px-1 py-4 font-medium text-dark dark:text-white xl:pl-2">
@@ -137,6 +141,9 @@ const ProviderOrders = () => {
                 ))}
               </tbody>
             </table>
+              )
+            }
+            
           </div>
         )}
 

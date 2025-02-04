@@ -11,7 +11,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowDetails }) => 
     <div className="bg-white dark:bg-gray-dark rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="relative">
         <img 
-          src={`${product.productImageUrl}`} 
+          src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${product.productImageUrl}`} 
           alt={product.productName} 
           className="w-full h-48 object-cover rounded-t-xl"
         />
@@ -26,11 +26,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onShowDetails }) => 
         <div className="space-y-2 mb-4">
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600 dark:text-gray-400">Price:</span>
-            <span className="text-lg font-semibold text-green-600 dark:text-green-400">{product.productOfferPrice} RS</span>
+            <span className="text-lg font-semibold text-green-600 dark:text-green-400">{product.productOfferPrice} SAR</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600 dark:text-gray-400">Quantity:</span>
-            <span className="text-base font-medium text-dark dark:text-white">{product.productOfferQuantity} units</span>
+            <span className="text-base font-medium text-dark dark:text-white">{product.productOfferQuantity} {product.productMeasurementUnit}</span>
           </div>
         </div>
 

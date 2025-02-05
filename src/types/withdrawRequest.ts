@@ -1,10 +1,10 @@
 export type WithdrawRequest = {
     id: number;
-    status: "Pending" | "Approved" | "Rejected";
-    name: string;
-    iban: string;
-    date: string;
+    party: number;
     bankAccountNumber: string;
-    userId: number;
-    amount: number;
+    iBanNumber: string;
+    date: Date;
+    done: boolean;
+    accepted: boolean;
+    rejected: boolean;
 };

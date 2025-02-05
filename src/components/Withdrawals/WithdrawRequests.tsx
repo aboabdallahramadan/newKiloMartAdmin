@@ -11,50 +11,36 @@ interface WithdrawRequestsProps {
 
 const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
     const [selectedRequest, setSelectedRequest] = useState<Omit<WithdrawRequest, "status"> | null>(null);
-    const [withdrawRequests, setWithdrawRequests] = useState<Omit<WithdrawRequest, "status">[]>([
-        {
-            id: 1,
-            name: "John Doe",
-            date: new Date().toLocaleDateString(),
-            iban: "DE89370400440532013000",
-            bankAccountNumber: "123456789",
-            userId: 4,
-            amount: 100,
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            date: new Date().toLocaleDateString(),
-            iban: "FR7630006000011234567890189",
-            bankAccountNumber: "987654321",
-            userId: 4,
-            amount: 100,
-        },
-        {
-            id: 3,
-            name: "Alice Johnson",
-            date: new Date().toLocaleDateString(),
-            iban: "GB29NWBK60161331926819",
-            bankAccountNumber: "555555555",
-            userId: 4,
-            amount: 100,
-        }
-    ]);
+    const [withdrawRequests, setWithdrawRequests] = useState<Omit<WithdrawRequest, "status">[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const pageSize = 10;
 
     const fetchWithdrawRequests = async (page: number) => {
-        const response = await fetch(`http://kilomart-001-site1.ptempurl.com/api/admin/withdraw-requests/paginated?page=${page}&pageSize=${pageSize}&isActive=true`);
-        const data = await response.json();
-        if (data.status) {
-            setWithdrawRequests(data.data.data);
+        try {
+          const response = await fetch(
+            `/backend/api/admin/withdraw/paginated/by-done?done=false&pageNumber=${page}&pageSize=${pageSize}`
+          );
+      
+          if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.statusText}`);
+          }
+      
+          const data = await response.json();
+          if (data.status) {
+            setWithdrawRequests(data.data.withdraws);
             setTotalCount(data.data.totalCount);
+          } else {
+            console.error(data.message || 'Error fetching withdraw requests');
+          }
+        } catch (error) {
+          console.error('Error fetching withdraw requests:', error);
         }
-    };
+      };
+      
 
     useEffect(() => {
-        // fetchWithdrawRequests(currentPage);
+        fetchWithdrawRequests(currentPage);
     }, [currentPage]);
 
     const onAccept = (id: number) => {
@@ -99,26 +85,26 @@ const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
                 >
                     <div className="col-span-1 flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                            <Link className='text-primary hover:text-primary/50' href={
-                                user === "Delivery" ? `/deliveries/${withdrawRequest.userId}` :
-                                user === "Provider" ? `/providers/${withdrawRequest.userId}` : 
+                            {/* <Link className='text-primary hover:text-primary/50' href={
+                                user === "Delivery" ? `/deliveries/${withdrawRequest.deliveryId}` :
+                                user === "Provider" ? `/providers/${withdrawRequest.providerId}` : 
                                 '#'
                             }>
-                                {withdrawRequest.name}
-                            </Link>                        
+                                {withdrawRequest.displayName}
+                            </Link>                         */}
                         </p>
                     </div>
                     <div className="col-span-2 items-center hidden lg:flex">
-                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.date}</p>
+                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawRequest.date).toLocaleDateString()}</p>
                     </div>
                     <div className="col-span-3 hidden md:flex items-center">
-                        <p className="text-body-sm font-medium text-dark dark:text-dark-6 break-all">{withdrawRequest.iban}</p>
+                        <p className="text-body-sm font-medium text-dark dark:text-dark-6 break-all">{withdrawRequest.iBanNumber}</p>
                     </div>
                     <div className="col-span-2 hidden md:flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.bankAccountNumber}</p>
                     </div>
                     <div className="col-span-1 flex items-center">
-                        <p className="text-body-sm font-medium text-[#219653]">{withdrawRequest.amount} RS</p>
+                        {/* <p className="text-body-sm font-medium text-[#219653]">{withdrawRequest.amount} SAR</p> */}
                     </div>
                     <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3.5">
                     <button 

@@ -39,34 +39,40 @@ const WithdrawalModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest,
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                withdrawRequest.status === 'Approved' 
+                withdrawRequest.accepted
                   ? 'bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-400'
-                  : withdrawRequest.status === 'Rejected'
+                  : withdrawRequest.rejected
                   ? 'bg-red-100 text-red-800 dark:bg-red-800/20 dark:text-red-400'
                   : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800/20 dark:text-yellow-400'
               }`}>
-                {withdrawRequest.status}
+                {
+                  withdrawRequest.accepted
+                    ? (<span>Accepted</span>)
+                    : withdrawRequest.rejected
+                        ? (<span>Rejected</span>)
+                        : (<span>Pending</span>)
+                }
               </span>
             </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Name</p>
                 <p className="font-medium text-dark dark:text-white">
-                <Link className='text-primary hover:text-primary/50' href={
-                    user === "Delivery" ? `/deliveries/${withdrawRequest.userId}` :
-                    user === "Provider" ? `/providers/${withdrawRequest.userId}` : 
+                {/* <Link className='text-primary hover:text-primary/50' href={
+                    user === "Delivery" ? `/deliveries/${withdrawRequest.deliveryId}` :
+                    user === "Provider" ? `/providers/${withdrawRequest.providerId}` : 
                     '#'
                 }>
-                    {withdrawRequest.name}
-                </Link>  
+                    {withdrawRequest.displayName}
+                </Link>   */}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Date</p>
-                <p className="font-medium text-dark dark:text-white">{withdrawRequest.date}</p>
+                <p className="font-medium text-dark dark:text-white">{new Date(withdrawRequest.date).toLocaleDateString()}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">IBAN</p>
-                <p className="font-medium text-dark dark:text-white">{withdrawRequest.iban}</p>
+                <p className="font-medium text-dark dark:text-white">{withdrawRequest.iBanNumber}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Bank Account Number</p>
@@ -74,7 +80,7 @@ const WithdrawalModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest,
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Amount</p>
-                <p className="font-medium text-[#219653]">{withdrawRequest.amount} RS</p>
+                {/* <p className="font-medium text-[#219653]">{withdrawRequest.amount} SAR</p> */}
               </div>
             </div>
           </div>

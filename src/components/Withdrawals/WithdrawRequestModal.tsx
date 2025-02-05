@@ -39,22 +39,22 @@ const WithdrawRequestModal: React.FC<WithdrawRequestModalProps> = ({ withdrawReq
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Name</p>
                 <p className="font-medium text-dark dark:text-white">
-                <Link className='text-primary hover:text-primary/50' href={
-                    user === "Delivery" ? `/deliveries/${withdrawRequest.userId}` :
-                    user === "Provider" ? `/providers/${withdrawRequest.userId}` : 
+                {/* <Link className='text-primary hover:text-primary/50' href={
+                    user === "Delivery" ? `/deliveries/${withdrawRequest.deliveryId}` :
+                    user === "Provider" ? `/providers/${withdrawRequest.providerId}` : 
                     '#'
                 }>
-                    {withdrawRequest.name}
-                </Link>  
+                    {withdrawRequest.displayName}
+                </Link>   */}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Date</p>
-                <p className="font-medium text-dark dark:text-white">{withdrawRequest.date}</p>
+                <p className="font-medium text-dark dark:text-white">{new Date(withdrawRequest.date).toLocaleDateString()}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">IBAN</p>
-                <p className="font-medium text-dark dark:text-white">{withdrawRequest.iban}</p>
+                <p className="font-medium text-dark dark:text-white">{withdrawRequest.iBanNumber}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Bank Account Number</p>
@@ -62,7 +62,7 @@ const WithdrawRequestModal: React.FC<WithdrawRequestModalProps> = ({ withdrawReq
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Amount</p>
-                <p className="font-medium text-[#219653]">{withdrawRequest.amount} RS</p>
+                {/* <p className="font-medium text-[#219653]">{withdrawRequest.amount} SAR</p> */}
               </div>
             </div>
           </div>

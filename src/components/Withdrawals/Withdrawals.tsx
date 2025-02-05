@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { WithdrawRequest } from '@/types/withdrawRequest';
 
 interface WithdrawalsProps {
@@ -7,45 +8,54 @@ interface WithdrawalsProps {
 }
 
 const Withdrawals = ({ user }: WithdrawalsProps) => {
-    const [withdrawals, setWithdrawals] = useState<Omit<WithdrawRequest, "name" | "phone" | "iban" | "userId">[]>([
-        {
-            id: 1,
-            bankAccountNumber: "123456789",
-            status: "Approved",
-            date: new Date().toLocaleDateString(),
-            amount: 100,
-        },
-        {
-            id: 2,
-            bankAccountNumber: "987654321",
-            status: "Rejected",
-            date: new Date().toLocaleDateString(),
-            amount: 100,
-        },
-        {
-            id: 3,
-            bankAccountNumber: "555555555",
-            status: "Pending",
-            date: new Date().toLocaleDateString(),
-            amount: 100,
-        }
-    ]);
+    const [withdrawals, setWithdrawals] = useState<WithdrawRequest[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const pageSize = 10;
-
-    const fetchWithdrawals = async (page: number) => {
-        const response = await fetch(`http://kilomart-001-site1.ptempurl.com/api/admin/withdrawals/paginated?provider=4&page=${page}&pageSize=${pageSize}&isActive=true`);
-        const data = await response.json();
-        if (data.status) {
-            setWithdrawals(data.data.data);
-            setTotalCount(data.data.totalCount);
-        }
-    };
+    const employeeId = useParams().id;
 
     useEffect(() => {
-        // fetchWithdrawals(currentPage);
-    }, [currentPage]);
+        const fetchWithdrawals = async (page: number, userId: number) => {
+            try {
+                const response = await fetch(`/backend/api/admin/withdraw/paginated/by-delivery-or-provider?partyId=${userId}&pageNumber=${page}&pageSize=${pageSize}`);
+                const data = await response.json();
+                if (data.status) {
+                    setWithdrawals(data.data.withdraws);
+                    setTotalCount(data.data.totalCount);
+                } else {
+                    console.error("Failed to fetch withdrawals:", data);
+                }
+            } catch (error) {
+                console.error("Error fetching withdrawals:", error);
+            }
+        };
+
+        const fetchUserId = async () => {
+            setIsLoading(true);
+            try {
+                let response = null;
+                if (user === "Provider") {
+                    response = await fetch(`/backend/api/admin-panel/provider-by-id?providerId=${employeeId}`);
+                } else if (user === "Delivery") {
+                    response = await fetch(`/backend/api/admin-panel/delivery-by-id?deliveryId=${employeeId}`);
+                }
+                const data = await response?.json();
+                if (data.status) {
+                    fetchWithdrawals(currentPage, data.data.userId);
+                } else {
+                    console.error("Failed to fetch user details:", data);
+                }
+            } catch (error) {
+                console.error("Error fetching user id:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        fetchUserId();
+    }, [currentPage, employeeId, user]);
 
     const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -81,53 +91,58 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                             <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawal.date).toLocaleDateString()}</p>
                         </div>
                         <div className="col-span-1 flex items-center">
-                            <p className="text-body-sm font-medium text-[#219653]">{withdrawal.amount} RS</p>
+                            {/* this should be the amount of money that the user has withdrawn */}
+                            <p className="text-body-sm font-medium text-[#219653]">{withdrawal.accepted} SAR</p>
                         </div>
                         <div className="col-span-1 flex items-center">
                             <p
                                 className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${
-                                    withdrawal.status === "Approved"
+                                    withdrawal.accepted
                                         ? "bg-[#219653]/[0.08] text-[#219653]"
-                                        : withdrawal.status === "Rejected"
+                                        : withdrawal.rejected
                                             ? "bg-[#D34053]/[0.08] text-[#D34053]"
                                             : "bg-[#FFA70B]/[0.08] text-[#FFA70B]"
                                 }`}
                             >
-                                {withdrawal.status}
+                                {
+                                withdrawal.accepted
+                                        ? (<span>Accepted</span>)
+                                        : withdrawal.rejected
+                                            ? (<span>Rejected</span>)
+                                            : (<span>Pending</span>)
+                                            }
                             </p>
                         </div>
                     </div>
                 ))}
                 <div className="flex justify-between px-4 py-4">
-                <button 
-                    disabled={currentPage === 1} 
-                    onClick={() => setCurrentPage(currentPage - 1)} 
-                    className="bg-gray-300 hover:bg-gray-400 rounded px-4 py-2"
-                >
-                    Previous
-                </button>
-                <div className="flex justify-center space-x-2">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        onClick={() => setCurrentPage(index + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                    <button 
+                        disabled={currentPage === 1} 
+                        onClick={() => setCurrentPage(currentPage - 1)} 
+                        className="bg-gray-300 hover:bg-gray-400 rounded px-4 py-2"
                     >
-                        {index + 1}
+                        Previous
                     </button>
-                ))}
+                    <div className="flex justify-center space-x-2">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            onClick={() => setCurrentPage(index + 1)}
+                            className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    </div>
+                    <button 
+                        disabled={currentPage === totalPages} 
+                        onClick={() => setCurrentPage(currentPage + 1)} 
+                        className="bg-gray-300 hover:bg-gray-400 rounded px-4 py-2"
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
-                <button 
-                    disabled={currentPage === totalPages} 
-                    onClick={() => setCurrentPage(currentPage + 1)} 
-                    className="bg-gray-300 hover:bg-gray-400 rounded px-4 py-2"
-                >
-                    Next
-                </button>
-            </div>
-            </div>
-            
-            
         </div>
     );
 };

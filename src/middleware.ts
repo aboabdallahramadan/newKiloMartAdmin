@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
 export async function middleware(request: NextRequest) {
+  
   const session = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
   
   if (!session && !request.nextUrl.pathname.startsWith('/auth')) {
@@ -13,12 +14,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
 
-  if (request.nextUrl.pathname.includes('/api/')) {
+  if (request.nextUrl.pathname.startsWith('/backend/api/')) {
     const modifiedHeaders = new Headers(request.headers);
 
     // Add the token to the Authorization header
     if (session) {
-      modifiedHeaders.set('Authorization', `Bearer ${session}`);
+      modifiedHeaders.set('Authorization', `Bearer ${session.accessToken}`);
     }
 
     return NextResponse.next({

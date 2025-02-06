@@ -1,48 +1,37 @@
 "use client"
 import { useEffect, useState } from 'react';
 import {MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useParams } from 'next/navigation';
 import 'leaflet/dist/leaflet.css';
+import { ProviderProfile } from '@/types/providerProfile';
 import ElementLoader from '../common/ElementLoader';
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import { Location } from '@/types/location';
 
 const ProviderMap = () => {
-  const [location, setLocation] = useState<Omit<Location, 'userId' | 'userName' >>({
-    id: 0,
-    type: "Apartment",
-    name: "home",
-    buildingNumber: "123",
-    apartmentNumber: "456",
-    floorNumber: "7",
-    streetName: "Al-Riyadh",
-    phoneNumber: "+966512345678",
-    mapDetails: {
-        latitude: 24.743752042257807,
-        longitude: 46.65313878798754,
-    }
-  });
+  const [profile, setProfile] = useState<ProviderProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const { id } = useParams();
 
   useEffect(() => {
     // Fetch latitude and longitude from the API
-    // const fetchLocation = async () => {
-    //   try {
-    //     const response = await fetch('YOUR_API_ENDPOINT');
-    //     const data = await response.json();
-    //     if (data.status) {
-    //       setLocation({ lat: data.latitude, lng: data.longitude });
-    //     } else {
-    //       console.error("Failed to fetch location:", data.message);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching location:", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
+    const fetchLocation = async () => {
+      try {
+        const response = await fetch(`/backend/api/provider-profile/filter?providerId=${id}&isActive=true&pageNumber=1&pageSize=10`);
+        const data = await response.json();
+        if (data.status) {
+          setProfile(data.data.items[0]);
+        } else {
+          console.error("Failed to fetch location:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching location:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     setLoading(false);
-    // fetchLocation();
+    fetchLocation();
   }, []);
 
   return (
@@ -50,26 +39,36 @@ const ProviderMap = () => {
         <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Provider Location</h2>
         {loading ? (
           <ElementLoader />
-        ) : (
-          <MapContainer center={[location.mapDetails.latitude, location.mapDetails.longitude]} zoom={13} style={{ height: "400px", width: "100%" }} className='z-0'>
+        ) : ( 
+        <>
+        {
+          profile ? (<MapContainer center={[profile.latitude, profile.longitude]} zoom={13} style={{ height: "400px", width: "100%" }} className='z-0'>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            <Marker position={[location.mapDetails.latitude, location.mapDetails.longitude]}>
+            <Marker position={[profile.latitude, profile.longitude]}>
               <Popup>
                 <div>
-                  <p>Type: {location.type}</p>
-                  <p>Name: {location.name}</p>
-                  <p>Building Number: {location.buildingNumber}</p>
-                  <p>Apartment Number: {location.apartmentNumber}</p>
-                  <p>Floor Number: {location.floorNumber}</p>
-                  <p>Street Name: {location.streetName}</p>
-                  <p>Phone Number: {location.phoneNumber}</p>
+                  <p>Type: {profile.buildingType}</p>
+                  <p>Name: {profile.locationName}</p>
+                  <p>Building Number: {profile.buildingNumber}</p>
+                  <p>Apartment Number: {profile.apartmentNumber}</p>
+                  <p>Floor Number: {profile.floorNumber}</p>
+                  <p>Street Name: {profile.streetNumber}</p>
+                  <p>Phone Number: {profile.phoneNumber}</p>
                 </div>
               </Popup>
             </Marker>
-          </MapContainer>
+          </MapContainer>) :(
+            <div className="text-center">
+              <p>No location found for this provider.</p>
+            </div>
+          )
+        }
+        
+          
+        </>
         )}
       </div>
     

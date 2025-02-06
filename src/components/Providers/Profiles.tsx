@@ -51,7 +51,7 @@ const Profiles = () => {
  const acceptProfile = async (id: number,description: string) => {
   try {
     const response = await fetch(`/backend/api/provider-profile/accept`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },

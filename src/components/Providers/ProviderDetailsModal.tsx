@@ -1,19 +1,23 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ProviderProfile } from '../../types/providerProfile'
 import {MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import "leaflet-defaulticon-compatibility"
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css"
 import ReviewProfileModal from '../Users/ReviewProfileModal'
+import { toast } from 'react-toastify'
 
 
 interface ProviderDetailsModalProps {
     providerId: number;
+    providerEmail: string;
     onClose: () => void;
   }
-  const ProviderDetailsModal: React.FC<ProviderDetailsModalProps> = ({ providerId, onClose }) => {
-  const [selectedProfile, setSelectedProfile] = useState<ProviderProfile | null>(null)
+  const ProviderDetailsModal: React.FC<ProviderDetailsModalProps> = ({ providerId, providerEmail, onClose }) => {
+    const [providerProfiles , setProviderProfiles] = useState<ProviderProfile[]>([]);
+    const [selectedProfile, setSelectedProfile] = useState<ProviderProfile | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   
@@ -21,93 +25,89 @@ interface ProviderDetailsModalProps {
     const closeAcceptModal = () => setIsAcceptModalOpen(false);
     const openRejectModal = () => setIsRejectModalOpen(true);
     const closeRejectModal = () => setIsRejectModalOpen(false);
-  
-  const providerProfiles: ProviderProfile[] = [
-    {
-      id: 1,
-      firstName: "John",
-      secondName: "Doe",
-      nationalApprovalId: "NAP123456",
-      companyName: "Fresh Foods Market",
-      ownerName: "John Doe",
-      ownerNationalId: "NID789012",
-      ownershipDocumentFileUrl: "https://example.com/doc1.pdf",
-      ownerNationalApprovalFileUrl: "https://example.com/doc2.pdf",
-      locationName: "Downtown Store",
-      longitude: 31.2357,
-      latitude: 30.0444,
-      buildingType: "Commercial",
-      buildingNumber: "123",
-      floorNumber: "1",
-      apartmentNumber: "101",
-      streetNumber: "45",
-      city: "Cairo",
-      phoneNumber: "+201234567890",
-      isAccepted: true,
-      isRejected: false,
-      submitDate: new Date("2024-01-15"),
-      reviewDate: new Date("2024-01-20"),
-      providerId: 1001,
-      isActive: true,
-      reviewDescription: "All documents verified successfully"
-    },
-    {
-      id: 2,
-      firstName: "Sarah",
-      secondName: "Smith",
-      nationalApprovalId: "NAP789012",
-      companyName: "City Grocers",
-      ownerName: "Sarah Smith",
-      ownerNationalId: "NID345678",
-      ownershipDocumentFileUrl: "https://example.com/doc3.pdf",
-      ownerNationalApprovalFileUrl: "https://example.com/doc4.pdf",
-      locationName: "Suburban Branch",
-      longitude: 31.2456,
-      latitude: 30.0533,
-      buildingType: "Retail",
-      buildingNumber: "456",
-      floorNumber: "2",
-      apartmentNumber: "202",
-      streetNumber: "78",
-      city: "Cairo",
-      phoneNumber: "+201122334455",
-      isAccepted: false,
-      isRejected: false,
-      submitDate: new Date("2024-02-01"),
-      reviewDate: new Date("2024-02-05"),
-      providerId: 1002,
-      isActive: true,
-      reviewDescription: "Pending review"
-    },
-    {
-      id: 3,
-      firstName: "Mohamed",
-      secondName: "Ahmed",
-      nationalApprovalId: "NAP345678",
-      companyName: "Express Mart",
-      ownerName: "Mohamed Ahmed",
-      ownerNationalId: "NID901234",
-      ownershipDocumentFileUrl: "https://example.com/doc5.pdf",
-      ownerNationalApprovalFileUrl: "https://example.com/doc6.pdf",
-      locationName: "City Center",
-      longitude: 31.2789,
-      latitude: 30.0622,
-      buildingType: "Mall",
-      buildingNumber: "789",
-      floorNumber: "3",
-      apartmentNumber: "303",
-      streetNumber: "90",
-      city: "Cairo",
-      phoneNumber: "+201099887766",
-      isAccepted: true,
-      isRejected: false,
-      submitDate: new Date("2024-01-25"),
-      reviewDate: new Date("2024-01-30"),
-      providerId: 1003,
-      isActive: true,
-      reviewDescription: "Approved with premium status"
-    }
-  ]
+
+
+    useEffect(() => {
+      const fetchProfiles = async () => {
+      setIsLoading(true);
+    
+        try {
+          const response = await fetch(`/backend/api/provider-profile/filter?providerId=${providerId}&pageNumber=1&pageSize=999999`);
+          const data = await response.json();
+          if(data.status) {
+            setProviderProfiles(data.data.items);
+          }
+          else {
+            console.log("Error:" , data.message);
+          }
+        } catch (error) {
+          console.error('Error fetching profiles:', error);
+        }
+    
+    
+      setIsLoading(false)
+      }
+      fetchProfiles();
+    
+     }, []);
+    
+    
+     const acceptProfile = async (id: number,description: string) => {
+      try {
+        const emailResponse = await fetch(`/backend/api/user/admin/activate/email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(providerEmail),
+        });
+        const response = await fetch(`/backend/api/provider-profile/accept`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            "id": id,
+            "reviewDescription": description
+           }),
+        });
+        const data = await response.json();
+        if(data.status) {
+          toast.success("Profile Accepted Successfully");
+          window.location.reload();
+        }
+        else {
+          toast.error("Error Accepting profile");
+          console.log("Error Accepting profile", data.message);
+        }
+      } catch(error) {
+        console.log("Error Accepting profile", error);
+        toast.error("Error Accepting profile");
+      }
+     }
+    
+     const rejectProfile = async (id: number,description: string) => {
+      try {
+        const response = await fetch(`/backend/api/provider-profile/reject`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            "id": id,
+            "reviewDescription": description
+           }),
+        });
+        const data = await response.json();
+        if(data.status) {
+          toast.success("Profile Rejected Successfully");
+          window.location.reload();
+        }
+      } catch(error) {
+        console.log("Error Rejecting profile", error);
+        toast.error("Error Rejecting profile");
+      }
+     }
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/60 flex justify-center items-center p-4">
@@ -144,6 +144,7 @@ interface ProviderDetailsModalProps {
             </div>
 
             {selectedProfile && (
+              <>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white dark:bg-dark-2 rounded-xl shadow-md">
                 {/* Profile Information Card */}
                 <div className=" p-6 space-y-6 lg:col-span-3">
@@ -164,7 +165,7 @@ interface ProviderDetailsModalProps {
                     <div className="space-y-4">
                         <h3 className="text-xl font-semibold dark:text-white border-b pb-2">Status & Contact</h3>
                         <div className="space-y-2">
-                        <InfoItem label="Added in" value={selectedProfile.submitDate.toLocaleDateString()} />
+                        <InfoItem label="Added in" value={new Date(selectedProfile.submitDate).toLocaleDateString()} />
                         <InfoItem label="Phone Number" value={selectedProfile.phoneNumber} />
                         <StatusBadge status={selectedProfile.isRejected ? 'rejected' : selectedProfile.isAccepted ? 'accepted' : 'pending'} />
                         {(selectedProfile.isAccepted || selectedProfile.isRejected) ? (
@@ -236,29 +237,31 @@ interface ProviderDetailsModalProps {
                     </div>
                 </div>
                 </div>
+                {isAcceptModalOpen && (
+                  <ReviewProfileModal 
+                    onConfirm={(description) => {
+                      acceptProfile(selectedProfile.id, description);
+                      closeAcceptModal();
+                    }}
+                    onCancel={closeAcceptModal}
+                  />
+                )}
+                {isRejectModalOpen && (
+                  <ReviewProfileModal 
+                    onConfirm={(description) => {
+                      rejectProfile(selectedProfile.id, description);
+                      closeRejectModal();
+                    }}
+                    onCancel={closeRejectModal}
+                  />
+                )}
+              </>
+                
             )}
             </div>
+            
         </div>
-        {isAcceptModalOpen && (
-          <ReviewProfileModal 
-            onConfirm={(description) => {
-              // Handle the review description
-              console.log(description);
-              closeAcceptModal();
-            }}
-            onCancel={closeAcceptModal}
-          />
-        )}
-        {isRejectModalOpen && (
-          <ReviewProfileModal 
-            onConfirm={(description) => {
-              // Handle the review description
-              console.log(description);
-              closeRejectModal();
-            }}
-            onCancel={closeRejectModal}
-          />
-        )}
+        
     </div>
 
   )

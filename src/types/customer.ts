@@ -1,7 +1,8 @@
 export type Customer = {
     id: number,
-    name: string,
-    phoneNumber: string,
-    totalOrders: number,
-    isActive: boolean
+    email: string,
+    emailConfirmed: boolean,
+    party: number,
+    isActive: boolean,
+    displayName: string
   }

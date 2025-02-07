@@ -18,7 +18,7 @@ const page = () => {
         <div className='flex flex-col gap-8'>
             <CustomersDataStats />
             <AllCustomers />
-            <AllCustomersMap />
+            {/* <AllCustomersMap /> */}
         </div>
     </DefaultLayout>
   )

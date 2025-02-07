@@ -1,113 +1,39 @@
 "use client"
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import {MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import ElementLoader from '../common/ElementLoader';
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import { Location } from '@/types/location';
+import { Location } from '@/types/customerDetails';
 import Link from 'next/link';
 
 const CustomerLocations = () => {
-  const [locations, setLocations] = useState<Omit<Location , "userId" | "userName">[]>([
-    {
-      id: 1,
-      name: "home",
-      type: "Apartment",
-      buildingNumber: "123",
-      apartmentNumber: "456",
-      floorNumber: "7",
-      streetName: "Al-Riyadh",
-      phoneNumber: "+966512345678",
-      mapDetails: {
-        latitude: 24.743752042257807,
-        longitude: 46.65313878798754,
-      }
-    },
-    {
-        id: 2,
-        name: "home",
-        type: "Apartment",
-        buildingNumber: "123",
-        apartmentNumber: "456",
-        floorNumber: "7",
-        streetName: "Al-Riyadh",
-        phoneNumber: "+966512345678",
-        mapDetails: {
-          latitude: 24.872622193731775,
-          longitude: 41.19193667057781
-        }
-      },
-      {
-        id: 3,
-        name: "home",
-        type: "Apartment",
-        buildingNumber: "123",
-        apartmentNumber: "456",
-        floorNumber: "7",
-        streetName: "Al-Riyadh",
-        phoneNumber: "+966512345678",
-        mapDetails: {
-          latitude: 24.233079626757707,
-          longitude: 46.61918265698761,
-        }
-      },
-      {
-        id: 4,
-        name: "home",
-        type: "Apartment",
-        buildingNumber: "123",
-        apartmentNumber: "456",
-        floorNumber: "7",
-        streetName: "Al-Riyadh",
-        phoneNumber: "+966512345678",
-        mapDetails: {
-          latitude: 25.230921977262206,
-          longitude: 47.45414357797373,
-        }
-      },
-      {
-        id: 5,
-        name: "home",
-        type: "Apartment",
-        buildingNumber: "123",
-        apartmentNumber: "456",
-        floorNumber: "7",
-        streetName: "Al-Riyadh",
-        phoneNumber: "+966512345678",
-        mapDetails: {
-          latitude: 24.55718835750745,
-          longitude: 46.618417808853586,
-        }
-      }
-  ]);
-  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [isLoading , setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Fetch latitude and longitude from the API
-    // const fetchLocation = async () => {
-    //   try {
-    //     const response = await fetch('YOUR_API_ENDPOINT');
-    //     const data = await response.json();
-    //     if (data.status) {
-    //       setLocation({ lat: data.latitude, lng: data.longitude });
-    //     } else {
-    //       console.error("Failed to fetch location:", data.message);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching location:", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    setLoading(false);
-    // fetchLocation();
+    const fetchLocations = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/backend/api/admin-panel/customer-by-id?customerId=${id}`);
+        const result = await response.json();
+        setLocations(result.data.locations || []);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchLocations();
   }, []);
 
   return (
       <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
         <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Customer Location</h2>
-        {loading ? (
+        {isLoading ? (
           <ElementLoader />
         ) : (
           <MapContainer center={{ lat: 24.181212251491353, lng: 43.91654599169042 }} zoom={6} style={{ height: "400px", width: "100%" }} className='z-0'>
@@ -116,16 +42,16 @@ const CustomerLocations = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
             {locations.map((location) => (
-            <Marker key={location.id} position={{ lat: location.mapDetails.latitude, lng: location.mapDetails.longitude }}>
+            <Marker key={location.locationId} position={{ lat: location.locationLatitude, lng: location.locationLongitude }}>
                 <Popup>
                     <div>
-                    <p>Name: {location.name}</p>
-                    <p>Type: {location.type}</p>
-                    <p>Building Number: {location.buildingNumber}</p>
-                    <p>Apartment Number: {location.apartmentNumber}</p>
-                    <p>Floor Number: {location.floorNumber}</p>
-                    <p>Street Name: {location.streetName}</p>
-                    <p>Phone Number: {location.phoneNumber}</p>
+                    <p>Name: {location.locationName}</p>
+                    <p>Type: {location.locationDetailsBuildingType}</p>
+                    <p>Building Number: {location.locationDetailsBuildingNumber}</p>
+                    <p>Apartment Number: {location.locationDetailsApartmentNumber}</p>
+                    <p>Floor Number: {location.locationDetailsFloorNumber}</p>
+                    <p>Street Name: {location.locationDetailsStreetNumber}</p>
+                    <p>Phone Number: {location.locationDetailsPhoneNumber}</p>
                     </div>
                 </Popup>
             </Marker>

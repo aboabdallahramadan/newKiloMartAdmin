@@ -1,11 +1,12 @@
 "use client";
 import { Delivery } from "@/types/delivery";
 import { useEffect, useState } from "react";
-import Loader from "../common/Loader";
 import { FaEye } from "react-icons/fa";
 import { BiCheckCircle, BiStopCircle } from "react-icons/bi";
 import Link from "next/link";
 import AddNewDelivery from "./AddNewDelivery";
+import { toast } from "react-toastify";
+import ElementLoader from "../common/ElementLoader";
 
 const AllDeliveries = () => {
   const [deliveriesData, setDeliveriesData] = useState<Omit<Delivery, "NationalIqamaIDFile" | "VehicleLicenseFile" | "DrivingLicenseFile" | "VehiclePhotoFile" | "isEmailVerified">[]>([]);
@@ -13,102 +14,30 @@ const AllDeliveries = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
 
   useEffect(() => {
     const fetchDeliveries = async () => {
       try {
         setLoading(true);
-        // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/provider/admin/list?page=${currentPage}&pageSize=${pageSize}`;
-        // console.log("Fetching from API URL:", apiUrl);
+        const apiUrl = `/backend/api/admin-panel/deliveries/paginated-by-term?page=${currentPage}&pageSize=${pageSize}&searchTerm=${searchTerm}`;
+        console.log("Fetching from API URL:", apiUrl);
   
-        // const response = await fetch(apiUrl);
-        // if (!response.ok) {
-        //   throw new Error(`HTTP error! status: ${response.status}`);
-        // }
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
   
-        // const data = await response.json();
+        const data = await response.json();
   
-        // if (data.status) {
-        //   setDeliveriesData(data.data.data);
-        //   setTotalCount(data.data.totalCount);
-        // } else {
-        //   console.error("Failed to fetch deliveries:", data.message);
-        // }
-        setDeliveriesData([
-          {
-            deliveryId: 1,
-            userId: 1,
-            displayName: 'Delivery 1',
-            firstName: 'John',
-            secondName: 'Doe',
-            nationalId: '1234567890',
-            nationalName: 'John Doe',
-            drivingLicenseExpiredDate: '2024-12-31',
-            drivingLicenseNumber: 'DL123456',
-            licenseExpiredDate: '2024-12-31',
-            licenseNumber: 'L789012',
-            email: 'john.doe@example.com',
-            isActive: true,
-            totalOrders: 10,
-            availableBalance: 1000,
-            totalBalance: 100000,
-          },
-          {
-            deliveryId: 2,
-            userId: 2,
-            displayName: 'Delivery 1',
-            firstName: 'John',
-            secondName: 'Doe',
-            nationalId: '1234567890',
-            nationalName: 'John Doe',
-            drivingLicenseExpiredDate: '2024-12-31',
-            drivingLicenseNumber: 'DL123456',
-            licenseExpiredDate: '2024-12-31',
-            licenseNumber: 'L789012',
-            email: 'john.doe@example.com',
-            isActive: true,
-            totalOrders: 10,
-            availableBalance: 1000,
-            totalBalance: 100000,
-          },
-          {
-            deliveryId: 3,
-            userId: 3,
-            displayName: 'Delivery 1',
-            firstName: 'John',
-            secondName: 'Doe',
-            nationalId: '1234567890',
-            nationalName: 'John Doe',
-            drivingLicenseExpiredDate: '2024-12-31',
-            drivingLicenseNumber: 'DL123456',
-            licenseExpiredDate: '2024-12-31',
-            licenseNumber: 'L789012',
-            email: 'john.doe@example.com',
-            isActive: true,
-            totalOrders: 10,
-            availableBalance: 1000,
-            totalBalance: 100000,
-          },
-          {
-            deliveryId: 4,
-            userId: 4,
-            displayName: 'Delivery 1',
-            firstName: 'John',
-            secondName: 'Doe',
-            nationalId: '1234567890',
-            nationalName: 'John Doe',
-            drivingLicenseExpiredDate: '2024-12-31',
-            drivingLicenseNumber: 'DL123456',
-            licenseExpiredDate: '2024-12-31',
-            licenseNumber: 'L789012',
-            email: 'john.doe@example.com',
-            isActive: true,
-            totalOrders: 10,
-            availableBalance: 1000,
-            totalBalance: 100000,
-          }
-        ])
-        setTotalCount(deliveriesData.length)
+        if (data.status) {
+          setDeliveriesData(data.data.deliveries || []);
+          setTotalCount(data.data.totalCount || 0);
+        } else {
+          console.error("Failed to fetch deliveries:", data.message);
+        }
       } catch (error) {
         console.error("Error fetching deliveries:", error);
       } finally {
@@ -117,7 +46,7 @@ const AllDeliveries = () => {
     };
   
     fetchDeliveries();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, searchTerm]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -133,8 +62,94 @@ const AllDeliveries = () => {
     }
   };
 
+  const handleFreeze = async (email: string) => {
+    try {
+      const apiUrl = `/backend/api/user/admin/deactivate/email`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(email),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status) {
+        setDeliveriesData((prevDeliveryData) =>
+          prevDeliveryData.map((delivery) =>
+            delivery.email === email ? { ...delivery, isActive: false } : delivery
+          )
+        );
+        toast.success("Delivery has been frozen successfully");
+      } else {
+        console.error("Failed to freeze delivery:", data.message);
+        toast.error("Failed to freeze delivery");
+      }}
+      catch (error) {
+      console.error("Error freezing delivery:", error);
+      toast.error("Failed to freeze delivery");
+    }
+  };
+
+
+  const handleActivate = async (email: string) => {
+    try {
+      const apiUrl = `/backend/api/user/admin/activate/email`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(email),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status) {
+        setDeliveriesData((prevDeliveryData) =>
+          prevDeliveryData.map((delivery) =>
+            delivery.email === email ? { ...delivery, isActive: true } : delivery
+          )
+        );
+        toast.success("Delivery has been activated successfully");
+      } else {
+        console.error("Failed to activate delivery:", data.message);
+        toast.error("Failed to activate delivery");
+      }}
+      catch (error) {
+      console.error("Error activating delivery:", error);
+      toast.error("Failed to activate delivery");
+    }
+  };
+
   return (
     <div>
+      <div className="flex justify-between items-center mb-4">
+        <input
+          type="text"
+          placeholder="Search by name or phone..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className="flex-1 md:w-1/3 px-4 py-2 rounded-lg border border-dark-3 bg-transparent outline-none focus:border-primary dark:border-dark-3 dark:bg-dark-2"
+        />
+
+        <button
+          className="ml-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-all"
+          onClick={() => setSearchTerm(searchInput)}
+        >
+          Search
+        </button>
+
+      </div>
         <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
             <div className="flex items-center justify-between px-4 py-6 md:px-6 xl:px-9">
                 <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
@@ -144,8 +159,8 @@ const AllDeliveries = () => {
             </div>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
-          <Loader />
-        </div>
+        <ElementLoader size={20} />
+      </div>
       ) : (
         <>
           {deliveriesData.length > 0 ? (
@@ -193,9 +208,9 @@ const AllDeliveries = () => {
                   </div>
                   <div className="col-span-1 flex items-center">
                     <p className="text-body-sm font-medium text-green">
-                      {delivery.totalBalance} RS
+                      {delivery.receivedBalance} SAR
                       <br />
-                      {delivery.availableBalance} RS
+                      {delivery.receivedBalance - delivery.withdrawalBalance} SAR
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center justify-end space-x-3.5">
@@ -204,11 +219,11 @@ const AllDeliveries = () => {
                     </Link>
                     {
                       delivery.isActive ? (
-                        <button className="hover:text-primary" title="Freeze">
+                        <button className="hover:text-primary" title="Freeze" onClick={()=> handleFreeze(delivery.email)}>
                           <BiStopCircle />
                         </button>
                       ) : (
-                        <button className="hover:text-primary" title="Activate">
+                        <button className="hover:text-primary" title="Activate" onClick={()=> handleActivate(delivery.email)}>
                           <BiCheckCircle />
                         </button>
                       )

@@ -134,8 +134,8 @@ const AllProviders = () => {
 
   return (
     <div>
-    <div className="flex justify-between items-center mb-4">
-      <input
+      <div className="flex justify-between items-center mb-4">
+        <input
           type="text"
           placeholder="Search by name or phone..."
           value={searchInput}

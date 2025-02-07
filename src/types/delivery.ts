@@ -14,10 +14,12 @@ export type Delivery = {
     isEmailVerified: boolean;
     isActive: boolean;
     totalOrders: number;
-    availableBalance: number;
-    totalBalance: number;
+    receivedBalance: number;
+    withdrawalBalance: number;
     VehiclePhotoFile: string;
     DrivingLicenseFile: string;
     VehicleLicenseFile: string;
     NationalIqamaIDFile: string;
+    isRejected: boolean;
+    isAccepted: boolean;
   };

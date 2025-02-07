@@ -99,9 +99,9 @@ const DeliveryDetails = () => {
               <div className="space-y-4 md:col-span-2">
                 <h3 className="text-xl font-semibold text-dark dark:text-white mb-4">Statistics</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <StatCard label="Total Orders" value={`${delivery.totalOrders}`}  className=" text-primary"/>
-                  <StatCard label="Available Balance" value={`${delivery.receivedBalance - delivery.withdrawalBalance} SAR`} className="text-green-600" />
-                  <StatCard label="Total Balance" value={`${delivery.receivedBalance} SAR`} className="text-green-600" />
+                  <StatCard label="Total Orders" value={delivery.totalOrders.toString() || "0"}  className=" text-primary"/>
+                  <StatCard label="Available Balance" value={`${(delivery.receivedBalance - delivery.withdrawalBalance) || 0} SAR`} className="text-green-600" />
+                  <StatCard label="Total Balance" value={`${delivery.receivedBalance || 0} SAR`} className="text-green-600" />
                 </div>
               </div>
 
@@ -116,7 +116,7 @@ const DeliveryDetails = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
                       <a 
-                        href={delivery.VehiclePhotoFile} 
+                        href={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${delivery.vehiclePhotoFileUrl}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-primary hover:text-primary/80 font-medium"
@@ -133,7 +133,7 @@ const DeliveryDetails = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
                       <a 
-                        href={delivery.DrivingLicenseFile} 
+                        href={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${delivery.drivingLicenseFileUrl}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-primary hover:text-primary/80 font-medium"
@@ -150,7 +150,7 @@ const DeliveryDetails = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
                       <a 
-                        href={delivery.VehicleLicenseFile} 
+                        href={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${delivery.vehicleLicenseFileUrl}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-primary hover:text-primary/80 font-medium"
@@ -167,7 +167,7 @@ const DeliveryDetails = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
                       <a 
-                        href={delivery.NationalIqamaIDFile} 
+                        href={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${delivery.nationalIqamaIDFileUrl}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-primary hover:text-primary/80 font-medium"

@@ -16,10 +16,10 @@ export type Delivery = {
     totalOrders: number;
     receivedBalance: number;
     withdrawalBalance: number;
-    VehiclePhotoFile: string;
-    DrivingLicenseFile: string;
-    VehicleLicenseFile: string;
-    NationalIqamaIDFile: string;
+    vehiclePhotoFileUrl: string;
+    drivingLicenseFileUrl: string;
+    vehicleLicenseFileUrl: string;
+    nationalIqamaIDFileUrl: string;
     isRejected: boolean;
     isAccepted: boolean;
   };

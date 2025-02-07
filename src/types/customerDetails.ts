@@ -1,13 +1,33 @@
-export type CustomerDetails = {
-    customerId: number,
+interface Location {
+    locationId: number,
+    locationLongitude: number,
+    locationLatitude: number,
+    locationName: string,
+    locationParty: number,
+    locationIsActive: boolean,
+    locationDetailsId: number,
+    locationDetailsBuildingType: string,
+    locationDetailsBuildingNumber: string,
+    locationDetailsFloorNumber: string,
+    locationDetailsApartmentNumber: string,
+    locationDetailsStreetNumber: string,
+    locationDetailsPhoneNumber: string
+}
+
+export interface CustomerDetails {
     displayName: string,
+    customerId: number,
+    userId: number,
+    email: string,
+    isActive: boolean,
+    customer: number,
     firstName: string,
     secondName: string,
-    nationalId: string,
     nationalName: string,
-    phone: string,
-    phoneConfirmed: boolean,
-    isActive: boolean,
-    totalOrders: number,
-    totalRevenue: number
+    nationalId: string,
+    isEmailVerified: boolean,
+    ordersCount: number,
+    ordersValue: number,
+    locations: Location[]
+    
 }

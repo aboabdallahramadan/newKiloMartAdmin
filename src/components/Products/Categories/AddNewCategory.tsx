@@ -28,21 +28,19 @@ const AddNewCategory = () => {
         e.preventDefault();
         setLoading(true);
 
-        // Create a JSON object
         const categoryData = {
             arabic: { name: arabicName },
-            english: { name: englishName },
+            endlish: { name: englishName },
         };
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MAIN}/api/admin/product-categories/add`, {
+            const response = await fetch(`/backend/api/admin/product-categories/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Set Content-Type to application/json
                 },
                 body: JSON.stringify(categoryData), // Convert the object to a JSON string
             });
-            console.log(response);
             const data = await response.json();
 
             if (data.status) {
@@ -55,11 +53,13 @@ const AddNewCategory = () => {
                 toast.error(data.message || 'Failed to add category.', {
                     autoClose: 3000,
                 });
+                console.log(data.message);
             }
         } catch (err) {
             toast.error('An error occurred while adding the category.', {
                 autoClose: 3000,
             });
+            console.error(err);
         } finally {
             setLoading(false);
         }

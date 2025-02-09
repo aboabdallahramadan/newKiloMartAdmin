@@ -4,14 +4,11 @@ import { WithdrawRequest } from '@/types/withdrawRequest';
 import { BiBlock, BiCheckCircle } from 'react-icons/bi';
 import Link from 'next/link';
 import WithdrawRequestModal from './WithdrawRequestModal';
+import { toast } from 'react-toastify';
 
-interface WithdrawRequestsProps {
-    user: "Provider" | "Delivery"
-}
-
-const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
-    const [selectedRequest, setSelectedRequest] = useState<Omit<WithdrawRequest, "status"> | null>(null);
-    const [withdrawRequests, setWithdrawRequests] = useState<Omit<WithdrawRequest, "status">[]>([]);
+const WithdrawRequests = () => {
+    const [selectedRequest, setSelectedRequest] = useState<WithdrawRequest | null>(null);
+    const [withdrawRequests, setWithdrawRequests] = useState<WithdrawRequest[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const pageSize = 10;
@@ -19,7 +16,7 @@ const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
     const fetchWithdrawRequests = async (page: number) => {
         try {
           const response = await fetch(
-            `/backend/api/admin/withdraw/paginated/by-done?done=false&pageNumber=${page}&pageSize=${pageSize}`
+            `/backend/api/admin/withdrawVw/paginated/by-done?done=false&pageNumber=${page}&pageSize=${pageSize}`
           );
       
           if (!response.ok) {
@@ -43,12 +40,53 @@ const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
         fetchWithdrawRequests(currentPage);
     }, [currentPage]);
 
-    const onAccept = (id: number) => {
-        console.log(id);
-    };
+    const onAccept = async (withdraw: WithdrawRequest) => {
+        // Calculate the net total value
+        const totalValue =
+          withdraw.activeBalanceReceives > withdraw.activeBalanceDeductions
+            ? withdraw.activeBalanceReceives - withdraw.activeBalanceDeductions
+            : 0;
+      
+        try {
+          const response = await fetch('/backend/api/admin/withdrawVw/accept/withdraw', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              withdrawId: withdraw.id,
+              totalValue: totalValue,
+            }),
+          });
+      
+          if (response.ok) {
+            toast.success('Withdrawal accepted successfully');
+            fetchWithdrawRequests(currentPage);
+          } else {
+            toast.error('Failed to accept withdrawal');
+          }
+        } catch (error) {
+          console.error('Error accepting withdrawal:', error);
+          toast.error('Failed to accept withdrawal');
+        }
+      };
+      
 
-    const onReject = (id: number) => {
-        console.log(id);
+    const onReject = async (withdraw: WithdrawRequest) => {
+        try {
+            const response = await fetch(`/backend/api/admin/withdrawVw/reject/withdraw?WithdrawId=${withdraw.id}`, {
+              method: 'POST',});
+        
+            if (response.ok) {
+              toast.success('Withdrawal rejected successfully');
+              fetchWithdrawRequests(currentPage);
+            } else {
+              toast.error('Failed to reject withdrawal');
+            }
+          } catch (error) {
+            console.error('Error rejecting withdrawal:', error);
+            toast.error('Failed to reject withdrawal');
+          }
     };
 
     const totalPages = Math.ceil(totalCount / pageSize);
@@ -85,13 +123,19 @@ const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
                 >
                     <div className="col-span-1 flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                            {/* <Link className='text-primary hover:text-primary/50' href={
-                                user === "Delivery" ? `/deliveries/${withdrawRequest.deliveryId}` :
-                                user === "Provider" ? `/providers/${withdrawRequest.providerId}` : 
-                                '#'
-                            }>
-                                {withdrawRequest.displayName}
-                            </Link>                         */}
+                            {
+                                withdrawRequest.providerId ? (
+                                <Link className='text-primary hover:text-primary/50' href={`/providers/${withdrawRequest.providerId}`
+                                }>
+                                    Provider: {withdrawRequest.partyDisplayName}
+                                </Link> 
+                                ) : (
+                                    <Link className='text-primary hover:text-primary/50' href={`/deliveries/${withdrawRequest.deliveryId}`
+                                    }>
+                                        Delivery: {withdrawRequest.partyDisplayName}
+                                    </Link> 
+                                )
+                            }
                         </p>
                     </div>
                     <div className="col-span-2 items-center hidden lg:flex">
@@ -104,7 +148,7 @@ const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.bankAccountNumber}</p>
                     </div>
                     <div className="col-span-1 flex items-center">
-                        {/* <p className="text-body-sm font-medium text-[#219653]">{withdrawRequest.amount} SAR</p> */}
+                        <p className="text-body-sm font-medium text-[#219653]">{(withdrawRequest.activeBalanceReceives > withdrawRequest.activeBalanceDeductions) ? (withdrawRequest.activeBalanceReceives - withdrawRequest.activeBalanceDeductions) : 0} SAR</p>
                     </div>
                     <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3.5">
                     <button 
@@ -117,10 +161,10 @@ const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
                         <path d="M12 20.27C15.53 20.27 18.82 18.19 21.11 14.59C22.01 13.18 22.01 10.81 21.11 9.39997C18.82 5.79997 15.53 3.71997 12 3.71997C8.47003 3.71997 5.18003 5.79997 2.89003 9.39997C1.99003 10.81 1.99003 13.18 2.89003 14.59C5.18003 18.19 8.47003 20.27 12 20.27Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                     </button>
-                        <button className="hover:text-primary" title="Accept" onClick={() => onAccept(withdrawRequest.id)}>
+                        <button className="hover:text-primary" title="Accept" onClick={() => onAccept(withdrawRequest)}>
                             <BiCheckCircle />
                         </button>
-                        <button className="hover:text-rose-600" title="Reject" onClick={() => onReject(withdrawRequest.id)}>
+                        <button className="hover:text-rose-600" title="Reject" onClick={() => onReject(withdrawRequest)}>
                             <BiBlock />
                         </button>
                     </div>
@@ -155,7 +199,6 @@ const WithdrawRequests = ({ user }: WithdrawRequestsProps) => {
             </div>
             {selectedRequest && (
                 <WithdrawRequestModal 
-                    user={user} 
                     withdrawRequest={selectedRequest} 
                     onClose={() => setSelectedRequest(null)}
                 />

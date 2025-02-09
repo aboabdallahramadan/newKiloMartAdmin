@@ -4,11 +4,10 @@ import Link from 'next/link';
 
 interface WithdrawRequestModalProps {
   withdrawRequest: Omit<WithdrawRequest, "status">;
-  user: "Provider" | "Delivery";
   onClose: () => void;
 }
 
-const WithdrawRequestModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest, onClose , user }) => {
+const WithdrawRequestModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest, onClose }) => {
   return (
     <div className="fixed inset-0 z-[9999] bg-black/60 flex justify-center items-center p-4">
       <ClickOutside onClick={onClose}>
@@ -39,13 +38,19 @@ const WithdrawRequestModal: React.FC<WithdrawRequestModalProps> = ({ withdrawReq
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Name</p>
                 <p className="font-medium text-dark dark:text-white">
-                {/* <Link className='text-primary hover:text-primary/50' href={
-                    user === "Delivery" ? `/deliveries/${withdrawRequest.deliveryId}` :
-                    user === "Provider" ? `/providers/${withdrawRequest.providerId}` : 
-                    '#'
-                }>
-                    {withdrawRequest.displayName}
-                </Link>   */}
+                {
+                    withdrawRequest.providerId ? (
+                    <Link className='text-primary hover:text-primary/50' href={`/providers/${withdrawRequest.providerId}`
+                    }>
+                        Provider: {withdrawRequest.partyDisplayName}
+                    </Link> 
+                    ) : (
+                        <Link className='text-primary hover:text-primary/50' href={`/deliveries/${withdrawRequest.deliveryId}`
+                        }>
+                            Delivery: {withdrawRequest.partyDisplayName}
+                        </Link> 
+                    )
+                }
                 </p>
               </div>
               <div>

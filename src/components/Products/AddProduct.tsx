@@ -4,8 +4,10 @@ import InputGroup from '@/components/FormElements/InputGroup';
 import { toast } from 'react-toastify';
 import CategorySelect from '@/components/Products/Categories/CategorySelect';
 import { useRouter } from 'next/navigation';
+import ElementLoader from '../common/ElementLoader';
 const AddProduct = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false)
   const [file, setFile] = useState<File | null>(null);
   const [categoryId, setCategoryId] = useState<number>(0);
   const [arabicData, setArabicData] = useState({
@@ -40,9 +42,9 @@ const AddProduct = () => {
     formData.append('EnglishData.MeasurementUnit', englishData.MeasurementUnit);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MAIN}/api/product`, {
+      setIsLoading(true);
+      const response = await fetch(`/backend/api/product`, {
         method: 'POST',
-        mode: 'no-cors',
         body: formData,
       });
       const data = await response.json();
@@ -51,9 +53,13 @@ const AddProduct = () => {
         router.push('/products/all');
       } else {
         toast.error(data.message || 'Failed to add product.', { autoClose: 3000 });
+        console.log(data.message)
       }
     } catch (error) {
       toast.error('An error occurred while adding the product.', { autoClose: 3000 });
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -121,7 +127,14 @@ const AddProduct = () => {
       <button
         type="submit"
         className="bg-primary text-white py-2 px-4 rounded">
-        Add Product
+          {
+            isLoading ? (
+              <ElementLoader color='white'/>
+            ) : (
+              <span>Add Product</span>
+            )
+          }
+        
       </button>
     </form>
   );

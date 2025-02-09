@@ -9,11 +9,11 @@ import ElementLoader from "../common/ElementLoader";
 const OrdersChart: React.FC = () => {
   const [series, setSeries] = useState<number[]>([10,20,30,40]);
   const [ordersCountSummary, setOrdersCountSummary] = useState<OrdersCountSummary>({
-    canceledOrders: 30,
-    completedOrders: 40,
-    totalOrders: 100,
-    noProviderAccepted: 20,
-    noDeliveryAccepted: 10,
+    canceledOrders: 0,
+    completedOrders: 0,
+    totalOrders: 0,
+    noProviderAccepted: 0,
+    noDeliveryAccepted: 0,
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -30,7 +30,6 @@ const OrdersChart: React.FC = () => {
           res.data.completedOrders,
           res.data.noProviderAccepted,
           res.data.noDeliveryAccepted,
-          (res.data.totalOrders - res.data.completedOrders - res.data.noProviderAccepted - res.data.noDeliveryAccepted)
         ]);
         }
         else{
@@ -42,7 +41,7 @@ const OrdersChart: React.FC = () => {
         setIsLoading(false);
       }
     };
-    // fetchAllData();
+    fetchAllData();
   }, []);
 
   const options: ApexOptions = {
@@ -51,7 +50,7 @@ const OrdersChart: React.FC = () => {
       type: "donut",
     },
     colors: ["#5750F1", "#5475E5", "#8099EC", "#ADBCF2"],
-    labels: ["Completed", "There is no provider accepted it", "There is no delivery accepted it" , "Other"],
+    labels: ["Completed", "There is no provider accepted it", "There is no delivery accepted it"],
     legend: {
       show: false,
       position: "bottom",
@@ -152,15 +151,15 @@ const OrdersChart: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="w-full px-7.5 sm:w-1/2">
+              {/* <div className="w-full px-7.5 sm:w-1/2">
                 <div className="flex w-full items-center">
                   <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue-light-3"></span>
                   <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
                   <span> Other</span>
-                    <span> {((ordersCountSummary.totalOrders - ordersCountSummary.completedOrders - ordersCountSummary.noDeliveryAccepted - ordersCountSummary.noProviderAccepted) * 100 / ordersCountSummary.totalOrders).toFixed()}% </span>
+                    <span> {((ordersCountSummary.canceledOrders) * 100 / ordersCountSummary.totalOrders).toFixed()}% </span>
                   </p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           </> )

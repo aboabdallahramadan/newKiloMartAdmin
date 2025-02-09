@@ -11,7 +11,7 @@ import { FaStore } from "react-icons/fa";
 import { MdAdsClick, MdOutlineDeliveryDining } from "react-icons/md";
 import { AiFillProduct } from "react-icons/ai";
 import { BsPerson, BsQuestionCircle } from "react-icons/bs";
-import { BiCart } from "react-icons/bi";
+import { BiCart, BiMoneyWithdraw } from "react-icons/bi";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import { IoInformationOutline } from "react-icons/io5";
 import { CiSettings } from "react-icons/ci";
@@ -59,8 +59,6 @@ const menuGroups = [
         children: [
           { label: "All Providers", route: "/providers/all" },
           { label: "New Provider Requests", route: "/providers/request-approval" },
-          { label: "Withdraw Requests", route: "/providers/withdraw-requests" },
-          { label: "Withdrawals History", route: "/providers/withdrawals-history"}
         ],
       },
       {
@@ -72,8 +70,6 @@ const menuGroups = [
         children: [
           { label: "All Deliveries", route: "/deliveries/all" },
           { label: "New Delivery Requests", route: "/deliveries/request-approval" },
-          { label: "Withdraw Requests", route: "/deliveries/withdraw-requests" },
-          { label: "Withdrawals History", route: "/deliveries/withdrawals-history"}
         ],
       },
       {
@@ -82,6 +78,17 @@ const menuGroups = [
         ),
         label: "Customers",
         route: "/customers",
+      },
+      {
+        icon: (
+          <BiMoneyWithdraw className="text-2xl" />
+        ),
+        label: "Withdraws",
+        route: "#",
+        children: [
+          { label: "Requests", route: "/withdraw/requests" },
+          { label: "History", route: "/withdraw/history" },
+        ],
       },
       {
         icon: (

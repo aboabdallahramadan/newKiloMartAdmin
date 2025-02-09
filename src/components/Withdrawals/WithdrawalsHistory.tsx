@@ -1,14 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { WithdrawRequest } from '@/types/withdrawRequest';
-import Link from 'next/link';
 import WithdrawalModal from './WithdrawalModal';
+import Link from 'next/link';
 
-interface WithdrawRequestsProps {
-    user: "Provider" | "Delivery"
-}
-
-const WithdrawalsHistory = ({ user }: WithdrawRequestsProps) => {
+const WithdrawalsHistory = () => {
     const [selectedRequest, setSelectedRequest] = useState<WithdrawRequest | null>(null);
     const [withdrawRequests, setWithdrawRequests] = useState<WithdrawRequest[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +13,7 @@ const WithdrawalsHistory = ({ user }: WithdrawRequestsProps) => {
 
     const fetchWithdrawRequests = async (page: number) => {
         try {
-          const response = await fetch(`/backend/api/admin/withdraw/paginated/by-done?done=true&pageNumber=${page}&pageSize=${pageSize}`);
+          const response = await fetch(`/backend/api/admin/withdrawVw/paginated/by-done?done=true&pageNumber=${page}&pageSize=${pageSize}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -41,9 +37,9 @@ const WithdrawalsHistory = ({ user }: WithdrawRequestsProps) => {
     return (
         <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
             <div className="px-4 py-6 md:px-6 xl:px-9">
-                <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Withdraw Requests</h4>
+                <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Withdraw History</h4>
             </div>
-            <div className="grid grid-cols-4 md:grid-cols-6 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-8 md:px-6 2xl:px-7.5">
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-7 md:px-6 2xl:px-7.5">
                 <div className="col-span-1 flex items-center">
                     <p className="font-medium">Name</p>
                 </div>
@@ -53,9 +49,9 @@ const WithdrawalsHistory = ({ user }: WithdrawRequestsProps) => {
                 <div className="col-span-2 hidden md:flex items-center">
                     <p className="font-medium">Bank Account Number</p>
                 </div>
-                <div className="col-span-1 flex items-center">
+                {/* <div className="col-span-1 flex items-center">
                     <p className="font-medium">Amount</p>
-                </div>
+                </div> */}
                 <div className="col-span-1 flex items-center">
                     <p className="font-medium">Status</p>
                 </div>
@@ -65,18 +61,24 @@ const WithdrawalsHistory = ({ user }: WithdrawRequestsProps) => {
             </div>
             {withdrawRequests.map((withdrawRequest) => (
                 <div
-                    className="grid grid-cols-4 md:grid-cols-6 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-8 md:px-6 2xl:px-7.5"
+                    className="grid grid-cols-3 md:grid-cols-5 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-7 md:px-6 2xl:px-7.5"
                     key={withdrawRequest.id}
                 >
                     <div className="col-span-1 flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                            {/* <Link className='text-primary hover:text-primary/50' href={
-                                user === "Delivery" ? `/deliveries/${withdrawRequest.deliveryId}` :
-                                user === "Provider" ? `/providers/${withdrawRequest.providerId}` : 
-                                '#'
-                            }>
-                                {withdrawRequest.displayName}
-                            </Link>                         */}
+                        {
+                                withdrawRequest.providerId ? (
+                                <Link className='text-primary hover:text-primary/50' href={`/providers/${withdrawRequest.providerId}`
+                                }>
+                                    Provider: {withdrawRequest.partyDisplayName}
+                                </Link> 
+                                ) : (
+                                    <Link className='text-primary hover:text-primary/50' href={`/deliveries/${withdrawRequest.deliveryId}`
+                                    }>
+                                        Delivery: {withdrawRequest.partyDisplayName}
+                                    </Link> 
+                                )
+                            }
                         </p>
                     </div>
                     <div className="col-span-2 items-center hidden lg:flex">
@@ -85,11 +87,11 @@ const WithdrawalsHistory = ({ user }: WithdrawRequestsProps) => {
                     <div className="col-span-2 hidden md:flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.bankAccountNumber}</p>
                     </div>
-                    <div className="col-span-1 flex items-center">
+                    {/* <div className="col-span-1 flex items-center">
                         <p className="text-body-sm font-medium text-[#219653]">
-                            {/* {withdrawRequest.amount}  */}
+                            {(withdrawRequest.activeBalanceReceives > withdrawRequest.activeBalanceDeductions) ? (withdrawRequest.activeBalanceReceives - withdrawRequest.activeBalanceDeductions) : 0}
                             SAR</p>
-                    </div>
+                    </div> */}
                     <div className="col-span-1 flex items-center">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             withdrawRequest.accepted
@@ -150,7 +152,6 @@ const WithdrawalsHistory = ({ user }: WithdrawRequestsProps) => {
             </div>
             {selectedRequest && (
                 <WithdrawalModal 
-                    user={user} 
                     withdrawRequest={selectedRequest} 
                     onClose={() => setSelectedRequest(null)}
                 />

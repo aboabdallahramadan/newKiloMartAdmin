@@ -1,10 +1,10 @@
 export type Product = {
-    id: number;
-    imageUrl: string;
-    isActive: boolean;
-    description: string;
-    measurementUnit: string;
-    name: string;
-    categoryId: number;
-    categoryName: string;
+    productId: number;
+    productImageUrl: string;
+    productIsActive: boolean;
+    productMeasurementUnit: string;
+    productDescription: string;
+    productName: string;
+    productCategoryId: number;
+    productCategoryName: string;
 }

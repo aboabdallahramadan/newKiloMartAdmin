@@ -4,17 +4,16 @@ import Link from 'next/link';
 
 interface WithdrawRequestModalProps {
   withdrawRequest: WithdrawRequest;
-  user: "Provider" | "Delivery";
   onClose: () => void;
 }
 
-const WithdrawalModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest, onClose , user }) => {
+const WithdrawalModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest, onClose}) => {
   return (
     <div className="fixed inset-0 z-[9999] bg-black/60 flex justify-center items-center p-4">
       <ClickOutside onClick={onClose}>
         <div className="bg-white dark:bg-gray-dark rounded-xl shadow-2xl max-w-2xl w-full">
           <div className="p-6 border-b border-gray-200 dark:border-dark-3 flex justify-between items-center">
-            <h3 className="text-2xl font-bold text-dark dark:text-white">Withdraw Request Details</h3>
+            <h3 className="text-2xl font-bold text-dark dark:text-white">Withdraw Details</h3>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -57,13 +56,19 @@ const WithdrawalModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest,
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Name</p>
                 <p className="font-medium text-dark dark:text-white">
-                {/* <Link className='text-primary hover:text-primary/50' href={
-                    user === "Delivery" ? `/deliveries/${withdrawRequest.deliveryId}` :
-                    user === "Provider" ? `/providers/${withdrawRequest.providerId}` : 
-                    '#'
-                }>
-                    {withdrawRequest.displayName}
-                </Link>   */}
+                {
+                    withdrawRequest.providerId ? (
+                    <Link className='text-primary hover:text-primary/50' href={`/providers/${withdrawRequest.providerId}`
+                    }>
+                        Provider: {withdrawRequest.partyDisplayName}
+                    </Link> 
+                    ) : (
+                        <Link className='text-primary hover:text-primary/50' href={`/deliveries/${withdrawRequest.deliveryId}`
+                        }>
+                            Delivery: {withdrawRequest.partyDisplayName}
+                        </Link> 
+                    )
+                }
                 </p>
               </div>
               <div>
@@ -78,10 +83,10 @@ const WithdrawalModal: React.FC<WithdrawRequestModalProps> = ({ withdrawRequest,
                 <p className="text-sm text-gray-500 dark:text-gray-400">Bank Account Number</p>
                 <p className="font-medium text-dark dark:text-white">{withdrawRequest.bankAccountNumber}</p>
               </div>
-              <div>
+              {/* <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Amount</p>
-                {/* <p className="font-medium text-[#219653]">{withdrawRequest.amount} SAR</p> */}
-              </div>
+                <p className="font-medium text-[#219653]">{withdrawRequest.amount} SAR</p>
+              </div> */}
             </div>
           </div>
         </div>

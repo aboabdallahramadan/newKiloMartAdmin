@@ -1,20 +1,20 @@
 import DefaultLayout from '@/components/Layouts/DefaultLaout'
-import WithdrawalsHistory from '@/components/Withdrawals/WithdrawalsHistory'
+import WithdrawRequests from '@/components/Withdrawals/WithdrawRequests'
 import React from 'react'
 import { Metadata } from 'next'
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 
 export const metadata: Metadata = {
-    title: "Providers Withdrawals History",
-    description: "Providers Withdrawals History",
+    title: "Withdraw Requests",
+    description: "Withdraw Requests",
 };
 
 
 const page = () => {
   return (
     <DefaultLayout>
-        <Breadcrumb pageName="Withdrawals History" />
-        <WithdrawalsHistory user="Provider" />
+        <Breadcrumb pageName="Withdraw Requests" />
+        <WithdrawRequests/>
     </DefaultLayout>
   )
 }

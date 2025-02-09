@@ -248,9 +248,6 @@ const CategoriesTable = () => {
                                             <td className="px-4 py-2 text-start">{category.name}</td>
                                             <td className="px-4 py-2 text-center">{category.productsCount}</td>
                                             <td className="px-4 py-2 flex items-center justify-end space-x-1.5 sm:space-x-3.5">
-                                                <Link href={`/products/categories/${category.id}`} className="hover:text-primary hover:text-primary-hover" title="view products">
-                                                    <FaEye />
-                                                </Link>
                                                 <button
                                                     className="ml-2 hover:text-primary"
                                                     title="edit"
@@ -277,13 +274,13 @@ const CategoriesTable = () => {
                                                         </button>
                                                     )
                                                 }
-                                                <button
+                                                {/* <button
                                                     className="ml-2 hover:text-red-500"
                                                     title="delete"
                                                     onClick={() => handleDelete(category.id)}
                                                 >
                                                     <FaTrash />
-                                                </button>
+                                                </button> */}
                                             </td>
                                         </tr>
                                     ))}

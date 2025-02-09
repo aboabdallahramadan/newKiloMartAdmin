@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { WithdrawRequest } from '@/types/withdrawRequest';
+import ElementLoader from '../common/ElementLoader';
 
 interface WithdrawalsProps {
     user: "Provider" | "Delivery"
@@ -19,7 +20,7 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
     useEffect(() => {
         const fetchWithdrawals = async (page: number, userId: number) => {
             try {
-                const response = await fetch(`/backend/api/admin/withdraw/paginated/by-delivery-or-provider?partyId=${userId}&pageNumber=${page}&pageSize=${pageSize}`);
+                const response = await fetch(`/backend/api/admin/withdrawVw/paginated/by-delivery-or-provider?partyId=${employeeId}&pageNumber=${page}&pageSize=${pageSize}`);
                 const data = await response.json();
                 if (data.status) {
                     setWithdrawals(data.data.withdraws);
@@ -79,42 +80,54 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                         <p className="font-medium">Status</p>
                     </div>
                 </div>
-                {withdrawals.map((withdrawal) => (
-                    <div
-                        className="grid grid-cols-3 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5"
-                        key={withdrawal.id}
-                    >
-                        <div className="col-span-1 hidden sm:flex items-center">
-                            <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawal.bankAccountNumber}</p>
-                        </div>
-                        <div className="col-span-1 flex items-center">
-                            <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawal.date).toLocaleDateString()}</p>
-                        </div>
-                        <div className="col-span-1 flex items-center">
-                            {/* this should be the amount of money that the user has withdrawn */}
-                            <p className="text-body-sm font-medium text-[#219653]">{withdrawal.accepted} SAR</p>
-                        </div>
-                        <div className="col-span-1 flex items-center">
-                            <p
-                                className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${
-                                    withdrawal.accepted
-                                        ? "bg-[#219653]/[0.08] text-[#219653]"
-                                        : withdrawal.rejected
-                                            ? "bg-[#D34053]/[0.08] text-[#D34053]"
-                                            : "bg-[#FFA70B]/[0.08] text-[#FFA70B]"
-                                }`}
-                            >
-                                {
-                                withdrawal.accepted
-                                        ? (<span>Accepted</span>)
-                                        : withdrawal.rejected
-                                            ? (<span>Rejected</span>)
-                                            : (<span>Pending</span>)
-                                            }
-                            </p>
-                        </div>
-                    </div>
-                ))}
+                {
+                    isLoading ? ( 
+                        <ElementLoader />
+                    ) : withdrawals && withdrawals.length > 0 ? (
+                        <>
+                            {withdrawals.map((withdrawal) => (
+                                <div
+                                    className="grid grid-cols-3 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5"
+                                    key={withdrawal.id}
+                                >
+                                    <div className="col-span-1 hidden sm:flex items-center">
+                                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawal.bankAccountNumber}</p>
+                                    </div>
+                                    <div className="col-span-1 flex items-center">
+                                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawal.date).toLocaleDateString()}</p>
+                                    </div>
+                                    <div className="col-span-1 flex items-center">
+                                        <p className="text-body-sm font-medium text-[#219653]">{(withdrawal.activeBalanceReceives > withdrawal.activeBalanceDeductions) ? (withdrawal.activeBalanceReceives - withdrawal.activeBalanceDeductions) : 0} SAR</p>
+                                    </div>
+                                    <div className="col-span-1 flex items-center">
+                                        <p
+                                            className={`inline-flex rounded-full px-3.5 py-1 text-body-sm font-medium ${
+                                                withdrawal.accepted
+                                                    ? "bg-[#219653]/[0.08] text-[#219653]"
+                                                    : withdrawal.rejected
+                                                        ? "bg-[#D34053]/[0.08] text-[#D34053]"
+                                                        : "bg-[#FFA70B]/[0.08] text-[#FFA70B]"
+                                            }`}
+                                        >
+                                            {
+                                            withdrawal.accepted
+                                                    ? (<span>Accepted</span>)
+                                                    : withdrawal.rejected
+                                                        ? (<span>Rejected</span>)
+                                                        : (<span>Pending</span>)
+                                                        }
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                        <p>No Withdraws found</p>
+                        </>
+                    )
+                }
+                
                 <div className="flex justify-between px-4 py-4">
                     <button 
                         disabled={currentPage === 1} 

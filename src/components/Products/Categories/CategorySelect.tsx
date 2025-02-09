@@ -4,23 +4,12 @@ import { Category } from '@/types/category'
 import ClickOutside from '@/components/ClickOutside'
 
 
-const CategorySelect = ({category, setCategory}: {category: number, setCategory: (category: number) => void}) => {
+const CategorySelect = ({category, setCategory}: {category: number | null, setCategory: (category: number | null) => void}) => {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-    const [categories,setCategories] = useState<Omit<Category, "isActive" | "productsCount">[]>([
-        { id: 1, name: "Electronics"},
-        { id: 2, name: "Groceries" },
-        { id: 3, name: "Fashion" },
-        { id: 4, name: "Home & Garden" },
-        { id: 5, name: "Sports" },
-        { id: 6, name: "Books"},
-        { id: 7, name: "Beauty" },
-        { id: 8, name: "Toys" },
-        { id: 9, name: "Automotive" },
-        { id: 10, name: "Health" }
-    ])
+    const [categories,setCategories] = useState<Omit<Category, "isActive" | "productsCount">[]>([])
     const fetchCategories = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/all-users/product-categories/paginated?language=2&page=1&pageSize=99999&isActive=true`);
+            const response = await fetch(`/backend/api/all-users/product-categories/paginated?language=2&page=1&pageSize=99999999&isActive=true`);
             const data = await response.json();
             if (data.status) {
                 setCategories(data.data.data);
@@ -28,14 +17,15 @@ const CategorySelect = ({category, setCategory}: {category: number, setCategory:
                 console.error("Failed to fetch categories:", data.message);
             }
         } catch (error) {
-            console.error("An error occurred while fetching categories:", error);
+            console.error("Error fetching categories:", error);
+        } finally {
         }
     };
-
+    
     useEffect(() => {
-        // fetchCategories();
+        fetchCategories();
     }, []);
-    const handleCategorySelect = (option: number) => {
+    const handleCategorySelect = (option: number | null) => {
         setCategory(option);
         setIsCategoryOpen(false);
       };
@@ -70,6 +60,12 @@ const CategorySelect = ({category, setCategory}: {category: number, setCategory:
             {isCategoryOpen && (
             <div className="absolute right-0 top-full z-40 mt-2 w-full rounded-[7px] border border-stroke bg-white py-1.5 shadow-2 dark:border-dark-3 dark:bg-dark-2 dark:shadow-card">
                 <ul>
+                    <li
+                        onClick={() => handleCategorySelect(null)}
+                        className={`flex w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-left font-medium hover:text-dark dark:hover:text-white ${category === null ? "selected" : ""}`}
+                        >
+                        All
+                    </li>
                     {categories.map((singleCategory) => (
                     <li key={singleCategory.id}
                     onClick={() => handleCategorySelect(singleCategory.id)}

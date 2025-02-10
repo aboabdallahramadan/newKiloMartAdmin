@@ -6,6 +6,7 @@ import InputGroup from '../FormElements/InputGroup';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { FreeDelivery } from '@/types/freeDelivery';
+import ElementLoader from '../common/ElementLoader';
 
 interface AddNewFreeDeliveryProps {
     setFreeDeliveryOffersData: React.Dispatch<React.SetStateAction<any>>;
@@ -13,10 +14,11 @@ interface AddNewFreeDeliveryProps {
 
 const AddNewFreeDelivery: React.FC<AddNewFreeDeliveryProps> = ({setFreeDeliveryOffersData}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState<Omit<FreeDelivery , "productName" | "productImageUrl" | "isActive" | "id">>({
-        name: '',
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState<Omit<FreeDelivery , "id">>({
         startDate: '',
         endDate: '',
+        isActive: true,
     });
 
     const handleOpenModal = () => {
@@ -38,7 +40,8 @@ const AddNewFreeDelivery: React.FC<AddNewFreeDeliveryProps> = ({setFreeDeliveryO
         e.preventDefault();
     
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountfreedelivery`, {
+            setIsSubmitting(true);
+            const response = await fetch(`/backend/api/driverfreefee/admin/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,6 +61,8 @@ const AddNewFreeDelivery: React.FC<AddNewFreeDeliveryProps> = ({setFreeDeliveryO
         } catch (error) {
             console.error('Error:', error);
             toast.error('Failed to create Free Delivery');
+        } finally {
+            setIsSubmitting(false);
         }
         
         handleCloseModal();
@@ -87,16 +92,6 @@ const AddNewFreeDelivery: React.FC<AddNewFreeDeliveryProps> = ({setFreeDeliveryO
                             <div className="p-6.5">
 
                                 <InputGroup
-                                    label="Name"
-                                    type="text"
-                                    name="name"
-                                    placeholder="Enter discount name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    customClasses="mb-4.5"
-                                />
-
-                                <InputGroup
                                     label="Start Date"
                                     type="datetime-local"
                                     name="startDate"
@@ -122,7 +117,16 @@ const AddNewFreeDelivery: React.FC<AddNewFreeDeliveryProps> = ({setFreeDeliveryO
                                         type="submit"
                                         className="col-span-2 flex justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90"
                                     >
-                                        Add Free Delivery
+                                        {
+                                            isSubmitting ? (
+                                                <ElementLoader color='white' />
+                                            ) : (
+                                                <span>
+                                                    Add Free Delivery
+                                                </span>
+                                            )
+                                        }
+                                        
                                     </button>
                                     <button 
                                         type="button"

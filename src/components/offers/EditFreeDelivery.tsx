@@ -5,6 +5,7 @@ import InputGroup from '../FormElements/InputGroup';
 import { FaEdit, FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { FreeDelivery } from '@/types/freeDelivery';
+import ElementLoader from '../common/ElementLoader';
 
 interface EditFreeDeliveryProps {
     setFreeDeliveryOffersData: React.Dispatch<React.SetStateAction<any>>;
@@ -13,11 +14,11 @@ interface EditFreeDeliveryProps {
 
 const EditFreeDelivery: React.FC<EditFreeDeliveryProps> = ({setFreeDeliveryOffersData , freeDelivery}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState<Omit<FreeDelivery, "isActive">>({
-        id: freeDelivery.id,
-        name: freeDelivery.name,
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState<Omit<FreeDelivery, "id">>({
         startDate: freeDelivery.startDate,
-        endDate: freeDelivery.endDate
+        endDate: freeDelivery.endDate,
+        isActive: freeDelivery.isActive,
     });
 
     const handleOpenModal = () => {
@@ -39,8 +40,9 @@ const EditFreeDelivery: React.FC<EditFreeDeliveryProps> = ({setFreeDeliveryOffer
         e.preventDefault();
     
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountfreeDelivery/${freeDelivery.id}`, {
-                method: 'POST',
+            setIsSubmitting(true);
+            const response = await fetch(`/backend/api/driverfreefee/admin/edit/${freeDelivery.id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -55,18 +57,20 @@ const EditFreeDelivery: React.FC<EditFreeDeliveryProps> = ({setFreeDeliveryOffer
                     prevFreeDeliveryOffersData.map((offer) =>
                         offer.id === freeDelivery.id ? { 
                             ...offer,
-                            name: formData.name,
                             startDate: formData.startDate,
                             endDate: formData.endDate
                          } : offer
                 ));
                 handleCloseModal();
             } else {
+                console.log('Error:', response.json());
                 throw new Error('Failed to create discount freeDelivery');
             }
         } catch (error) {
             console.error('Error:', error);
             toast.error('Failed to create discount freeDelivery');
+        } finally {
+            setIsSubmitting(false);
         }
         
         handleCloseModal();
@@ -88,17 +92,6 @@ const EditFreeDelivery: React.FC<EditFreeDeliveryProps> = ({setFreeDeliveryOffer
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="p-6.5">
-
-                                <InputGroup
-                                    label="Name"
-                                    type="text"
-                                    name="name"
-                                    placeholder="Enter discount name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    customClasses="mb-4.5"
-                                />
-
                                 <InputGroup
                                     label="Start Date"
                                     type="datetime-local"
@@ -125,7 +118,14 @@ const EditFreeDelivery: React.FC<EditFreeDeliveryProps> = ({setFreeDeliveryOffer
                                         type="submit"
                                         className="col-span-2 flex justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90"
                                     >
-                                        Save Offer
+                                        {
+                                            isSubmitting ? (
+                                                <ElementLoader color='white' />
+                                            ) : (
+                                                <span>Save Offer</span>
+                                            )
+                                        }
+                                        
                                     </button>
                                     <button 
                                         type="button"

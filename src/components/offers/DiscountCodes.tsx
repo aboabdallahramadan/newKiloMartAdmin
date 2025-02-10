@@ -6,40 +6,10 @@ import Loader from "../common/Loader";
 import AddNewCode from "./AddNewCode";
 import { toast } from "react-toastify";
 import EditCode from "./EditCode";
+import ElementLoader from "../common/ElementLoader";
 
 const DiscountCodes = () => {
-  const [codesData, setCodesData] = useState<Code[]>([
-    {
-      id: 1,
-      code: "SUMMER2024",
-      discountType: "1",
-      value: 50,
-      description: "Summer season discount",
-      startDate: "2024-06-01T00:00:00",
-      endDate: "2024-08-31T00:00:00",
-      isActive: true
-    },
-    {
-      id: 2,
-      code: "WELCOME25",
-      discountType: "2", 
-      value: 25,
-      description: "New customer welcome discount",
-      startDate: "2024-01-01T00:00:00",
-      endDate: "2024-12-31T00:00:00",
-      isActive: true
-    },
-    {
-      id: 3,
-      code: "FLASH10",
-      discountType: "2",
-      value: 10,
-      description: "Flash sale discount",
-      startDate: "2024-03-15T00:00:00", 
-      endDate: "2024-03-17T00:00:00",
-      isActive: false
-    }
-  ]);
+  const [codesData, setCodesData] = useState<Code[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
@@ -49,7 +19,7 @@ const DiscountCodes = () => {
     const fetchCodes = async () => {
       try {
         setLoading(true);
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountcode/list?page=${currentPage}&pageSize=${pageSize}`;
+        const apiUrl = `/backend/api/admin/discountcode/list?page=${currentPage}&pageSize=${pageSize}`;
         console.log("Fetching from API URL:", apiUrl);
   
         const response = await fetch(apiUrl);
@@ -72,7 +42,7 @@ const DiscountCodes = () => {
       }
     };
   
-    // fetchCodes();
+    fetchCodes();
   }, [currentPage, pageSize]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -91,7 +61,7 @@ const DiscountCodes = () => {
 
   const handleFreezeCode = async (codeId: number) => {
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountcode/deactivate/${codeId}`;
+      const apiUrl = `/backend/api/admin/discountcode/deactivate/${codeId}`;
       const response = await fetch(apiUrl, {
         method: "PUT",
       });
@@ -123,7 +93,7 @@ const DiscountCodes = () => {
 
   const handleActivateCode = async (codeId: number) => {
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountcode/activate/${codeId}`;
+      const apiUrl = `/backend/api/admin/discountcode/activate/${codeId}`;
       const response = await fetch(apiUrl, {
         method: "PUT",
       });
@@ -164,7 +134,7 @@ const DiscountCodes = () => {
         </div>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
-          <Loader />
+          <ElementLoader />
         </div>
       ) : (
         <>
@@ -215,23 +185,23 @@ const DiscountCodes = () => {
                   </div>
                   <div className="col-span-1 flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      {code.discountType == "1" ? "Fixed" : "Percentage"}
+                      {code.discountType == 1 ? "Fixed" : "Percentage"}
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      {code.value}
+                      {code.value} {code.discountType == 1 ? "SAR" : "%"}
                     </p>
                   </div>
                   
                   <div className="col-span-1 hidden sm:flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      {code.startDate.substring(0, 10)}
+                      {new Date(code.startDate).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="col-span-1 hidden sm:flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      {code.endDate.substring(0, 10)}
+                      {new Date(code.endDate).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center justify-end space-x-3.5">

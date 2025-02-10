@@ -5,6 +5,7 @@ import ButtonDefault from '../Buttons/ButtonDefault';
 import InputGroup from '../FormElements/InputGroup';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import ElementLoader from '../common/ElementLoader';
 
 interface AddNewCodeProps {
     setCodesData: React.Dispatch<React.SetStateAction<any>>;
@@ -12,9 +13,10 @@ interface AddNewCodeProps {
 
 const AddNewCode: React.FC<AddNewCodeProps> = ({setCodesData}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         code: '',
-        discountType: '',
+        discountType: 1,
         value: 0,
         description: '',
         startDate: '',
@@ -38,9 +40,11 @@ const AddNewCode: React.FC<AddNewCodeProps> = ({setCodesData}) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log('Form Data:', formData);
     
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountcode`, {
+            setIsSubmitting(true);
+            const response = await fetch(`/backend/api/admin/discountcode`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,18 +52,20 @@ const AddNewCode: React.FC<AddNewCodeProps> = ({setCodesData}) => {
                 body: JSON.stringify(formData)
             });
 
+            const data = await response.json();
             if (response.ok) {
-                const data = await response.json();
-                console.log('Success:', data);
                 toast.success('Discount code created successfully!');
                 setCodesData((prevCodesData: any) => [...prevCodesData, data.data]);
                 handleCloseModal();
             } else {
+                console.error('Failed to create discount code', data);
                 throw new Error('Failed to create discount code');
             }
         } catch (error) {
             console.error('Error:', error);
             toast.error('Failed to create discount code');
+        } finally {
+            setIsSubmitting(false);
         }
         
         handleCloseModal();
@@ -107,9 +113,8 @@ const AddNewCode: React.FC<AddNewCodeProps> = ({setCodesData}) => {
                                         onChange={handleChange}
                                         className="w-full rounded-lg border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-dark-3"
                                     >
-                                        <option value="">Select type</option>
-                                        <option value="percentage">Percentage</option>
-                                        <option value="fixed">Fixed Amount</option>
+                                        <option value="1" selected>Fixed Amount</option>
+                                        <option value="2">Percentage</option>
                                     </select>
                                 </div>
 
@@ -159,7 +164,15 @@ const AddNewCode: React.FC<AddNewCodeProps> = ({setCodesData}) => {
                                         type="submit"
                                         className="col-span-2 flex justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90"
                                     >
-                                        Add Discount Code
+                                        {
+                                            isSubmitting ? (
+                                                <ElementLoader color='white' />
+                                            ) :(
+                                                <span>Add Discount Code</span>
+                                            )
+                                        }
+                                        
+                                        
                                     </button>
                                     <button 
                                         type="button"

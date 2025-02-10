@@ -1,7 +1,7 @@
 export type Code = {
     id: number;
     code: string;
-    discountType: string;
+    discountType: number;
     value: number;
     description: string;
     startDate: string;

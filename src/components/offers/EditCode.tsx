@@ -6,6 +6,7 @@ import InputGroup from '../FormElements/InputGroup';
 import { FaEdit, FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Code } from '@/types/code';
+import ElementLoader from '../common/ElementLoader';
 
 interface EditCodeProps {
     setCodesData: React.Dispatch<React.SetStateAction<any>>;
@@ -13,6 +14,7 @@ interface EditCodeProps {
 }
 
 const EditCode: React.FC<EditCodeProps> = ({setCodesData , code}) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         id: code.id,
@@ -21,7 +23,8 @@ const EditCode: React.FC<EditCodeProps> = ({setCodesData , code}) => {
         value: code.value,
         description: code.description,
         startDate: code.startDate,
-        endDate: code.endDate
+        endDate: code.endDate,
+        isActive: true
     });
 
     const handleOpenModal = () => {
@@ -43,8 +46,9 @@ const EditCode: React.FC<EditCodeProps> = ({setCodesData , code}) => {
         e.preventDefault();
     
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountcode/${code.id}`, {
-                method: 'POST',
+            setIsSubmitting(true);
+            const response = await fetch(`/backend/api/admin/discountcode/${code.id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -74,6 +78,8 @@ const EditCode: React.FC<EditCodeProps> = ({setCodesData , code}) => {
         } catch (error) {
             console.error('Error:', error);
             toast.error('Failed to create discount code');
+        } finally {
+            setIsSubmitting(false);
         }
         
         handleCloseModal();
@@ -111,13 +117,12 @@ const EditCode: React.FC<EditCodeProps> = ({setCodesData , code}) => {
                                     </label>
                                     <select
                                         name="discountType"
-                                        value={formData.discountType}
+                                        defaultValue={formData.discountType}
                                         onChange={handleChange}
                                         className="w-full rounded-lg border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-dark-3"
                                     >
-                                        <option value="">Select type</option>
-                                        <option value="percentage">Percentage</option>
-                                        <option value="fixed">Fixed Amount</option>
+                                        <option value="1">Fixed Amount</option>
+                                        <option value="2">Percentage</option>
                                     </select>
                                 </div>
 
@@ -167,7 +172,14 @@ const EditCode: React.FC<EditCodeProps> = ({setCodesData , code}) => {
                                         type="submit"
                                         className="col-span-2 flex justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90"
                                     >
-                                        Add Discount Code
+                                        {
+                                            isSubmitting ? (
+                                                <ElementLoader color='white' />
+                                            ) : (
+                                                <span>Add Discount Code</span>
+                                            )
+                                        }
+                                        
                                     </button>
                                     <button 
                                         type="button"

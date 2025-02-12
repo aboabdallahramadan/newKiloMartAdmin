@@ -1,12 +1,13 @@
 export type ProjectSettings = {
-    Id: number;
-    DeliveryOrderFee: number;
-    SystemOrderFee: number;
-    CancelOrderWhenNoProviderHasAllProducts: boolean;
-    MinCircleRadius: number;
-    MaxCircleRadius: number;
-    TimeInMinutesToMakeTheCircleBigger: number;
-    HowMuchToIncreaseTheCircle: number;
-    MaxMinutesToCancelOrderWaitingAProvider: number;
-    MaxMinutesToCancelOrderWaitingADelivery: number;
+    id: number;
+    deliveryOrderFee: number;
+    systemOrderFee: number;
+    circleRaduis: number;
+    distanceToAdd: number;
+    timeInMinutesToMakeTheCircleBigger: number;
+    maxDistanceToAdd: number;
+    maxMinutesToCancelOrderWaitingAProvider: number;
+    cancelOrderWhenNoProviderHasAllProducts: boolean;
+    minOrderValue: number;
+    raduisForGetProducts: number;
 }

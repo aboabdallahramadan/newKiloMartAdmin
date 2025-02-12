@@ -9,6 +9,7 @@ import ElementLoader from '../common/ElementLoader';
 
 const AllInformation: React.FC = () => {
   const [info, setInfo] = useState<Information[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState({ oldKey: '' , key: '', value: '' });
   const [newForm, setNewForm] = useState({ key: '', value: '' });
@@ -50,6 +51,7 @@ const AllInformation: React.FC = () => {
   const handleCreateNew = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      setIsSubmitting(true);
       const res = await fetch('/backend/api/configs/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,6 +67,8 @@ const AllInformation: React.FC = () => {
     } catch (error) {
       console.error('Error creating configuration:', error);
       toast.error('Failed to create configuration');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -81,6 +85,7 @@ const AllInformation: React.FC = () => {
 
   const handleSaveEdit = async () => {
     try {
+      setIsSubmitting(true);
       const res = await fetch(`/backend/api/configs/edit/${editForm.oldKey}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -96,6 +101,8 @@ const AllInformation: React.FC = () => {
     } catch (error) {
       console.error('Error updating configuration:', error);
       toast.error('Failed to update configuration');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -163,7 +170,7 @@ const AllInformation: React.FC = () => {
                   type="submit"
                   className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/80"
                 >
-                  Create
+                  {isSubmitting ? (<ElementLoader color='white' />) : 'Create'}
                 </button>
               </div>
             </form>
@@ -205,7 +212,7 @@ const AllInformation: React.FC = () => {
                   onClick={handleSaveEdit}
                   className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/80"
                 >
-                  Save
+                  {isSubmitting ? (<ElementLoader color='white' />) : 'Save'}
                 </button>
               </div>
             </div>

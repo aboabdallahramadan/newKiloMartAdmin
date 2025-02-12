@@ -103,8 +103,8 @@ const OrderDetailsModal: React.FC<OrderDetailsProps> = ({Order, handleCloseModal
               <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                 <h4 className="text-lg font-semibold text-dark dark:text-white mb-4">Order Items</h4>
                 <div className="space-y-4">
-                  {Order.orderProductDetails.map((item) => (
-                    <div key={item.productId} className="flex items-center gap-4 bg-white dark:bg-gray-700 p-4 rounded-lg">
+                  {Order.orderProductDetails.map((item , index) => (
+                    <div key={index} className="flex items-center gap-4 bg-white dark:bg-gray-700 p-4 rounded-lg">
                       <img 
                         src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${item.productImageUrl}`} 
                         alt={item.productName} 

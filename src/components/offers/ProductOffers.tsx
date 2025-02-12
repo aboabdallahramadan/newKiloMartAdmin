@@ -9,38 +9,7 @@ import EditOffer from "./EditOffer";
 import Image from "next/image";
 
 const ProductOffers = () => {
-  const [offersData, setOffersData] = useState<Offer[]>([
-    {
-        id: 1,
-        productName: "Premium Coffee",
-        productId: 4,
-        productImageUrl: "/images/product/product-01.png",
-        value: 20,
-        startDate: "2024-01-01",
-        endDate: "2024-02-01",
-        isActive: true
-      },
-      {
-        id: 2,
-        productName: "Organic Tea",
-        productId: 4,
-        productImageUrl: "/images/product/product-02.png",
-        value: 15,
-        startDate: "2024-01-15",
-        endDate: "2024-02-15",
-        isActive: false
-      },
-      {
-        id: 3,
-        productName: "Fresh Juice",
-        productId: 4,
-        productImageUrl: "/images/product/product-03.png",
-        value: 25,
-        startDate: "2024-02-01",
-        endDate: "2024-03-01",
-        isActive: true
-      }
-  ]);
+  const [offersData, setOffersData] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);

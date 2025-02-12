@@ -10,10 +10,9 @@ export type ProductOffer = {
     productOfferIsActive: boolean;
     productOfferOffPercentage: number;
     productOfferPrice: number;
-    productOfferTotalOrders?: number;
     productOfferQuantity: number;
-    productOfferProviderName?: string;
-    productOfferProviderId?: number;
+    partyDisplayName?: string;
+    productOfferProvider?: number;
     productProductCategory: number;
     productCategoryName: string;
 }

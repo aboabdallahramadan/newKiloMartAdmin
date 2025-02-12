@@ -301,8 +301,14 @@ const menuGroups = [
         icon: (
           <CiSettings />
         ),
-        label: "Project Settings",
-        route: "/pages/project-settings",
+        label: "Project",
+        route: "#",
+        children: [
+          { label: "Project", route: "/pages/project-settings" },
+          { label: "Apps", route: "/pages/apps" },
+          { label: "Admin Account", route: "/pages/settings" },
+
+        ],
       },
       {
         icon: (

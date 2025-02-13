@@ -306,6 +306,7 @@ const menuGroups = [
         children: [
           { label: "Project", route: "/pages/project-settings" },
           { label: "Apps", route: "/pages/apps" },
+          { label: "App Texts", route: "/pages/text" },
           { label: "Admin Account", route: "/pages/settings" },
 
         ],

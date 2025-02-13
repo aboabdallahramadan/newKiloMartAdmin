@@ -9,7 +9,7 @@ const AddProduct = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
   const [file, setFile] = useState<File | null>(null);
-  const [categoryId, setCategoryId] = useState<number>(0);
+  const [categoryId, setCategoryId] = useState<number | null>(0);
   const [arabicData, setArabicData] = useState({
     Name: '',
     Description: '',
@@ -33,7 +33,9 @@ const AddProduct = () => {
     if (file) {
       formData.append('File', file);
     }
-    formData.append('CategoryId', categoryId.toString());
+    if(categoryId) {
+      formData.append('CategoryId', categoryId.toString());
+    }
     formData.append('ArabicData.Name', arabicData.Name);
     formData.append('ArabicData.Description', arabicData.Description);
     formData.append('ArabicData.MeasurementUnit', arabicData.MeasurementUnit);

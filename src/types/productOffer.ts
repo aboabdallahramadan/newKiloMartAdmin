@@ -1,4 +1,13 @@
 export type ProductOffer = {
+    id: number;
+    price: number;
+    offPercentage: number;
+    fromDate: Date;
+    toDate: Date;
+    quantity: number;
+    providerId: number;
+    isActive: boolean;
+    providerDisplayName: string;
     productId: number;
     productImageUrl: string;
     productIsActive: boolean;
@@ -6,13 +15,7 @@ export type ProductOffer = {
     productMeasurementUnit: string;
     productName: string;
     productOfferId: number;
-    productOfferFromDate: string;
-    productOfferIsActive: boolean;
-    productOfferOffPercentage: number;
-    productOfferPrice: number;
-    productOfferQuantity: number;
-    partyDisplayName?: string;
-    productOfferProvider?: number;
-    productProductCategory: number;
+    productCategoryId: number;
     productCategoryName: string;
+    totalOrders: number;
 }

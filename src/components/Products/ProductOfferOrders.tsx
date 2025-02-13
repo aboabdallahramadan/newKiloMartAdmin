@@ -50,7 +50,7 @@ const ProductOfferOrders = () => {
         ) : (
           <div className="overflow-y-auto max-h-[600px]">
             {
-              orders.length === 0 ? (
+              orders && orders.length === 0 ? (
                 <p className="text-gray-500 text-center">No orders found.</p>
               ) : (
                 <table className="w-full table-auto">

@@ -6,7 +6,7 @@ import Loader from "../common/Loader";
 import AddNewOffer from "./AddNewOffer";
 import { toast } from "react-toastify";
 import EditOffer from "./EditOffer";
-import Image from "next/image";
+import ElementLoader from "../common/ElementLoader";
 
 const ProductOffers = () => {
   const [offersData, setOffersData] = useState<Offer[]>([]);
@@ -15,34 +15,36 @@ const ProductOffers = () => {
   const [pageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
 
-  useEffect(() => {
-    const fetchOffers = async () => {
-      try {
-        setLoading(true);
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountoffer/list?page=${currentPage}&pageSize=${pageSize}`;
-        console.log("Fetching from API URL:", apiUrl);
-  
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const data = await response.json();
-  
-        if (data.status) {
-          setOffersData(data.data.data);
-          setTotalCount(data.data.totalCount);
-        } else {
-          console.error("Failed to fetch Offers:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching Offers:", error);
-      } finally {
-        setLoading(false);
+
+  const fetchOffers = async () => {
+    try {
+      setLoading(true);
+      const apiUrl = `/backend/api/deal/admin/all?language=2&pageNumber=${currentPage}&pageSize=${pageSize}`;
+      console.log("Fetching from API URL:", apiUrl);
+
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+
+      const data = await response.json();
+
+      if (data.status) {
+        setOffersData(data.data.deals);
+        setTotalCount(data.data.totalCount);
+      } else {
+        console.error("Failed to fetch Offers:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching Offers:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+
   
-    // fetchOffers();
+    fetchOffers();
   }, [currentPage, pageSize]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -61,7 +63,7 @@ const ProductOffers = () => {
 
   const handleFreezeOffer = async (offerId: number) => {
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountoffer/deactivate/${offerId}`;
+      const apiUrl = `/backend/api/deal/admin/deactivate/${offerId}`;
       const response = await fetch(apiUrl, {
         method: "PUT",
       });
@@ -93,7 +95,7 @@ const ProductOffers = () => {
 
   const handleActivateOffer = async (offerId: number) => {
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountoffer/activate/${offerId}`;
+      const apiUrl = `/backend/api/deal/admin/activate/${offerId}`;
       const response = await fetch(apiUrl, {
         method: "PUT",
       });
@@ -130,15 +132,13 @@ const ProductOffers = () => {
           <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
             All Offers
           </h4>
-          <AddNewOffer setOffersData={setOffersData} />
+          <AddNewOffer setOffersData={setOffersData} fetchOffers={fetchOffers} />
         </div>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
-          <Loader />
+          <ElementLoader />
         </div>
-      ) : (
-        <>
-          {offersData.length > 0 ? (
+      ) : offersData && offersData.length > 0 ? (
             <>
               
 
@@ -168,8 +168,8 @@ const ProductOffers = () => {
                   <div className="col-span-2 flex items-center">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="h-12.5 w-15 rounded-md">
-                            <Image
-                                src={offer.productImageUrl}
+                            <img
+                                src={`${process.env.NEXT_PUBLIC_API_URL_MAIN}/${offer.productImageUrl}`}
                                 width={60}
                                 height={50}
                                 alt="Product"
@@ -182,18 +182,18 @@ const ProductOffers = () => {
                   </div>
                   <div className="col-span-1 flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      {offer.value}%
+                      {offer.offPercentage}%
                     </p>
                   </div>
                   
                   <div className="col-span-1 hidden sm:flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      {offer.startDate.substring(0, 10)}
+                      {new Date(offer.startDate).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="col-span-1 hidden sm:flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                      {offer.endDate.substring(0, 10)}
+                      {new Date(offer.endDate).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center justify-end space-x-3.5">
@@ -233,11 +233,8 @@ const ProductOffers = () => {
                 </button>
               </div>
             </>
-          ) : (
-            <div className="w-full flex justify-center items-center py-4">No Offers found</div>
-          )}
-        </>
-          
+      ) : (
+        <p>No Offers Found</p>
       )}
       </div>
     </div>

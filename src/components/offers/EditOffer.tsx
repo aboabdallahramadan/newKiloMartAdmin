@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import ClickOutside from '../ClickOutside';
 import InputGroup from '../FormElements/InputGroup';
 import { FaEdit, FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Offer } from '@/types/offer';
+import { Product } from '@/types/product';
 
 interface EditOfferProps {
     setOffersData: React.Dispatch<React.SetStateAction<any>>;
@@ -13,12 +14,32 @@ interface EditOfferProps {
 
 const EditOffer: React.FC<EditOfferProps> = ({setOffersData , offer}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState<Omit<Offer, "productName" | "productImageUrl" | "isActive">>({
+
+        const [products, setProducts] = useState<Product[]>()
+        const fetchProducts = async () => {
+            try {
+              const response = await fetch(`/backend/api/products/list/paginated-with-filters?language=2&productIsActive=true&pageNumber=1&pageSize=999999`);
+              const data = await response.json();
+              if (data.status) {
+                  setProducts(data.data.items);
+              } else {
+                  console.error("Failed to fetch products:", data.message);
+              }
+            } catch (error) {
+              console.error("An error occurred while fetching products:", error);
+            } finally {
+            }
+          };
+          useEffect(() => {
+              fetchProducts();
+          }, []);
+    const [formData, setFormData] = useState<Omit<Offer, "productName" | "productImageUrl">>({
         id: offer.id,
-        productId: offer.productId,
-        value: offer.value,
+        product: offer.product,
+        offPercentage: offer.offPercentage,
         startDate: offer.startDate,
-        endDate: offer.endDate
+        endDate: offer.endDate,
+        isActive: true,
     });
 
     const handleOpenModal = () => {
@@ -40,8 +61,8 @@ const EditOffer: React.FC<EditOfferProps> = ({setOffersData , offer}) => {
         e.preventDefault();
     
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountoffer/${offer.id}`, {
-                method: 'POST',
+            const response = await fetch(`/backend/api/deal/admin/edit/${offer.id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -56,14 +77,15 @@ const EditOffer: React.FC<EditOfferProps> = ({setOffersData , offer}) => {
                     prevOffersData.map((cod) =>
                         cod.id === offer.id ? { 
                             ...cod,
-                            productId: formData.productId,
-                            value: formData.value,
+                            productId: formData.product,
+                            value: formData.offPercentage,
                             startDate: formData.startDate,
                             endDate: formData.endDate
                          } : cod
                 ));
                 handleCloseModal();
             } else {
+                console.log(response.json())
                 throw new Error('Failed to create discount offer');
             }
         } catch (error) {
@@ -96,24 +118,25 @@ const EditOffer: React.FC<EditOfferProps> = ({setOffersData , offer}) => {
                                         Product
                                     </label>
                                     <select
-                                        name="producttId"
-                                        value={formData.productId}
+                                        name="product"
                                         onChange={handleChange}
+                                        defaultValue={offer.product}
                                         className="w-full rounded-lg border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-dark-3"
                                     >
-                                        <option value="">Select Product</option>
-                                        <option value="Potato">Potato</option>
-                                        <option value="Tomato">Tomato</option>
-                                        <option value="Apple">Apple</option>
+                                        {products && products.map((product) => (
+                                            <option key={product.productId} value={product.productId}>
+                                                {product.productName}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
 
                                 <InputGroup
                                     label="Value"
                                     type="number"
-                                    name="value"
+                                    name="offPercentage"
                                     placeholder="Enter discount value"
-                                    value={formData.value}
+                                    value={formData.offPercentage}
                                     onChange={handleChange}
                                     customClasses="mb-4.5"
                                 />

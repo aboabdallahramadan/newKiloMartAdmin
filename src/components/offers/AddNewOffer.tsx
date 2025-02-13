@@ -1,23 +1,44 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ClickOutside from '../ClickOutside';
 import ButtonDefault from '../Buttons/ButtonDefault';
 import InputGroup from '../FormElements/InputGroup';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Offer } from '@/types/offer';
+import { Product } from '@/types/product';
 
 interface AddNewOfferProps {
     setOffersData: React.Dispatch<React.SetStateAction<any>>;
+    fetchOffers: () => Promise<void>;
 }
 
-const AddNewOffer: React.FC<AddNewOfferProps> = ({setOffersData}) => {
+const AddNewOffer: React.FC<AddNewOfferProps> = ({setOffersData , fetchOffers}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState<Omit<Offer , "productName" | "productImageUrl" | "isActive" | "id">>({
-        productId: 0,
-        value: 0,
+    const [products, setProducts] = useState<Product[]>()
+    const fetchProducts = async () => {
+        try {
+          const response = await fetch(`/backend/api/products/list/paginated-with-filters?language=2&productIsActive=true&pageNumber=1&pageSize=999999`);
+          const data = await response.json();
+          if (data.status) {
+              setProducts(data.data.items);
+          } else {
+              console.error("Failed to fetch products:", data.message);
+          }
+        } catch (error) {
+          console.error("An error occurred while fetching products:", error);
+        } finally {
+        }
+      };
+      useEffect(() => {
+          fetchProducts();
+      }, []);
+    const [formData, setFormData] = useState<Omit<Offer , "productName" | "productImageUrl" | "id">>({
+        product: 0,
+        offPercentage: 0,
         startDate: '',
         endDate: '',
+        isActive: true,
     });
 
     const handleOpenModal = () => {
@@ -39,7 +60,7 @@ const AddNewOffer: React.FC<AddNewOfferProps> = ({setOffersData}) => {
         e.preventDefault();
     
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/discountoffer`, {
+            const response = await fetch(`/backend/api/deal/admin/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,8 +73,10 @@ const AddNewOffer: React.FC<AddNewOfferProps> = ({setOffersData}) => {
                 console.log('Success:', data);
                 toast.success('Discount offer created successfully!');
                 setOffersData((prevOffersData: any) => [...prevOffersData, data.data]);
+                fetchOffers();
                 handleCloseModal();
             } else {
+                console.log(response.json())
                 throw new Error('Failed to create discount offer');
             }
         } catch (error) {
@@ -91,25 +114,25 @@ const AddNewOffer: React.FC<AddNewOfferProps> = ({setOffersData}) => {
                                         Product
                                     </label>
                                     <select
-                                        name="productId"
-                                        value={formData.productId}
+                                        name="product"
+                                        value={formData.product}
                                         onChange={handleChange}
                                         className="w-full rounded-lg border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-dark-3"
                                     >
-                                        <option value="">Select Product</option>
-                                        <option value="Potato">Potato</option>
-                                        <option value="Tomato">Tomato</option>
-                                        <option value="Apple">Apple</option>
-
+                                        {products && products.map((product) => (
+                                            <option key={product.productId} value={product.productId}>
+                                                {product.productName}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
 
                                 <InputGroup
                                     label="Value"
                                     type="number"
-                                    name="value"
+                                    name="offPercentage"
                                     placeholder="Enter discount value"
-                                    value={formData.value}
+                                    value={formData.offPercentage}
                                     onChange={handleChange}
                                     customClasses="mb-4.5"
                                 />

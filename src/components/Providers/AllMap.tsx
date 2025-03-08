@@ -1,19 +1,19 @@
-"use client"
+"use client";
 import { useEffect, useState } from 'react';
-import {MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import { GoogleMap, Marker, InfoWindow, useLoadScript } from '@react-google-maps/api';
 import ElementLoader from '../common/ElementLoader';
-import "leaflet-defaulticon-compatibility";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import { ProvidersLocations } from '@/types/providersLocations';
 import Link from 'next/link';
+import { ProvidersLocations } from '@/types/providersLocations';
 
-const AllMap = () => {
+const mapContainerStyle = { height: "400px", width: "100%" };
+const defaultCenter = { lat: 24.181212251491353, lng: 43.91654599169042 };
+
+const AllMap: React.FC = () => {
   const [locations, setLocations] = useState<ProvidersLocations[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<ProvidersLocations | null>(null);
 
   useEffect(() => {
-    // Fetch latitude and longitude from the API
     const fetchLocation = async () => {
       setLoading(true);
       try {
@@ -30,41 +30,59 @@ const AllMap = () => {
         setLoading(false);
       }
     };
-    setLoading(false);
     fetchLocation();
   }, []);
 
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY || '',
+  });
+
+  if (loadError) return <div>Error loading Google Maps</div>;
+  if (!isLoaded || loading) return <ElementLoader size={10} />;
+
   return (
-      <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
-        <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Providers Location</h2>
-        {loading ? (
-          <ElementLoader size={10} />
-        ) :( locations.length > 0 ? (
-          <MapContainer center={{ lat: 24.181212251491353, lng: 43.91654599169042 }} zoom={6} style={{ height: "400px", width: "100%" }} className='z-0'>
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-            {locations.map((location) => (
-            <Marker key={location.providerId} position={{ lat: location.locationDetails.lat, lng: location.locationDetails.long }}>
-                <Popup>
-                    <div>
-                    <p>User Name: <Link className='text-primary hover:text-primary/50' href={`/providers/${location.providerId}`}>{location.displayName}</Link></p>
-                    <p>Name: {location.displayName}</p>
-                    <p>Building Number: {location.locationDetails.buildingNumber}</p>
-                    <p>Apartment Number: {location.locationDetails.apartmentNumber}</p>
-                    <p>Floor Number: {location.locationDetails.floorNumber}</p>
-                    <p>Street Name: {location.locationDetails.streetNumber}</p>
-                    </div>
-                </Popup>
-            </Marker>
-            ))}
-          </MapContainer>
-        ) : (
-          <p>No locations available.</p>
+    <div className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card">
+      <h2 className="text-xl font-bold mb-4 text-dark dark:text-white">Providers Location</h2>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        center={defaultCenter}
+        zoom={6}
+      >
+        {locations.map((location) => (
+          <Marker
+            key={location.providerId}
+            position={{
+              lat: location.locationDetails.lat,
+              lng: location.locationDetails.long,
+            }}
+            onClick={() => setSelectedProvider(location)}
+          />
         ))}
-      </div>
-    
+        {selectedProvider && (
+          <InfoWindow
+            position={{
+              lat: selectedProvider.locationDetails.lat,
+              lng: selectedProvider.locationDetails.long,
+            }}
+            onCloseClick={() => setSelectedProvider(null)}
+          >
+            <div>
+              <p>
+                User Name:{" "}
+                <Link className="text-primary hover:text-primary/50" href={`/providers/${selectedProvider.providerId}`}>
+                  {selectedProvider.displayName}
+                </Link>
+              </p>
+              <p>Name: {selectedProvider.displayName}</p>
+              <p>Building Number: {selectedProvider.locationDetails.buildingNumber}</p>
+              <p>Apartment Number: {selectedProvider.locationDetails.apartmentNumber}</p>
+              <p>Floor Number: {selectedProvider.locationDetails.floorNumber}</p>
+              <p>Street Name: {selectedProvider.locationDetails.streetNumber}</p>
+            </div>
+          </InfoWindow>
+        )}
+      </GoogleMap>
+    </div>
   );
 };
 

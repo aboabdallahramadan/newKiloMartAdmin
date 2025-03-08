@@ -11,10 +11,9 @@ import { toast } from 'react-toastify'
 
 interface ProviderDetailsModalProps {
     providerId: number;
-    providerEmail: string;
     onClose: () => void;
   }
-  const ProviderDetailsModal: React.FC<ProviderDetailsModalProps> = ({ providerId, providerEmail, onClose }) => {
+  const ProviderDetailsModal: React.FC<ProviderDetailsModalProps> = ({ providerId, onClose }) => {
     const [providerProfiles , setProviderProfiles] = useState<ProviderProfile[]>([]);
     const [selectedProfile, setSelectedProfile] = useState<ProviderProfile | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -54,13 +53,6 @@ interface ProviderDetailsModalProps {
     
      const acceptProfile = async (id: number,description: string) => {
       try {
-        const emailResponse = await fetch(`/backend/api/user/admin/activate/email`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(providerEmail),
-        });
         const response = await fetch(`/backend/api/provider-profile/accept`, {
           method: 'PUT',
           headers: {
@@ -78,7 +70,7 @@ interface ProviderDetailsModalProps {
         }
         else {
           toast.error("Error Accepting profile");
-          console.log("Error Accepting profile", data.message);
+          console.log("Error Accepting profile", data);
         }
       } catch(error) {
         console.log("Error Accepting profile", error);

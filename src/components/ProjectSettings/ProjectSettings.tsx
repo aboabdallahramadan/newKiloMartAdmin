@@ -193,18 +193,6 @@ const ProjectSettings = () => {
             </label>
           </div>
 
-          <div>
-            <label className="mb-2.5 block text-black dark:text-white">
-              Raduis For Get Products
-              <input
-                type="number"
-                name="raduisForGetProducts"
-                value={settings.raduisForGetProducts}
-                onChange={handleChange}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
-            </label>
-          </div>
 
           <div className="col-span-1 md:col-span-2">
             <label className="flex items-center mb-2.5 text-black dark:text-white">

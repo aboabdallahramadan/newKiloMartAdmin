@@ -111,12 +111,12 @@ const CustomerDetails = () => {
                     <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
                         <h3 className="text-lg font-semibold text-dark dark:text-white mb-2">Total Orders</h3>
-                        <p className="text-2xl font-bold text-primary">{customer.ordersCount}</p>
+                        <p className="text-2xl font-bold text-primary">{customer.ordersCount ?? 0}</p>
                       </div>
 
                       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
                         <h3 className="text-lg font-semibold text-dark dark:text-white mb-2">Total Revenue</h3>
-                        <p className="text-2xl font-bold text-primary">{customer.ordersValue.toFixed(2)} SAR</p>
+                        <p className="text-2xl font-bold text-primary">{(customer.ordersValue ?? 0).toFixed(2)} SAR</p>
                       </div>
                     </div>
                   </div>

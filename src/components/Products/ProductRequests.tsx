@@ -79,23 +79,22 @@ const ProductRequests = () => {
   };
 
   // Helper function for updating product request status.
-  const handleStatus = async (requestId: number, statusId: number) => {
-    const actionText = statusId === 2 ? "activated" : "deactivated";
+  const handleReject = async (requestId: number) => {
     try {
-      const response = await fetch(`/backend/api/admin-panel/product-requests/edit?requestId=${requestId}&statusId=${statusId}`, {
+      const response = await fetch(`/backend/api/admin-panel/product-requests/reject?requestId=${requestId}`, {
         method: 'PUT',
       });
       if (response.ok) {
         // Update that product's status in state.
         setProducts(prevProducts =>
           prevProducts.map(product =>
-            product.productRequestId === requestId ? { ...product, status: statusId } : product
+            product.productRequestId === requestId ? { ...product, status: 3 } : product
           )
         );
-        toast.success(`Product request ${actionText} successfully!`);
+        toast.success(`Product request rejected successfully!`);
       } else {
         console.error(`Failed to update product request status:`, response.statusText);
-        toast.error(`Failed to ${actionText} product request!`);
+        toast.error(`Failed to reject product request!`);
       }
     } catch (error) {
       console.error("An error occurred while updating status:", error);
@@ -103,14 +102,28 @@ const ProductRequests = () => {
     }
   };
 
-  const handleActivate = (requestId: number) => {
-    // For activate, set statusId = 2.
-    handleStatus(requestId, 2);
-  };
-
-  const handleDeactivate = (requestId: number) => {
-    // For deactivate, set statusId = 3.
-    handleStatus(requestId, 3);
+  const handleActivate = async (requestId: number) => {
+    try {
+      const response = await fetch(`/backend/api/provider/product-request/accept?id=${requestId}`, {
+        method: 'POST',
+      });
+      if (response.ok) {
+        // Update that product's status in state.
+        setProducts(prevProducts =>
+          prevProducts.map(product =>
+            product.productRequestId === requestId ? { ...product, status: 2 } : product
+          )
+        );
+        toast.success(`Product request accepted successfully!`);
+      } else {
+        console.error(`Failed to update product request status:`, response.statusText);
+        console.log(response);
+        toast.error(`Failed to accept product request!`);
+      }
+    } catch (error) {
+      console.error("An error occurred while updating status:", error);
+      toast.error("An error occurred while updating status.");
+    }
   };
 
   return (
@@ -178,19 +191,11 @@ const ProductRequests = () => {
                     <button 
                       className="ml-2 hover:text-primary" 
                       title='Deactivate'
-                      onClick={() => handleDeactivate(product.productRequestId)}
+                      onClick={() => handleReject(product.productRequestId)}
                     >
                       <FaBan />
                     </button>
-                  ) : product.status === 3 ? (
-                    <button 
-                      className="ml-2 hover:text-primary" 
-                      title='Activate'
-                      onClick={() => handleActivate(product.productRequestId)}
-                    >
-                      <FaCheck />
-                    </button>
-                  ) : product.status === 1 && (
+                  ): product.status === 1 && (
                     <>
                       <button 
                         className="ml-2 hover:text-primary" 
@@ -202,7 +207,7 @@ const ProductRequests = () => {
                       <button 
                         className="ml-2 hover:text-primary" 
                         title='Deactivate'
-                        onClick={() => handleDeactivate(product.productRequestId)}
+                        onClick={() => handleReject(product.productRequestId)}
                       >
                         <FaBan />
                       </button>

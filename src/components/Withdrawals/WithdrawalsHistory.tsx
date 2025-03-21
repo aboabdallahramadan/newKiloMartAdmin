@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { WithdrawRequest } from '@/types/withdrawRequest';
-import WithdrawalModal from './WithdrawalModal';
+import WithdrawRequestModal from './WithdrawRequestModal';
 import Link from 'next/link';
 
 const WithdrawalsHistory = () => {
@@ -39,19 +39,16 @@ const WithdrawalsHistory = () => {
             <div className="px-4 py-6 md:px-6 xl:px-9">
                 <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Withdraw History</h4>
             </div>
-            <div className="grid grid-cols-3 md:grid-cols-5 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-7 md:px-6 2xl:px-7.5">
-                <div className="col-span-1 flex items-center">
+            <div className="grid grid-cols-5 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-6 md:px-6 2xl:px-7.5">
+                <div className="col-span-2 flex items-center">
                     <p className="font-medium">Name</p>
                 </div>
-                <div className="col-span-2 items-center hidden lg:flex">
+                <div className="col-span-1 items-center hidden lg:flex">
                     <p className="font-medium">Date</p>
                 </div>
-                <div className="col-span-2 hidden md:flex items-center">
-                    <p className="font-medium">Bank Account Number</p>
-                </div>
-                {/* <div className="col-span-1 flex items-center">
+                <div className="col-span-1 flex items-center">
                     <p className="font-medium">Amount</p>
-                </div> */}
+                </div>
                 <div className="col-span-1 flex items-center">
                     <p className="font-medium">Status</p>
                 </div>
@@ -61,10 +58,10 @@ const WithdrawalsHistory = () => {
             </div>
             {withdrawRequests.map((withdrawRequest) => (
                 <div
-                    className="grid grid-cols-3 md:grid-cols-5 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-7 md:px-6 2xl:px-7.5"
+                    className="grid grid-cols-5 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-6 md:px-6 2xl:px-7.5"
                     key={withdrawRequest.id}
                 >
-                    <div className="col-span-1 flex items-center">
+                    <div className="col-span-2 flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">
                         {
                                 withdrawRequest.providerId ? (
@@ -81,17 +78,12 @@ const WithdrawalsHistory = () => {
                             }
                         </p>
                     </div>
-                    <div className="col-span-2 items-center hidden lg:flex">
+                    <div className="col-span-1 items-center hidden lg:flex">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawRequest.date).toLocaleDateString()}</p>
                     </div>
-                    <div className="col-span-2 hidden md:flex items-center">
-                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.bankAccountNumber}</p>
+                    <div className="col-span-1 flex items-center">
+                        <p className="text-body-sm font-medium text-[#219653]">{withdrawRequest.amount || 0} SAR</p>
                     </div>
-                    {/* <div className="col-span-1 flex items-center">
-                        <p className="text-body-sm font-medium text-[#219653]">
-                            {(withdrawRequest.activeBalanceReceives > withdrawRequest.activeBalanceDeductions) ? (withdrawRequest.activeBalanceReceives - withdrawRequest.activeBalanceDeductions) : 0}
-                            SAR</p>
-                    </div> */}
                     <div className="col-span-1 flex items-center">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                             withdrawRequest.accepted
@@ -151,7 +143,7 @@ const WithdrawalsHistory = () => {
                 </button>
             </div>
             {selectedRequest && (
-                <WithdrawalModal 
+                <WithdrawRequestModal 
                     withdrawRequest={selectedRequest} 
                     onClose={() => setSelectedRequest(null)}
                 />

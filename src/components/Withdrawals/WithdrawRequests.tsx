@@ -41,12 +41,6 @@ const WithdrawRequests = () => {
     }, [currentPage]);
 
     const onAccept = async (withdraw: WithdrawRequest) => {
-        // Calculate the net total value
-        const totalValue =
-          withdraw.activeBalanceReceives > withdraw.activeBalanceDeductions
-            ? withdraw.activeBalanceReceives - withdraw.activeBalanceDeductions
-            : 0;
-      
         try {
           const response = await fetch('/backend/api/admin/withdrawVw/accept/withdraw', {
             method: 'POST',
@@ -55,7 +49,7 @@ const WithdrawRequests = () => {
             },
             body: JSON.stringify({
               withdrawId: withdraw.id,
-              totalValue: totalValue,
+              totalValue: withdraw.amount,
             }),
           });
       
@@ -96,21 +90,18 @@ const WithdrawRequests = () => {
             <div className="px-4 py-6 md:px-6 xl:px-9">
                 <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Withdraw Requests</h4>
             </div>
-            <div className="grid grid-cols-3 md:grid-cols-8 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-10 md:px-6 2xl:px-7.5">
-                <div className="col-span-1 flex items-center">
+            <div className="grid grid-cols-5 sm:grid-cols-6 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 md:px-6 2xl:px-7.5">
+                <div className="col-span-2 flex items-center">
                     <p className="font-medium">Name</p>
                 </div>
-                <div className="col-span-2 items-center hidden lg:flex">
+                <div className="col-span-1 hidden sm:flex items-center">
                     <p className="font-medium">Date</p>
-                </div>
-                <div className="col-span-3 hidden md:flex items-center">
-                    <p className="font-medium">IBAN</p>
-                </div>
-                <div className="col-span-2 hidden md:flex items-center">
-                    <p className="font-medium">Bank Account Number</p>
                 </div>
                 <div className="col-span-1 flex items-center">
                     <p className="font-medium">Amount</p>
+                </div>
+                <div className="col-span-1 flex items-center">
+                    <p className="font-medium">Available Balance</p>
                 </div>
                 <div className="col-span-1 flex items-center justify-end">
                     <p className="font-medium">Actions</p>
@@ -118,10 +109,10 @@ const WithdrawRequests = () => {
             </div>
             {withdrawRequests.map((withdrawRequest) => (
                 <div
-                    className="grid grid-cols-3 md:grid-cols-8 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 lg:grid-cols-10 md:px-6 2xl:px-7.5"
+                    className="grid grid-cols-5 sm:grid-cols-6 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 md:px-6 2xl:px-7.5"
                     key={withdrawRequest.id}
                 >
-                    <div className="col-span-1 flex items-center">
+                    <div className="col-span-2 flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">
                             {
                                 withdrawRequest.providerId ? (
@@ -138,21 +129,18 @@ const WithdrawRequests = () => {
                             }
                         </p>
                     </div>
-                    <div className="col-span-2 items-center hidden lg:flex">
+                    <div className="col-span-1 hidden sm:flex items-center">
                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawRequest.date).toLocaleDateString()}</p>
                     </div>
-                    <div className="col-span-3 hidden md:flex items-center">
-                        <p className="text-body-sm font-medium text-dark dark:text-dark-6 break-all">{withdrawRequest.iBanNumber}</p>
-                    </div>
-                    <div className="col-span-2 hidden md:flex items-center">
-                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawRequest.bankAccountNumber}</p>
+                    <div className="col-span-1 flex items-center">
+                        <p className="text-body-sm font-medium text-[#219653]">{(withdrawRequest.amount)} SAR</p>
                     </div>
                     <div className="col-span-1 flex items-center">
-                        <p className="text-body-sm font-medium text-[#219653]">{(withdrawRequest.activeBalanceReceives > withdrawRequest.activeBalanceDeductions) ? (withdrawRequest.activeBalanceReceives - withdrawRequest.activeBalanceDeductions) : 0} SAR</p>
+                        <p className="text-body-sm font-medium text-[#219653]">{((withdrawRequest.activeBalanceReceives || 0) - (withdrawRequest.activeBalanceDeductions || 0))} SAR</p>
                     </div>
                     <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3.5">
                     <button 
-                        className="hover:text-primary md:hidden" 
+                        className="hover:text-primary" 
                         title="View" 
                         onClick={() => setSelectedRequest(withdrawRequest)}
                     >

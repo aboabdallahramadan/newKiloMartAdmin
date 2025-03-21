@@ -1,6 +1,5 @@
 export type WithdrawRequest = {
     id: number;
-    party: number;
     partyDisplayName: string;
     deliveryId: number | null;
     providerId: number | null;
@@ -12,4 +11,10 @@ export type WithdrawRequest = {
     done: boolean;
     accepted: boolean;
     rejected: boolean;
+    accountName: string | null;
+    accountNumber: string | null;
+    amount: number;
+    swiftCode: string | null;
+    bankName: string | null;
+    partyIsActive: boolean;
 };

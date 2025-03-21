@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { WithdrawRequest } from '@/types/withdrawRequest';
 import ElementLoader from '../common/ElementLoader';
+import WithdrawRequestModal from './WithdrawRequestModal';
+import { FaEye } from 'react-icons/fa';
 
 interface WithdrawalsProps {
     user: "Provider" | "Delivery"
@@ -11,6 +13,8 @@ interface WithdrawalsProps {
 const Withdrawals = ({ user }: WithdrawalsProps) => {
     const [withdrawals, setWithdrawals] = useState<WithdrawRequest[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedWithdrawal, setSelectedWithdrawal] = useState<WithdrawRequest | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
@@ -18,7 +22,7 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
     const employeeId = useParams().id;
 
     useEffect(() => {
-        const fetchWithdrawals = async (page: number, userId: number) => {
+        const fetchWithdrawals = async (page: number) => {
             try {
                 const response = await fetch(`/backend/api/admin/withdrawVw/paginated/by-delivery-or-provider?partyId=${employeeId}&pageNumber=${page}&pageSize=${pageSize}`);
                 const data = await response.json();
@@ -44,7 +48,7 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                 }
                 const data = await response?.json();
                 if (data.status) {
-                    fetchWithdrawals(currentPage, data.data.userId);
+                    fetchWithdrawals(currentPage);
                 } else {
                     console.error("Failed to fetch user details:", data);
                 }
@@ -60,16 +64,23 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
 
     const totalPages = Math.ceil(totalCount / pageSize);
 
+    const handleViewWithdrawal = (withdrawal: WithdrawRequest) => {
+        setSelectedWithdrawal(withdrawal);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedWithdrawal(null);
+    };
+
     return (
         <div>
             <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
                 <div className="px-4 py-6 md:px-6 xl:px-9">
                     <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Withdrawals</h4>
                 </div>
-                <div className="grid grid-cols-3 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5">
-                    <div className="col-span-1 hidden sm:flex items-center">
-                        <p className="font-medium">Bank Account Number</p>
-                    </div>
+                <div className="grid grid-cols-4 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5">
                     <div className="col-span-1 flex items-center">
                         <p className="font-medium">Date</p>
                     </div>
@@ -79,6 +90,9 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                     <div className="col-span-1 flex items-center justify-start">
                         <p className="font-medium">Status</p>
                     </div>
+                    <div className="col-span-1 flex items-center justify-end">
+                        <p className="font-medium">Actions</p>
+                    </div>
                 </div>
                 {
                     isLoading ? ( 
@@ -87,12 +101,9 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                         <>
                             {withdrawals.map((withdrawal) => (
                                 <div
-                                    className="grid grid-cols-3 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5"
+                                    className="grid grid-cols-4 gap-4 border-t border-stroke px-4 py-4.5 dark:border-dark-3 sm:grid-cols-4 md:px-6 2xl:px-7.5"
                                     key={withdrawal.id}
                                 >
-                                    <div className="col-span-1 hidden sm:flex items-center">
-                                        <p className="text-body-sm font-medium text-dark dark:text-dark-6">{withdrawal.bankAccountNumber}</p>
-                                    </div>
                                     <div className="col-span-1 flex items-center">
                                         <p className="text-body-sm font-medium text-dark dark:text-dark-6">{new Date(withdrawal.date).toLocaleDateString()}</p>
                                     </div>
@@ -117,6 +128,14 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                                                         : (<span>Pending</span>)
                                                         }
                                         </p>
+                                    </div>
+                                    <div className="col-span-1 flex items-center justify-end">
+                                        <button
+                                            onClick={() => handleViewWithdrawal(withdrawal)}
+                                            className="text-dark dark:text-white rounded text-sm"
+                                        >
+                                            <FaEye />
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -156,6 +175,13 @@ const Withdrawals = ({ user }: WithdrawalsProps) => {
                     </button>
                 </div>
             </div>
+
+            {isModalOpen && selectedWithdrawal && (
+                <WithdrawRequestModal
+                    withdrawRequest={selectedWithdrawal}
+                    onClose={handleCloseModal}
+                />
+            )}
         </div>
     );
 };

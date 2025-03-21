@@ -19,7 +19,7 @@ const InActiveProviders = () => {
     const fetchProviders = async () => {
       try {
         setLoading(true);
-        const apiUrl = `/backend/api/admin-panel/providers/paginated?page=${currentPage}&pageSize=${pageSize}`;
+        const apiUrl = `/backend/api/admin-panel/providers/paginated-by-search-term?isActive=false&?isActive=false&page=${currentPage}&pageSize=${pageSize}`;
         const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -28,7 +28,7 @@ const InActiveProviders = () => {
         const data = await response.json();
   
         if (data.status) {
-          setRequestsData(data.data.providers.filter((item: { isActive: boolean; }) => !item.isActive));
+          setRequestsData(data.data.providers);
           setTotalCount(data.data.totalCount);
         } else {
           console.error("Failed to fetch providers:", data.message);
@@ -62,9 +62,7 @@ const InActiveProviders = () => {
   
         if (data.status) {
           setRequestsData((prevRequestsData) =>
-            prevRequestsData.map((provider) =>
-              provider.email === email ? { ...provider, isActive: true } : provider
-            )
+            prevRequestsData.filter((provider) => provider.email !== email)
           );
           toast.success("Provider has been activated successfully");
         } else {
@@ -103,7 +101,7 @@ const InActiveProviders = () => {
             <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
               <div className="px-4 py-6 md:px-6 xl:px-9">
               <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-                New Provider Requests
+                Inactive Providers
               </h4>
               </div>
 

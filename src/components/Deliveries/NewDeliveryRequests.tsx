@@ -19,7 +19,7 @@ const NewDeliveryRequests = () => {
     const fetchDeliveries = async () => {
       try {
         setLoading(true);
-        const apiUrl = `/backend/api/admin-panel/deliveries/paginated?page=${currentPage}&pageSize=${pageSize}`;
+        const apiUrl = `/backend/api/delivery-profile/filter?isActive=false&isRejected=false&isAccepted=false&page=${currentPage}&pageSize=${pageSize}`;
         const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -28,7 +28,7 @@ const NewDeliveryRequests = () => {
         const data = await response.json();
   
         if (data.status) {
-          setRequestsData(data.data.deliveries.filter((item: { isActive: boolean; }) => !item.isActive));
+          setRequestsData(data.data.items);
           setTotalCount(data.data.totalCount);
         } else {
           console.error("Failed to fetch deliveries:", data.message);
@@ -78,7 +78,7 @@ const NewDeliveryRequests = () => {
                   <p className="font-medium">Name</p>
                 </div>
                 <div className="col-span-2 flex items-center">
-                  <p className="font-medium">Phone Number</p>
+                  <p className="font-medium">National Name</p>
                 </div>
                 <div className="col-span-1 flex items-center justify-end">
                   <p className="font-medium">Actions</p>
@@ -93,13 +93,13 @@ const NewDeliveryRequests = () => {
                   <div className="col-span-2 flex items-center">
                     <div className="flex gap-4 items-center">
                       <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-                        {request.displayName}
+                        {request.firstName} {request.secondName}
                       </p>
                     </div>
                   </div>
                   <div className="col-span-2 flex items-center">
                     <p className="text-body-sm font-medium text-dark dark:text-dark-6 break-all pr-4">
-                      {request.email}
+                      {request.nationalName}
                     </p>
                   </div>
                   <div className="col-span-1 flex items-center justify-end space-x-1.5 sm:space-x-3">
@@ -110,12 +110,6 @@ const NewDeliveryRequests = () => {
                     >
                         <AiOutlineEye />
                     </button>
-                    {/* <button className="hover:text-primary" title="Activate">
-                        <BiCheckCircle />
-                    </button>
-                    <button className="hover:text-rose-600" title="Delete">
-                        <BiTrash />
-                    </button> */}
                   </div>
                 </div>
               ))}
@@ -141,7 +135,7 @@ const NewDeliveryRequests = () => {
               </div>
             </div>
           ) : (
-            <div>No providers found</div>
+            <div>No new delivery requests found</div>
           )}
         </>
 
@@ -150,7 +144,6 @@ const NewDeliveryRequests = () => {
       {selectedRequest && (
         <DeliveryDetailsModal 
             deliveryId={selectedRequest.deliveryId}
-            deliveryEmail={selectedRequest.email}
             onClose={() => setSelectedRequest(null)}
         />
     )}

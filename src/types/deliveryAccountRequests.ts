@@ -1,6 +1,7 @@
 export type DeliveryAccountRequest ={
     deliveryId: number;
-    email: string;
-    displayName: string;
+    firstName: string;
+    secondName: string;
+    nationalName: string;
     isActive: boolean;
 }

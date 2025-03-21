@@ -14,8 +14,10 @@ const page = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='New Provider Requests' />
-      <InActiveProviders />
-      <NewProviderRequests />
+      <div className='flex flex-col gap-4'>
+        <InActiveProviders />
+        <NewProviderRequests />
+      </div>
     </DefaultLayout>
   )
 }

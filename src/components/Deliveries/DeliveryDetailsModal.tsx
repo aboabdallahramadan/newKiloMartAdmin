@@ -7,10 +7,9 @@ import { toast } from 'react-toastify';
 
 interface DeliveryDetailsModalProps {
     deliveryId: number;
-    deliveryEmail: string;
     onClose: () => void;
   }
-const DeliveryDetailsModal: React.FC<DeliveryDetailsModalProps> = ({ deliveryId, deliveryEmail, onClose }) => {
+const DeliveryDetailsModal: React.FC<DeliveryDetailsModalProps> = ({ deliveryId, onClose }) => {
   const [selectedProfile, setSelectedProfile] = useState<DeliveryProfile | null>(null);
   const [deliveryProfiles, setDeliveryProfiles] = useState<DeliveryProfile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,13 +47,6 @@ const DeliveryDetailsModal: React.FC<DeliveryDetailsModalProps> = ({ deliveryId,
 
   const acceptProfile = async (id: number,description: string) => {
     try {
-      const emailResponse = await fetch(`/backend/api/user/admin/activate/email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(deliveryEmail),
-      });
       const response = await fetch(`/backend/api/delivery-profile/accept`, {
         method: 'PUT',
         headers: {
